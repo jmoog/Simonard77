@@ -1,0 +1,338 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from './Icones.astro';
+import Fleche from './Fleche.astro';
+import Ariane from './Ariane.astro';
+import CartePrestation from './CartePrestation.astro';
+import AppelMascotte from './AppelMascotte.astro';
+import { site, reassurance, communes } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { villes, infosVille, variantesTitre, variantesAccroche } from '../data/villes.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Gabarit unique des onze pages ville.
+ *
+ * Deux routes l'utilisent : `couvreur-[ville].astro` pour les dix communes
+ * préfixées, et `claye-souilly.astro` pour l'exception sans préfixe (l'URL
+ * WordPress historique). Le gabarit est donc écrit une seule fois.
+ *
+ * ⚠ TEXTE PROVISOIRE — tous les paragraphes sont en lorem ipsum. Les
+ * titres, la structure, les photos et les liens sont eux définitifs : c'est
+ * la maquette qui se juge, pas la rédaction. La page reste en noindex tant
+ * que sa ligne dans data/urls.js n'est pas passée à `status: 'ok'`.
+ */
+const { ville } = Astro.props;
+const { nom, path, rang } = ville;
+
+const v = rang % 4;
+const h1 = variantesTitre[v](nom);
+const accroche = variantesAccroche[v](nom);
+const title = `${h1} - ${site.brand} - Devis gratuit`;
+
+// Le fil d'Ariane porte la forme COURTE et constante (« Couvreur à Gressy »),
+// pas la variante du H1 : un fil d'Ariane est un repère de navigation, il doit
+// rester court et identique d'une ville à l'autre. La même chaîne est passée à
+// pageSchema() pour que le fil balisé corresponde exactement à l'affiché.
+const filAriane = `Couvreur à ${nom}`;
+
+// Le H1 affiché EST la variante : on entoure le nom de la commune d'un <em>
+// pour le mettre en bleu, sans dupliquer les quatre libellés en HTML.
+const description = `${accroche} Devis et déplacement gratuits ✓ ${site.phone}.`;
+
+// La page n'entre dans l'index qu'une fois sa rédaction faite, c'est-à-dire
+// une fois son status passé à 'ok' dans data/urls.js. Aucun réglage manuel.
+const brouillon = !estPubliee(path);
+
+const infos = infosVille[ville.slug] || null;
+
+const heroPhoto = '/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp';
+
+// La mascotte alterne d'une ville à l'autre : onze pages bâties sur le même
+// gabarit ne doivent pas afficher onze fois le même dessin. Deux dessins
+// seulement — `droite` est hors service, voir AppelMascotte.astro. Chacun
+// est monté du côté vers lequel son pouce pointe, sinon il désigne le vide.
+const MASCOTTES = [
+  { mascotte: 'gauche', inverse: false },  // pouce à droite → mascotte à gauche
+  { mascotte: 'face', inverse: true },     // pouce à gauche → mascotte à droite
+];
+const masc = MASCOTTES[rang % 2];
+
+const LOREM_COURT =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+const LOREM_LONG =
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.";
+
+const rubriques = [
+  { titre: 'Couverture & rénovation', icone: '/icones/couverture.webp', href: '/renovation-refection-de-toiture/', items: ['Tuile', 'Ardoise', 'Zinc', 'Bac acier'] },
+  { titre: 'Entretien de toiture', icone: '/icones/entretien.webp', href: '/entretien-de-toiture/', items: ['Démoussage', 'Anti-mousse', 'Hydrofuge'] },
+  { titre: 'Zinguerie', icone: '/icones/zinguerie.webp', href: '/refection-zinguerie/', items: ['Gouttières', 'Noues', 'Cheminée'] },
+  { titre: 'Isolation', icone: '/icones/isolation.webp', href: '/isolation-de-toiture/', items: ['Combles', 'Rampants', 'Bardage'] },
+  { titre: 'Étanchéité', icone: '/icones/etancheite.webp', href: '/etancheite-toit-terrasse/', items: ['Toit-terrasse', 'Bitume'] },
+  { titre: 'Urgences & recherche de fuite', icone: '/icones/reparation.webp', href: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/', items: ['Bâchage', 'Infiltration'] },
+].map((r) => ({ ...r, texte: LOREM_COURT.slice(0, 140) + '…' }));
+
+const etapes = [
+  { titre: 'Votre appel', texte: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.' },
+  { titre: 'La visite', texte: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.' },
+  { titre: 'Le devis écrit', texte: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.' },
+  { titre: 'Le chantier', texte: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.' },
+];
+
+
+// Communes voisines : les autres communes de la zone d'intervention, la
+// commune courante en moins. Elles ne deviennent des liens que le jour où
+// leur propre page passe à `ok` — jamais de lien vers une page en brouillon.
+const voisines = communes.filter((c) => c !== nom);
+const lienVoisine = (nomCommune) => {
+  const cible = villes.find((x) => x.nom === nomCommune);
+  return cible && estPubliee(cible.path) ? cible.path : null;
+};
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    commune: nom,
+    service: { name: `Couvreur zingueur à ${nom}`, description: accroche },
+  })}
+>
+  <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════
+       Deux colonnes sur desktop. Sur mobile, la photo REMONTE juste sous
+       le titre : les deux colonnes sont aplaties en CSS (display:contents)
+       et chaque élément est replacé par `order`. Le balisage n'est donc
+       écrit qu'une fois — voir .hero-page dans global.css. -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1 set:html={h1.replace(nom, `<em>${nom}</em>`)} />
+        <p class="hero-page__chapo">{accroche}</p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Lorem ipsum dolor sit amet consectetur</li>
+          <li><Icone nom="coche" taille={18} />Sed do eiusmod tempor incididunt ut labore</li>
+          <li><Icone nom="coche" taille={18} />Ut enim ad minim veniam quis nostrud</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1600" height="1199"
+          fetchpriority="high" decoding="async"
+          alt={`Chantier de couverture sur un pavillon, échafaudage installé, vue depuis la rue — ${site.brand}, couvreur à ${nom}`}
+        />
+        <!-- Pas de mascotte ici : elle porte l'appel au téléphone plus bas,
+             et un personnage qui pointe le vide n'est qu'une décoration. -->
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Déplacement et devis gratuits</strong>
+            <span>Lorem ipsum dolor sit amet consectetur adipiscing.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ URGENCES ═══════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Dépannage de toiture à {nom}</h2>
+        <p>{LOREM_COURT}</p>
+        <h3>Lorem ipsum dolor sit amet</h3>
+        <p>{LOREM_LONG}</p>
+        <h3>Consectetur adipiscing elit</h3>
+        <p>{LOREM_COURT}</p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/mise-en-etancheite-dun-pied-de-cheminee-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Mise en étanchéité d'un pied de cheminée — ${site.brand}, couvreur à ${nom}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉNOVATION ═════════════════════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Rénovation de toiture à {nom}</h2>
+        <p>{LOREM_LONG}</p>
+        <p>{LOREM_COURT}</p>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/remplacement-de-toiture-en-cours-sur-pavillon-simonard-couvreur-77.webp"
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Remplacement d'une toiture en cours sur un pavillon — ${site.brand}, couvreur à ${nom}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre={`Une toiture à voir à ${nom} ?`}
+    note="Déplacement offert"
+    mascotte={masc.mascotte}
+    inverse={masc.inverse}
+  />
+
+  <!-- ═══ ACCÈS, ÉCHAFAUDAGE, URBANISME ══════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Accès et échafaudage à {nom}</h2>
+        <p>{LOREM_COURT.slice(0, 160)}…</p>
+      </div>
+      <div class="duo">
+        <div class="duo__texte">
+          <h3>Accès au chantier et installation</h3>
+          <p>{LOREM_LONG}</p>
+          <h3>Déclaration préalable et règles locales</h3>
+          <p>{LOREM_COURT}</p>
+        </div>
+        <div class="duo__media">
+          <img
+            src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
+            width="1200" height="900" loading="lazy" decoding="async"
+            alt={`Maison sous échafaudage pendant un chantier de couverture — ${site.brand}, couvreur à ${nom}`}
+          />
+        </div>
+      </div>
+
+      <!-- Mairie : affichée uniquement si les coordonnées réelles ont été
+           renseignées dans data/villes.js. Sinon, un encart d'attente —
+           on n'invente pas une adresse de mairie. -->
+      {infos?.mairie ? (
+        <div class="mairie">
+          <div class="mairie__icone"><Icone nom="epingle" taille={24} /></div>
+          <div class="mairie__texte">
+            <strong>Mairie de {nom}</strong>
+            <p>{infos.mairie.adresse}</p>
+          </div>
+          <div class="mairie__actions">
+            {infos.mairie.carte && <a class="btn btn--contour" href={infos.mairie.carte} target="_blank" rel="noopener">Voir sur la carte</a>}
+            {infos.mairie.site && <a class="btn btn--contour" href={infos.mairie.site} target="_blank" rel="noopener">Site officiel</a>}
+          </div>
+        </div>
+      ) : (
+        <div class="mairie mairie--attente">
+          <div class="mairie__icone"><Icone nom="epingle" taille={24} /></div>
+          <div class="mairie__texte">
+            <strong>Mairie de {nom}</strong>
+            <p>Coordonnées à renseigner dans <code>data/villes.js</code> — aucune adresse n'est affichée tant qu'elle n'a pas été vérifiée.</p>
+          </div>
+        </div>
+      )}
+
+      <h3 class="titre-liste">Les quartiers de {nom}</h3>
+      {infos?.quartiers?.length ? (
+        <ul class="communes communes--gauche">
+          {infos.quartiers.map((q) => <li>{q}</li>)}
+        </ul>
+      ) : (
+        <p class="note-attente">Liste des quartiers à renseigner dans <code>data/villes.js</code>.</p>
+      )}
+    </div>
+  </section>
+
+  <!-- ═══ PRESTATIONS ════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Mes prestations de couvreur à {nom}</h2>
+        <p>{LOREM_COURT.slice(0, 150)}…</p>
+      </div>
+      <div class="prestations">
+        {rubriques.map((r) => <CartePrestation {...r} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ÉTAPES ═════════════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>De votre appel à la fin du chantier</h2>
+        <p>Quatre étapes, sans mauvaise surprise et sans engagement de votre part.</p>
+      </div>
+      <ol class="etapes">
+        {etapes.map((e) => (
+          <li class="etape">
+            <h3>{e.titre}</h3>
+            <p>{e.texte}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ COMMUNES VOISINES ══════════════════════════════════════════ -->
+  <section class="section section--ciel">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Autour de {nom}</h2>
+        <p>{LOREM_COURT.slice(0, 145)}…</p>
+      </div>
+      <ul class="communes">
+        {voisines.map((c) => {
+          const href = lienVoisine(c);
+          return <li>{href ? <a href={href}>{c}</a> : c}</li>;
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <section class="appel">
+    <div class="conteneur">
+      <h2>Votre toiture à {nom} : parlons-en</h2>
+      <p>{LOREM_COURT}</p>
+      <ul class="appel__points">
+        <li>Devis et déplacement gratuits</li>
+        <li>Interlocuteur unique</li>
+        <li>Garantie décennale</li>
+        <li>Urgences traitées en priorité</li>
+      </ul>
+      <div class="appel__actions">
+        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
+        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={20} />{site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

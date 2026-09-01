@@ -1,0 +1,18 @@
+---
+const { titre, items, gris = true } = Astro.props;
+---
+<section class={`section${gris ? ' section--gris' : ''}`}>
+  <div class="conteneur">
+    <div class="chapeau">
+      <h2>{titre}</h2>
+    </div>
+    <div class="faq">
+      {items.map((item) => (
+        <div class="faq__item">
+          <h3>{item.q}</h3>
+          <p set:html={item.a} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,277 @@
+---
+// Page entièrement statique : l'envoi passe par un appel fetch vers
+// /api/devis/ (seule route dynamique du site).
+//
+// NOUVELLE URL : cette page n'existe pas sur le site WordPress, qui n'avait
+// qu'un /contact/. Elle ne remplace pas /contact/ — cette dernière URL fait
+// partie des 47 à conserver et sera migrée telle quelle.
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import Ariane from '../components/Ariane.astro';
+import Icone from '../components/Icones.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import { site, communes } from '../data/site.js';
+import { pageSchema } from '../data/schema.js';
+
+const path = '/devis-gratuit/';
+// 58 caractères — requête « devis toiture / devis couvreur + Seine-et-Marne ».
+const title = 'Devis gratuit toiture en Seine-et-Marne (77) — M. Simonard';
+// 152 caractères.
+const description = `Devis gratuit et sans engagement pour votre toiture en ${site.address.region} : je me déplace, je monte voir le toit et je chiffre par écrit ✓ ${site.phone}.`;
+
+// Carte OpenStreetMap (sans cookie), centrée sur site.geo (Claye-Souilly).
+// Affiner les coordonnées dans src/data/site.js si le marqueur doit tomber
+// exactement sur l'adresse d'intervention.
+const { lat, lng } = site.geo;
+const d = 0.035;
+const carteSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - d}%2C${lat - d}%2C${lng + d}%2C${lat + d}&layer=mapnik&marker=${lat}%2C${lng}`;
+
+// Clé publique Turnstile (variable de BUILD). Si elle est vide, le formulaire
+// fonctionne quand même : le honeypot, le time-trap et le scoring de contenu
+// restent actifs côté serveur.
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+// `value` = clé attendue par /api/devis (PRESTATIONS) ; `label` = affichage.
+const prestations = [
+  { v: 'couverture', l: 'Couverture / rénovation de toiture' },
+  { v: 'reparation', l: 'Réparation & recherche de fuite' },
+  { v: 'urgence', l: 'Urgence (fuite en cours, tempête)' },
+  { v: 'entretien', l: 'Entretien, démoussage, hydrofuge' },
+  { v: 'zinguerie', l: 'Zinguerie, gouttières, noues' },
+  { v: 'isolation', l: 'Isolation de toiture ou de combles' },
+  { v: 'etancheite', l: 'Étanchéité de toit-terrasse' },
+  { v: 'autre', l: 'Autre / à préciser' },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={pageSchema(path, 'Devis gratuit', {
+    pageName: `Demander un devis gratuit — ${site.brand}`,
+    description,
+  })}
+>
+  <Ariane label="Devis gratuit" />
+
+  <section class="section section--serre">
+    <div class="conteneur devis">
+      <div class="devis__intro">
+        <h1>Devis gratuit pour votre toiture en {site.address.region}</h1>
+        <p class="devis__accroche">
+          Un toit qui prend l'eau, une couverture fatiguée, des gouttières qui débordent :
+          décrivez votre projet en deux minutes. Je vous rappelle, je viens voir le toit, et
+          vous recevez un devis écrit — gratuit et sans engagement.
+        </p>
+
+        <div class="devis__texte">
+          <p>
+            Un devis de toiture ne se rédige pas au téléphone. Vu du sol, un pan « juste à
+            nettoyer » cache parfois des liteaux morts sous les tuiles ; à l'inverse, une
+            infiltration inquiétante se règle souvent par une réparation ciblée d'une
+            demi-journée. Je me déplace donc systématiquement : je monte voir la couverture,
+            je passe dans les combles quand il y a une trace d'eau, et je chiffre sur ce que
+            j'ai constaté — pas sur une estimation à distance.
+          </p>
+          <p>
+            Vous recevez ensuite un devis détaillé poste par poste : les surfaces concernées,
+            les matériaux et leur provenance, la dépose et l'évacuation des gravats,
+            l'échafaudage lorsqu'il en faut. Rien de forfaitaire ni de flou, pour que vous
+            puissiez le comparer sereinement à un autre. Le déplacement et le conseil sont
+            gratuits, et le devis ne vous engage à rien.
+          </p>
+          <p>
+            Le formulaire accueille toutes les demandes, du remplacement de quelques tuiles à
+            la réfection complète d'une toiture, en passant par l'isolation des combles et
+            l'étanchéité d'un toit-terrasse. Plus vous m'en direz — âge du toit, matériau, ce
+            que vous avez constaté, une photo si vous en avez une —, plus mon premier retour
+            sera précis.
+          </p>
+          <div class="page-texte__encart">
+            <p>
+              <strong>L'eau entre déjà chez vous ?</strong> Ne passez pas par le formulaire :
+              appelez-moi au <a href={`tel:${site.phoneHref}`}>{site.phone}</a>. Les urgences
+              passent devant — on met le toit hors d'eau d'abord, on chiffre ensuite.
+            </p>
+          </div>
+        </div>
+
+        <img
+          class="devis__photo"
+          src="/photos/banderole-simonard-sur-chantier-de-toiture-avec-echafaudage-77.webp"
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Chantier de toiture sous échafaudage avec la banderole ${site.brandFull} — ${site.address.region}`}
+        />
+      </div>
+
+      <aside class="formulaire-carte">
+        <h2>Votre devis gratuit</h2>
+        <p class="formulaire-carte__accroche">
+          Quelques informations pour vous rappeler avec un premier retour, sans engagement.
+        </p>
+        <form id="devis-form" class="formulaire" method="post" action="/api/devis/">
+          <!-- Piège anti-robot : ce champ doit rester vide. -->
+          <p class="piege" aria-hidden="true">
+            <label>Ne pas remplir <input name="website" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <div class="champ">
+            <label for="nom">Nom et prénom *</label>
+            <input type="text" id="nom" name="nom" autocomplete="name" required />
+          </div>
+          <div class="champ-duo">
+            <div class="champ">
+              <label for="tel">Téléphone *</label>
+              <input type="tel" id="tel" name="tel" autocomplete="tel" required />
+            </div>
+            <div class="champ">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" autocomplete="email" required />
+            </div>
+          </div>
+          <div class="champ">
+            <label for="ville">Ville du chantier *</label>
+            <input type="text" id="ville" name="ville" autocomplete="address-level2" required />
+          </div>
+          <div class="champ">
+            <label for="prestation">Type de travaux</label>
+            <select id="prestation" name="prestation">
+              <option value="">— Sélectionnez —</option>
+              {prestations.map((p) => <option value={p.v}>{p.l}</option>)}
+            </select>
+          </div>
+          <div class="champ">
+            <label for="message">Votre projet *</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+
+          {turnstileKey && (
+            <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="light"></div>
+          )}
+
+          <button type="submit" class="btn btn--rouge formulaire__envoi" id="devis-envoi">
+            Envoyer ma demande
+          </button>
+          <p id="devis-etat" role="status" aria-live="polite" class="formulaire__etat"></p>
+          <p class="formulaire__note">
+            * Champs obligatoires. Vos données servent uniquement à traiter votre demande et
+            ne sont transmises à personne d'autre.
+          </p>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  {turnstileKey && (
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
+  )}
+  <script is:inline>
+    (function () {
+      var charge = Date.now();
+      var form = document.getElementById('devis-form');
+      if (!form) return;
+      var etat = document.getElementById('devis-etat');
+      var envoi = document.getElementById('devis-envoi');
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        envoi.disabled = true;
+        etat.className = 'formulaire__etat';
+        etat.textContent = 'Envoi en cours…';
+        try {
+          var fd = new FormData(form);
+          var donnees = {};
+          fd.forEach(function (v, k) { donnees[k] = v; });
+          // Horodatage du chargement : le serveur rejette en silence les
+          // envois faits en moins de 3 secondes (comportement de robot).
+          donnees.ts = String(charge);
+          // La barre finale est OBLIGATOIRE : le site est en trailingSlash
+          // "always". Sans elle, le POST devient une redirection 301 — donc
+          // un GET — et les données sont perdues en route.
+          var res = await fetch('/api/devis/', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', accept: 'application/json' },
+            body: JSON.stringify(donnees),
+          });
+          var data = await res.json().catch(function () { return {}; });
+          if (res.ok && data.ok) { window.location.href = '/merci/'; return; }
+          etat.className = 'formulaire__etat formulaire__etat--err';
+          etat.textContent = data.error || "Une erreur est survenue. Merci de réessayer ou de m'appeler.";
+          envoi.disabled = false;
+          if (window.turnstile) window.turnstile.reset();
+        } catch (err) {
+          etat.className = 'formulaire__etat formulaire__etat--err';
+          etat.textContent = "Erreur réseau. Merci de réessayer ou de m'appeler.";
+          envoi.disabled = false;
+          if (window.turnstile) window.turnstile.reset();
+        }
+      });
+    })();
+  </script>
+
+  <AppelMascotte
+    titre="Une fuite en cours ? N'attendez pas le devis."
+    note="Devis gratuit et sans engagement"
+    mascotte="face"
+    inverse={true}
+  />
+
+  <!-- ═══ ZONE D'INTERVENTION ════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Ma zone d'intervention</h2>
+        <p>
+          Je me déplace dans le nord de la {site.address.region} et les communes limitrophes.
+          Que votre toit soit en ville ou dans un bourg de campagne, la démarche est la même :
+          visite sur place, chiffrage écrit, réponse rapide.
+        </p>
+      </div>
+      <ul class="communes">
+        {communes.map((c) => (
+          <li class={c === site.address.city ? 'est-bureau' : undefined}>{c}</li>
+        ))}
+      </ul>
+      <div class="carte-zone" style="margin-top:34px">
+        <iframe
+          src={carteSrc}
+          title={`Carte de la zone d'intervention de ${site.brand}`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+      <p class="carte-zone__adresse">{site.address.street} — {site.address.postalCode} {site.address.city}</p>
+    </div>
+  </section>
+
+  <!-- ═══ APPEL DIRECT ═══════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Vous préférez en parler de vive voix ?</h2>
+        <p>
+          Certaines questions se règlent en trois minutes : savoir si un démoussage suffit
+          encore, si une gouttière se répare ou se remplace, combien de temps un chantier
+          immobilise la maison. Appelez-moi directement — pas de standard, pas de
+          commercial : vous parlez à l'artisan qui montera sur votre toit et qui rédigera
+          votre devis.
+        </p>
+        <p>
+          Si je suis sur un toit, je ne décroche pas toujours du premier coup : laissez un
+          message ou envoyez un SMS, je vous rappelle.
+        </p>
+        <a class="btn btn--rouge duo__cta" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={19} />Appeler le {site.phone}
+        </a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/portrait-kenny-simonard-devant-son-vehicule-77.webp"
+          width="629" height="550" loading="lazy" decoding="async"
+          alt={`${site.founder} devant son véhicule d'intervention — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+</Layout>

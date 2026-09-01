@@ -1,0 +1,21 @@
+---
+import PageVille from '../components/PageVille.astro';
+import { villes } from '../data/villes.js';
+
+/**
+ * Les dix pages ville préfixées « couvreur- » du site WordPress :
+ * /couvreur-annet-sur-marne/, /couvreur-charny/, etc.
+ *
+ * Claye-Souilly est volontairement exclue : son URL historique est
+ * /claye-souilly/, SANS préfixe. Elle a donc sa propre route, qui rend
+ * exactement le même gabarit (voir claye-souilly.astro).
+ */
+export function getStaticPaths() {
+  return villes
+    .filter((v) => v.path.startsWith('/couvreur-'))
+    .map((v) => ({ params: { ville: v.slug }, props: { ville: v } }));
+}
+
+const { ville } = Astro.props;
+---
+<PageVille ville={ville} />

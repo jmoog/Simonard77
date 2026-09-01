@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Ariane from '../components/Ariane.astro';
+import { site } from '../data/site.js';
+import { pageSchema } from '../data/schema.js';
+
+// URL conservée à l'identique du site WordPress : /mentions-legales/
+//
+// Le TEXTE aussi est repris à l'identique : c'est la rédaction validée par le
+// client. Trois écarts seulement, tous délibérés :
+//
+//  1. L'hébergeur déclaré est Hetzner (le VPS qui héberge réellement le site)
+//     et non Hostinger, qui figurait encore dans l'ancienne version.
+//  2. Les renvois « consultez notre politique de confidentialité / de
+//     cookies » ont été retirés : ces deux pages n'existent pas. Le WordPress
+//     répond 200 sur n'importe quelle URL inconnue en servant l'accueil, ce
+//     qui masquait des liens morts. Les sections 4 et 5 ci-dessous contiennent
+//     déjà l'information ; si les deux politiques sont rédigées un jour, il
+//     suffira de rétablir les liens.
+//  3. Les coordonnées, montants et identifiants viennent de data/site.js
+//     plutôt que d'être écrits en dur : une modification se fait à un seul
+//     endroit et se répercute partout.
+const path = '/mentions-legales/';
+const title = `Mentions légales — ${site.brand}, couvreur en ${site.address.region}`;
+const description = `Mentions légales du site ${site.domain.replace('https://', '')} : éditeur, hébergeur, propriété intellectuelle, données personnelles et cookies.`;
+
+const domaine = site.domain.replace('https://', '');
+---
+<Layout title={title} description={description} path={path} jsonLd={pageSchema(path, 'Mentions légales', { description })}>
+  <Ariane label="Mentions légales" />
+
+  <section class="section">
+    <div class="conteneur">
+      <div class="page-texte">
+        <h1>Mentions légales</h1>
+        <p class="page-texte__intro">
+          En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans
+          l'économie numérique, il est précisé aux utilisateurs du site internet
+          {' '}<strong>{site.domain}</strong> l'identité des différents intervenants dans le cadre
+          de sa réalisation et de son suivi.
+        </p>
+
+        <h2>1. Édition du site</h2>
+        <ul>
+          <li><strong>Propriétaire du site :</strong> M. {site.founderLegal}</li>
+          <li><strong>Directeur de la publication :</strong> {site.founderLegal}</li>
+          <li><strong>Contact :</strong> <a href={`mailto:${site.email}`}>{site.email}</a> — <a href={`tel:${site.phoneHref}`}>{site.phone}</a></li>
+        </ul>
+
+        {/* Adresse de Claye-Souilly mise en évidence : c'est celle que cherche
+            un visiteur de Seine-et-Marne. Le siège social (Val-de-Marne) n'est
+            cité qu'une fois, plus bas, là où la loi l'exige.
+            NE RIEN AJOUTER ICI : pas de phrase sur ce qui s'y passe, pas
+            d'atelier, pas d'organisation des interventions. L'adresse et son
+            intitulé, rien de plus. */}
+        <div class="encart-adresse">
+          <p class="encart-adresse__intitule">Mon bureau en {site.address.region}</p>
+          <p class="encart-adresse__valeur">{site.address.street}<br />{site.address.postalCode} {site.address.city}</p>
+        </div>
+
+        <h3>Identification de l'entreprise</h3>
+        <ul>
+          <li><strong>Dénomination :</strong> {site.legalName}, au capital social de {site.capital}</li>
+          <li><strong>SIRET :</strong> {site.siret} — <strong>TVA intracommunautaire :</strong> {site.tva}</li>
+          <li><strong>Siège social :</strong> {site.registeredOffice}</li>
+        </ul>
+
+        <h3>Hébergeur</h3>
+        <div class="page-texte__encart">
+          <p>
+            <strong>{site.hosting.name}</strong><br />
+            {site.hosting.address}<br />
+            Téléphone : {site.hosting.phone}<br />
+            <a href={site.hosting.site} target="_blank" rel="noopener">{site.hosting.site.replace('https://', '')}</a>
+          </p>
+        </div>
+
+        <p>
+          <strong>Délégué à la protection des données :</strong> {site.dpo} —
+          {' '}<a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+
+        <h2>2. Propriété intellectuelle et contrefaçons</h2>
+        <p>
+          M. {site.founderLegal} est propriétaire des droits de propriété intellectuelle et
+          détient les droits d'usage sur tous les éléments accessibles sur le site internet,
+          notamment les textes, images, graphismes, logos, vidéos, architecture, icônes et sons.
+        </p>
+        <p>
+          Toute reproduction, représentation, modification, publication ou adaptation de tout ou
+          partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est
+          interdite sauf autorisation écrite préalable.
+        </p>
+        <p>
+          Toute exploitation non autorisée du site ou de l'un quelconque de ses éléments sera
+          considérée comme constitutive d'une contrefaçon et poursuivie conformément aux
+          articles L.335-2 et suivants du Code de la propriété intellectuelle.
+        </p>
+
+        <h2>3. Limitations de responsabilité</h2>
+        <p>
+          M. {site.founderLegal} ne pourra être tenu responsable des dommages directs ou
+          indirects causés au matériel de l'utilisateur lors de l'accès au site {site.domain}.
+        </p>
+        <p>
+          Il décline toute responsabilité quant à l'utilisation des informations publiées. Bien
+          que le site soit régulièrement sécurisé, aucune responsabilité ne pourra être engagée
+          en cas d'intrusion ou de publication de contenus indésirables.
+        </p>
+        <p>
+          Les formulaires de contact sont accessibles aux utilisateurs. M. {site.founderLegal} se
+          réserve le droit de supprimer sans préavis tout contenu contrevenant à la législation
+          en vigueur (propos injurieux, diffamatoires, racistes, etc.).
+        </p>
+
+        <h2>4. CNIL et gestion des données personnelles</h2>
+        <p>
+          Conformément à la loi n° 78-17 du 6 janvier 1978 modifiée et au Règlement général sur
+          la protection des données (RGPD), tout utilisateur dispose d'un droit d'accès, de
+          rectification et de suppression des données personnelles le concernant.
+        </p>
+        <p>
+          Pour exercer ce droit : {site.dpo} —
+          {' '}<a href={`mailto:${site.email}`}>{site.email}</a>. Vous disposez également du droit
+          d'introduire une réclamation auprès de la
+          {' '}<a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.
+        </p>
+        <p>
+          Les informations transmises via le formulaire de demande de devis (nom, téléphone,
+          adresse e-mail, commune du chantier et description du projet) sont destinées
+          exclusivement à {site.legalName}, dans le seul but de répondre à votre demande. Elles
+          ne sont ni cédées, ni vendues, ni transmises à des tiers à des fins commerciales.
+        </p>
+        <div class="page-texte__encart">
+          <p>
+            <strong>Sous-traitant technique :</strong> l'acheminement des e-mails générés par le
+            formulaire de devis est assuré par Brevo (Sendinblue SAS, 106 boulevard Haussmann,
+            75008 Paris). La protection anti-robot du formulaire est assurée par Cloudflare
+            Turnstile, qui ne dépose pas de cookie publicitaire et ne suit pas les visiteurs
+            entre les sites.
+          </p>
+        </div>
+
+        <h2 id="cookies">5. Liens hypertextes et cookies</h2>
+        <p>
+          Le site {site.domain} contient des liens vers d'autres sites. M. {site.founderLegal}
+          {' '}décline toute responsabilité quant au contenu de ces sites externes.
+        </p>
+        <p>
+          La navigation sur le site peut entraîner l'installation de cookies destinés à mesurer
+          l'audience. <strong>Aucun cookie ne sera installé sans votre consentement
+          explicite :</strong> un bandeau vous permet, lors de votre première visite, d'accepter
+          ou de refuser ce dépôt, et en cas de refus aucun script tiers n'est chargé. La durée de
+          conservation est limitée à 1 mois. Vous pouvez modifier votre choix à tout moment via
+          le lien <a href="#" data-cookies>« Gérer les cookies »</a> en pied de page, ou
+          configurer votre navigateur pour bloquer ces cookies.
+        </p>
+        <p>
+          Les polices de caractères utilisées sur ce site sont hébergées sur nos propres
+          serveurs : aucune requête n'est adressée à un service tiers, et votre adresse IP n'est
+          donc transmise à personne du fait de leur affichage.
+        </p>
+
+        <h2>6. Droit applicable et attribution de juridiction</h2>
+        <p>
+          Tout litige en lien avec l'utilisation du site {site.domain} est soumis au droit
+          français. Sauf disposition contraire, compétence exclusive est attribuée aux tribunaux
+          compétents de {site.tribunal}.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Ariane from '../components/Ariane.astro';
+import { site } from '../data/site.js';
+import { urls, SILOS, avancement } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+// URL conservée à l'identique du site WordPress : /plan-du-site/
+const path = '/plan-du-site/';
+const title = `Plan du site — ${site.brand}, couvreur en ${site.address.region}`;
+const description = `Toutes les pages du site ${site.domain.replace('https://', '')} : prestations de couverture, entretien, zinguerie, isolation, étanchéité et zones d'intervention.`;
+
+// Le plan du site sert aussi de tableau de bord de la migration
+// WordPress → Astro : les pages déjà migrées sont des liens, celles qui
+// restent à écrire s'affichent en gris et suivies de « — à venir ».
+// Une page passe de l'un à l'autre en changeant son `status` dans
+// data/urls.js — rien d'autre à toucher.
+const ordre = ['transverse', 'couverture', 'entretien', 'zinguerie', 'isolation', 'etancheite', 'ville'];
+const groupes = ordre.map((cle) => ({
+  cle,
+  titre: SILOS[cle],
+  pages: urls.filter((u) => u.silo === cle),
+}));
+---
+<Layout title={title} description={description} path={path} jsonLd={pageSchema(path, 'Plan du site', { description })}>
+  <Ariane label="Plan du site" />
+
+  <section class="section">
+    <div class="conteneur">
+      <div class="page-texte" style="max-width:none">
+        <h1>Plan du site</h1>
+        <p class="page-texte__intro">
+          Toutes les pages de {site.domain.replace('https://', '')}, classées par rubrique.
+          Les pages signalées « à venir » sont en cours de rédaction : leur adresse est déjà
+          réservée et ne changera pas.
+        </p>
+
+        <div class="plan">
+          {groupes.map((g) => (
+            <div>
+              <h2>{g.titre}</h2>
+              <ul>
+                {g.pages.map((p) => (
+                  <li>
+                    {p.status === 'ok'
+                      ? <a href={p.path}>{p.label}</a>
+                      : <span class="attente">{p.label}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

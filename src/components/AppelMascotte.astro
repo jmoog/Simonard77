@@ -1,0 +1,69 @@
+---
+import Icone from './Icones.astro';
+import { site } from '../data/site.js';
+
+/**
+ * Encart d'appel à la mascotte, repris du site WordPress.
+ *
+ * C'est le bloc le plus repérable de l'ancien site : la mascotte attire
+ * l'œil, le fond clair détache l'encart du reste de la page. On le conserve —
+ * un visiteur qui revient le reconnaît, et il porte l'action « téléphone »,
+ * distincte du « devis » porté par les boutons rouges.
+ *
+ * Trois mascottes existent, ce sont trois dessins différents (et non des
+ * miroirs) : on alterne d'une page à l'autre pour que le bloc ne donne pas
+ * l'impression d'être recopié.
+ *
+ * RÈGLE D'ORIENTATION : la mascotte doit DÉSIGNER le texte, donc son pouce se
+ * place du côté du texte — sinon elle lui tourne le dos, et le geste ne veut
+ * plus rien dire.
+ *   - `gauche` : pouce à droite du cadre → mascotte à GAUCHE (montage normal) ;
+ *   - `droite` et `face` : pouce à gauche du cadre → mascotte à DROITE
+ *                          (montage `inverse`).
+ *
+ * ⚠ `droite` EST HORS SERVICE. Contrairement aux deux autres, ce fichier
+ * n'est pas un détourage mais un gros plan : la casquette est coupée en
+ * haut, le buste en bas, et un halo blanc entoure le personnage. Sur la
+ * carte gris clair, l'ensemble se lit comme une image tronquée. Tant que le
+ * dessin n'a pas été redécoupé au même cadrage que `gauche` et `face`, on ne
+ * l'emploie pas : n'alterner qu'entre `gauche` et `face`.
+ *
+ * Le titre est un <p> et non un <hn> : ce bloc revient sur plusieurs pages,
+ * et répéter le même titre de niveau 2 brouillerait le plan du document.
+ */
+const {
+  titre = 'Demandez une intervention',
+  note = 'Déplacement offert',
+  mascotte = 'droite',
+  inverse = false,
+} = Astro.props;
+
+// Dimensions réelles de chaque dessin après recadrage. Les renseigner évite
+// que la page ne saute au moment où l'image arrive.
+const TAILLES = {
+  face:   { l: 197, h: 183 },
+  droite: { l: 197, h: 184 },
+  gauche: { l: 241, h: 242 },
+};
+const t = TAILLES[mascotte] ?? TAILLES.droite;
+---
+<section class={`appel-mascotte${inverse ? ' appel-mascotte--inverse' : ''}`}>
+  <div class="conteneur">
+    <div class="appel-mascotte__carte">
+      <img
+        class="appel-mascotte__perso"
+        src={`/mascotte-simonard-${mascotte}.webp`}
+        width={t.l} height={t.h}
+        loading="lazy" decoding="async"
+        alt="" aria-hidden="true"
+      />
+      <div class="appel-mascotte__texte">
+        <p class="appel-mascotte__titre">{titre}</p>
+        <a class="btn btn--bleu btn--lg" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={22} />{site.phone}
+        </a>
+        <p class="appel-mascotte__note">{note}</p>
+      </div>
+    </div>
+  </div>
+</section>

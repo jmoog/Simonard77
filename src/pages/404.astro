@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site.js';
+import { pagesPubliees } from '../data/urls.js';
+
+// Astro sert automatiquement cette page pour toute route inconnue, avec un
+// vrai code HTTP 404 (adaptateur Node en mode standalone). Elle reste en
+// noindex : une page d'erreur n'a rien à faire dans l'index de Google.
+//
+// Rendue à la demande (et non prégénérée) : c'est indispensable pour que le
+// middleware de src/middleware.ts s'applique et neutralise la compression
+// fautive du proxy — voir le commentaire détaillé dans ce fichier.
+export const prerender = false;
+
+const path = '/404/';
+const title = `Page introuvable — ${site.brand}`;
+const description = `Cette page n'existe pas ou a été déplacée. Retrouvez les prestations de couverture, la demande de devis et les coordonnées de ${site.brand}.`;
+
+// Seules les pages réellement en ligne sont proposées ici : une page 404 qui
+// renvoie vers d'autres 404 est pire que pas de suggestion du tout.
+const suggestions = pagesPubliees.filter((u) => u.path !== '/' && u.path !== '/plan-du-site/');
+---
+<Layout title={title} description={description} path={path} noindex={true}>
+  <section class="etat">
+    <div class="conteneur">
+      <div class="etat__inner">
+        <p class="etat__code" aria-hidden="true">404</p>
+        <h1>Cette page n'existe pas (ou plus)</h1>
+        <p class="etat__accroche">
+          Le lien est peut-être erroné, ou la page a été déplacée depuis. Rien de grave :
+          voici de quoi retrouver votre chemin en deux clics.
+        </p>
+        <div class="etat__actions">
+          <a class="btn btn--rouge btn--lg" href="/">Retour à l'accueil</a>
+          <a class="btn btn--lg btn--clair" href="/devis-gratuit/">Demander un devis</a>
+        </div>
+        <p class="etat__note">
+          Vous cherchiez à me joindre ? Appelez le <a href={`tel:${site.phoneHref}`}>{site.phone}</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Les pages du site</h2>
+      </div>
+      <div class="liens">
+        {suggestions.map((u) => <a href={u.path}>{u.label}</a>)}
+        <a href="/plan-du-site/">Plan du site</a>
+      </div>
+    </div>
+  </section>
+</Layout>

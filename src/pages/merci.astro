@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import { site } from '../data/site.js';
+
+const path = '/merci/';
+const title = `Demande envoyée — ${site.brand}`;
+const description = "Votre demande de devis a bien été envoyée. Voici la suite : rappel, visite sur place puis devis détaillé sans engagement.";
+
+// Délais annoncés volontairement qualitatifs (« rapidement »), cohérents avec
+// l'accusé de réception envoyé par /api/devis. Si l'artisan veut s'engager sur
+// un délai chiffré (« sous 48 h »), le préciser ICI **et** dans le template
+// `accuseTemplate` de src/pages/api/devis.ts — sinon les deux se
+// contrediraient dans la même minute.
+const etapes = [
+  { titre: 'Un premier échange', texte: `${site.founder} vous rappelle pour préciser votre besoin, répondre à vos premières questions et convenir d'un créneau de visite.` },
+  { titre: 'La visite sur place', texte: `Rendez-vous chez vous pour monter voir la toiture, relever les mesures et identifier ce qui doit réellement être repris. Déplacement gratuit en ${site.address.region}.` },
+  { titre: 'Le devis détaillé', texte: "Vous recevez un devis écrit, poste par poste, avec les matériaux et la durée du chantier. Sans engagement : rien ne démarre tant que vous ne l'avez pas signé." },
+];
+---
+<Layout title={title} description={description} path={path} noindex={true}>
+  <section class="etat">
+    <div class="conteneur">
+      <div class="etat__inner">
+        <span class="etat__pastille" aria-hidden="true"><Icone nom="coche" taille={36} /></span>
+        <h1>Merci, votre demande est bien arrivée</h1>
+        <p class="etat__accroche">
+          {site.founder} a reçu votre demande de devis. Un accusé de réception vient de partir
+          sur votre adresse e-mail — s'il n'apparaît pas, pensez à regarder dans vos spams.
+        </p>
+        <div class="etat__actions">
+          <a class="btn btn--rouge btn--lg" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />Appeler le {site.phone}
+          </a>
+          <a class="btn btn--lg btn--clair" href="/">Retour à l'accueil</a>
+        </div>
+        <p class="etat__note">
+          Une fuite en cours, une tuile envolée après un coup de vent ? N'attendez pas le
+          rappel, <a href={`tel:${site.phoneHref}`}>appelez directement</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Une question d'ici là ?"
+    note="Devis gratuit et sans engagement"
+    mascotte="face"
+    inverse={true}
+  />
+
+  <section class="section">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Comment ça se passe ensuite</h2>
+        <p>Trois étapes simples, sans mauvaise surprise et sans engagement de votre part.</p>
+      </div>
+      <ol class="suite">
+        {etapes.map((e) => (
+          <li class="suite__item">
+            <h3>{e.titre}</h3>
+            <p>{e.texte}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Layout>

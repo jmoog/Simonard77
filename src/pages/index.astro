@@ -1,0 +1,295 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import CartePrestation from '../components/CartePrestation.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import { site, reassurance, communes } from '../data/site.js';
+import { pageSchema } from '../data/schema.js';
+
+// Balises reprises du site WordPress actuel, à dessein : ce sont elles qui
+// portent les positions acquises. Le title fait 60 caractères, la meta 143 —
+// aucune n'est tronquée dans les résultats de recherche.
+const title = 'Couvreur en Seine-et-Marne (77) - M Simonard - Devis gratuit';
+const description = `${site.brand}, artisan couvreur zingueur à ${site.address.city} : couverture, entretien de toiture, zinguerie, isolation. Devis gratuit ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/vue-aerienne-maison-avec-toiture-ardoise-terminee-simonard-couvreur-77.webp';
+
+// Les cinq rubriques du site. `href` pointe vers la page pilier de chaque
+// silo : la carte ne devient cliquable que le jour où cette page est marquée
+// `ok` dans data/urls.js (voir CartePrestation.astro).
+const rubriques = [
+  {
+    titre: 'Couverture & rénovation',
+    texte: "Remplacement complet ou partiel de votre couverture, réparation de fuites, urgences. Je travaille la tuile, l'ardoise, le zinc, le bac acier et le shingle.",
+    icone: '/icones/couverture.webp',
+    href: '/renovation-refection-de-toiture/',
+    items: ['Tuile', 'Ardoise', 'Zinc', 'Bac acier', 'Fuites'],
+  },
+  {
+    titre: 'Entretien de toiture',
+    texte: "Nettoyage et démoussage, traitement anti-mousse, hydrofuge incolore ou coloré : l'entretien régulier est ce qui repousse le plus longtemps une réfection complète.",
+    icone: '/icones/entretien.webp',
+    href: '/entretien-de-toiture/',
+    items: ['Démoussage', 'Anti-mousse', 'Hydrofuge'],
+  },
+  {
+    titre: 'Zinguerie',
+    texte: "Gouttières, descentes, noues, solins et pieds de cheminée. Tout ce qui conduit l'eau hors de votre toit, façonné et posé sur mesure.",
+    icone: '/icones/zinguerie.webp',
+    href: '/refection-zinguerie/',
+    items: ['Gouttières', 'Noues', 'Cheminée', 'Rives'],
+  },
+  {
+    titre: 'Isolation',
+    texte: "Combles perdus par soufflage, rampants par l'intérieur ou par l'extérieur (sarking), pignons, bardage PVC. On intervient sur le toit : autant en profiter.",
+    icone: '/icones/isolation.webp',
+    href: '/isolation-de-toiture/',
+    items: ['Combles', 'Rampants', 'Pignons', 'Bardage'],
+  },
+  {
+    titre: 'Étanchéité',
+    texte: "Toits-terrasses et étanchéité bitumineuse : membrane, relevés, évacuations. Une reprise ciblée coûte toujours moins cher qu'un plafond à refaire.",
+    icone: '/icones/etancheite.webp',
+    href: '/etancheite-toit-terrasse/',
+    items: ['Toit-terrasse', 'Bitume', 'Relevés'],
+  },
+  {
+    titre: 'Urgences & recherche de fuite',
+    texte: "Une infiltration, des tuiles arrachées par le vent : j'interviens pour bâcher et mettre hors d'eau, puis je cherche l'origine réelle du problème.",
+    icone: '/icones/reparation.webp',
+    href: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/',
+    items: ['Bâchage', 'Infiltration', 'Tempête'],
+  },
+];
+
+const etapes = [
+  { titre: 'Votre appel', texte: "Vous m'expliquez ce que vous avez constaté. Je vous dis tout de suite si cela demande une visite ou si la réponse tient en trois minutes." },
+  { titre: 'La visite', texte: 'Je monte voir la toiture, je passe dans les combles quand il y a une trace, et je constate au lieu de supposer. Le déplacement est gratuit.' },
+  { titre: 'Le devis écrit', texte: 'Un devis détaillé poste par poste : surfaces, matériaux, dépose et évacuation, échafaudage. Comparable, et sans engagement.' },
+  { titre: "Le chantier", texte: "Une date fixée, un chantier protégé et nettoyé chaque soir. Les travaux sont couverts par la garantie décennale." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path="/"
+  jsonLd={pageSchema('/', 'Accueil', {
+    pageName: `${site.brand} — couvreur zingueur en ${site.address.region}`,
+    description,
+    image: heroPhoto,
+  })}
+>
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero__media">
+      <img
+        src={heroPhoto}
+        width="1444" height="993"
+        fetchpriority="high" decoding="async"
+        alt={`Toiture en ardoise entièrement refaite, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
+      />
+    </div>
+    <div class="hero__inner">
+      <div class="conteneur">
+        <div class="hero__carte">
+          <h1>Couvreur en Seine-et-Marne (77) : <em>M. Simonard</em></h1>
+          <p class="hero__texte">
+            Couvreur zingueur en {site.address.region}, je prends en charge votre toiture de
+            bout en bout : couverture, entretien, zinguerie, isolation et étanchéité. Un seul
+            interlocuteur, du diagnostic à la dernière tuile posée.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+            <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+              <Icone nom="tel" taille={20} />{site.phone}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRESTATIONS ════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>L'expert de la couverture de toiture en Seine-et-Marne</h2>
+        <p>
+          De la simple tuile cassée à la réfection complète d'une toiture, je couvre toute
+          la chaîne du métier de couvreur zingueur — sans sous-traiter.
+        </p>
+      </div>
+      <div class="prestations">
+        {rubriques.map((r) => <CartePrestation {...r} />)}
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte mascotte="gauche" />
+
+  <!-- ═══ ARTISAN ════════════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur artisan">
+      <div class="artisan__media">
+        <img
+          src="/photos/portrait-kenny-simonard-couvreur-devant-pavillon-77-02.webp"
+          width="864" height="1152" loading="lazy" decoding="async"
+          alt={`${site.founder}, artisan couvreur, devant un pavillon en chantier en ${site.address.region}`}
+        />
+      </div>
+      <div class="artisan__texte">
+        <h2>Couvreur depuis deux générations</h2>
+        <p>
+          Le métier, je l'ai appris sur les chantiers, aux côtés de la génération d'avant.
+          C'est un savoir-faire qui se transmet et qui s'affine : on n'aborde pas de la même
+          façon une toiture ancienne en tuiles plates et un pavillon des années 80 en tuiles
+          mécaniques.
+        </p>
+        <p>
+          Je travaille aussi bien le neuf que l'ancien, la technique traditionnelle que les
+          matériaux d'aujourd'hui. Et je reste l'interlocuteur unique du début à la fin :
+          celui qui monte sur votre toit est celui qui a rédigé votre devis.
+        </p>
+        <div class="artisan__chiffres">
+          <div class="artisan__chiffre"><strong>2</strong><span>générations de couvreurs</span></div>
+          <div class="artisan__chiffre"><strong>77</strong><span>Seine-et-Marne et limitrophes</span></div>
+          <div class="artisan__chiffre"><strong>10 ans</strong><span>de garantie décennale</span></div>
+        </div>
+        <a class="btn btn--bleu" href="/devis-gratuit/">Me contacter<Fleche /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ENTRETIEN ══════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Un spécialiste de l'entretien de toiture en Seine-et-Marne</h2>
+        <p>
+          Les mousses et les lichens s'installent sur les tuiles, retiennent l'humidité et
+          rendent les matériaux poreux. Le gel fait le reste : la tuile éclate, l'eau passe.
+          Un démoussage réalisé au bon moment coûte une fraction de ce que coûte le pan de
+          toiture qu'il aurait fallu reprendre.
+        </p>
+        <p>
+          J'interviens en nettoyage basse pression ou manuel selon l'état de la couverture,
+          j'applique un traitement anti-mousse, puis un hydrofuge — incolore ou coloré — qui
+          retarde la repousse et fait ruisseler l'eau. J'en profite toujours pour contrôler
+          les points sensibles : faîtage, solins, pieds de cheminée. Ce sont eux qui
+          fuient en premier.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/artisan-simonard-sur-echelle-pour-le-nettoyage-dune-toiture-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Nettoyage d'une toiture en tuiles depuis une échelle — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ZINGUERIE ══════════════════════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Tous travaux de zinguerie</h2>
+        <p>
+          Gouttières, descentes, noues, chéneaux, solins et pieds de cheminée : la zinguerie,
+          c'est tout ce qui conduit l'eau hors de votre toit. Un ouvrage percé, déformé ou
+          simplement obstrué, et l'eau part là où elle ne devrait pas — sur la façade, dans
+          le mur, puis dans les fondations.
+        </p>
+        <p>
+          Je façonne et je pose ces ouvrages en zinc, en aluminium ou en PVC : dépose de
+          l'existant, pose des crochets, réglage des pentes, soudure des jonctions. Et je
+          vous dis franchement quand une gouttière se répare plutôt qu'elle ne se remplace.
+        </p>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/gouttiere-et-descente-en-zinc-sur-chantier-simonard-couvreur-77.webp"
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Gouttière en zinc et sa descente soudée, posées sur un chantier — ${site.brand}, couvreur zingueur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ÉTAPES ═════════════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>De votre appel à la fin du chantier</h2>
+        <p>Quatre étapes, sans mauvaise surprise et sans engagement de votre part.</p>
+      </div>
+      <ol class="etapes">
+        {etapes.map((e) => (
+          <li class="etape">
+            <h3>{e.titre}</h3>
+            <p>{e.texte}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ ZONE D'INTERVENTION ════════════════════════════════════════ -->
+  <section class="section section--ciel">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Le nord de la Seine-et-Marne, et au-delà</h2>
+        <p>
+          J'interviens sur tout le nord du département et les communes limitrophes. Si votre
+          commune n'est pas dans la liste, appelez-moi : elle est probablement dans ma
+          tournée.
+        </p>
+      </div>
+      <ul class="communes">
+        {communes.map((c) => (
+          <li class={c === site.address.city ? 'est-bureau' : undefined}>{c}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <section class="appel">
+    <div class="conteneur">
+      <h2>Une toiture à voir ? Le déplacement est gratuit.</h2>
+      <p>
+        Décrivez votre projet en deux minutes, ou appelez-moi directement. Je me déplace,
+        je monte voir le toit et vous recevez un devis écrit — gratuit, détaillé et sans
+        engagement.
+      </p>
+      <ul class="appel__points">
+        <li>Devis et déplacement gratuits</li>
+        <li>Interlocuteur unique</li>
+        <li>Garantie décennale</li>
+        <li>Urgences traitées en priorité</li>
+      </ul>
+      <div class="appel__actions">
+        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
+        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={20} />{site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

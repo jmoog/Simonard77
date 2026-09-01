@@ -1,0 +1,14 @@
+---
+import PageVille from '../components/PageVille.astro';
+import { villeParSlug } from '../data/villes.js';
+
+/**
+ * Exception d'URL : dans le site WordPress, la page de Claye-Souilly est
+ * servie sur /claye-souilly/ et non /couvreur-claye-souilly/ comme les dix
+ * autres. On conserve l'URL à l'identique — c'est elle qui porte les
+ * positions acquises — d'où ce fichier dédié, qui rend le même gabarit que
+ * la route couvreur-[ville].astro.
+ */
+const ville = villeParSlug('claye-souilly');
+---
+<PageVille ville={ville} />

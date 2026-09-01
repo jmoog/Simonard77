@@ -1,0 +1,382 @@
+---
+import '../styles/global.css';
+import { site, mainNav, communes } from '../data/site.js';
+import { urls, parSilo } from '../data/urls.js';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import IconeWhatsApp from '../components/IconeWhatsApp.astro';
+
+const {
+  title,
+  description,
+  path = '/',
+  ogImage = '/og-simonard-couvreur-77.jpg',
+  jsonLd = null,
+  // Pages de service (/merci/, 404) : à exclure de l'index Google.
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(path, site.domain).toString();
+
+// Le footer liste les prestations par silo. Comme aucune page de prestation
+// n'est encore migrée, on affiche les rubriques telles quelles : celles qui
+// ont une page en ligne deviennent des liens, les autres restent en texte.
+const rubriques = [
+  { cle: 'couverture', label: 'Couverture' },
+  { cle: 'entretien', label: 'Entretien de toiture' },
+  { cle: 'zinguerie', label: 'Zinguerie' },
+  { cle: 'isolation', label: 'Isolation' },
+  { cle: 'etancheite', label: 'Étanchéité' },
+];
+// Pour chaque rubrique : le lien de sa page pilier si elle est publiée.
+const lienRubrique = (cle) => {
+  const pilier = parSilo(cle).find((u) => u.pilier) || parSilo(cle)[0];
+  return pilier ? pilier.path : null;
+};
+const villesPubliees = parSilo('ville');
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Polices auto-hébergées (public/fonts/) : conformité RGPD — aucune
+       requête vers Google Fonts, donc aucune adresse IP visiteur transmise
+       avant tout consentement. -->
+  <link rel="preload" href="/fonts/poppins-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+  <!-- Favicons. Googlebot-Image ne récupère de façon fiable qu'un fichier
+       matriciel : l'ICO est déclaré en premier et reste servi sur
+       /favicon.ico, l'URL que les crawlers demandent par défaut. -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon-48x48.png" type="image/png" sizes="48x48" />
+  <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#025E95" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content={`${site.brand} — Couvreur ${site.address.department}`} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(ogImage, site.domain).toString()} />
+  <meta name="twitter:card" content="summary_large_image" />
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  <script is:inline>
+    // Posé avant le premier rendu : sans cette classe, aucun bloc n'est masqué
+    // et la page s'affiche telle quelle. On n'anime que si le navigateur sait
+    // observer le défilement et si l'utilisateur n'a pas demandé à réduire
+    // les animations.
+    if ('IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('js-anim');
+    }
+  </script>
+</head>
+<body>
+  <a class="saut-contenu" href="#contenu">Aller au contenu</a>
+
+  <div class="barre-haute">
+    <div class="conteneur">
+      <span class="barre-haute__gauche">Devis et déplacement gratuits<span class="barre-haute__zone">{` — ${site.address.region} et limitrophes`}</span></span>
+      <span class="barre-haute__droite">
+        <a href={`mailto:${site.email}`}><Icone nom="mail" taille={15} />{site.email}</a>
+        <a href={`tel:${site.phoneHref}`}><Icone nom="tel" taille={15} />{site.phone}</a>
+      </span>
+    </div>
+  </div>
+
+  <header class="entete">
+    <div class="conteneur">
+      <a class="entete__logo" href="/" aria-label={`Accueil — ${site.brand}, artisan couvreur`}>
+        <img src="/logo-simonard-couvreur-77.webp" alt={`${site.brand}, artisan couvreur en ${site.address.region}`} width="922" height="200" />
+      </a>
+
+      <input type="checkbox" id="nav-bascule" class="nav-bascule" hidden />
+      <label for="nav-bascule" class="nav-burger" aria-label="Ouvrir le menu"><span></span></label>
+      <label for="nav-bascule" class="nav-voile" aria-hidden="true"></label>
+
+      <div class="nav-panneau">
+        <label for="nav-bascule" class="nav-fermer" aria-label="Fermer le menu"></label>
+        <img class="nav-panneau__logo" src="/logo-simonard-couvreur-77.webp" width="922" height="200" alt={`${site.brand}, artisan couvreur en ${site.address.region}`} />
+
+        <nav class="nav" aria-label="Navigation principale">
+          {/* Rubrique sans `href` : sa page n'est pas encore migrée, on la
+              rend en <span> plutôt qu'en lien mort — voir data/site.js. */}
+          {mainNav.map((item) => (item.href ? <a href={item.href}>{item.label}</a> : <span>{item.label}</span>))}
+        </nav>
+
+        <div class="entete__actions">
+          <a class="entete__tel" href={`tel:${site.phoneHref}`}>
+            <span class="entete__tel-rond"><Icone nom="tel" taille={19} /></span>
+            <span class="entete__tel-txt"><small>Appelez-moi</small><strong>{site.phone}</strong></span>
+          </a>
+          <a
+            class="btn btn--wa"
+            href={site.whatsapp}
+            target="_blank"
+            rel="noopener"
+            aria-label={`Écrire à ${site.brand} sur WhatsApp`}
+          >
+            <IconeWhatsApp taille={18} /><span class="entete__wa-txt">WhatsApp</span>
+          </a>
+          <a class="btn btn--rouge" href="/devis-gratuit/">Devis gratuit<Fleche /></a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="barre-mobile">
+    <a class="btn btn--rouge" href="/devis-gratuit/">Devis gratuit<Fleche /></a>
+    <a class="btn btn--bleu" href={`tel:${site.phoneHref}`}><Icone nom="tel" taille={16} />{site.phone}</a>
+    <a
+      class="btn btn--wa btn--carre"
+      href={site.whatsapp}
+      target="_blank"
+      rel="noopener"
+      aria-label={`Écrire à ${site.brand} sur WhatsApp`}
+    >
+      <IconeWhatsApp taille={21} />
+    </a>
+  </div>
+
+  <script type="module">
+    // Fait apparaître la barre d'action mobile une fois l'en-tête sorti de
+    // l'écran (et non dès le premier pixel : elle masquerait le hero).
+    const maj = () => document.body.classList.toggle('defile', window.scrollY > 900);
+    window.addEventListener('scroll', maj, { passive: true });
+    maj();
+  </script>
+
+  <main id="contenu">
+    <slot />
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied__cols">
+        <div class="pied__marque">
+          <span class="pied__logo"><img src="/logo-simonard-couvreur-77.webp" width="922" height="200" alt={`${site.brand}, artisan couvreur en ${site.address.region}`} loading="lazy" /></span>
+          <p class="pied__nom">{site.brand}</p>
+          <p>Artisan couvreur zingueur en {site.address.region} ({site.address.department})</p>
+          <p>
+            {site.address.street}<br />{site.address.postalCode} {site.address.city}<br />
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+          <div class="pied__actions">
+            <a class="btn btn--rouge" href={`tel:${site.phoneHref}`}>
+              <Icone nom="tel" taille={17} />{site.phone}
+            </a>
+            <a
+              class="btn btn--wa"
+              href={site.whatsapp}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Écrire à ${site.brand} sur WhatsApp`}
+            >
+              <IconeWhatsApp taille={17} />WhatsApp
+            </a>
+            <a class="btn pied__btn-devis" href="/devis-gratuit/">Devis gratuit<Fleche /></a>
+          </div>
+          {/* Le bloc « avis Google » n'apparaît que le jour où la fiche
+              existe : un lien vide vaudrait moins que pas de lien du tout. */}
+          {site.googleReviewUrl && (
+            <a class="pied__avis" href={site.googleReviewUrl} target="_blank" rel="noopener noreferrer">
+              <span class="etoiles" aria-hidden="true">★★★★★</span>
+              <span>Laissez-nous un avis Google</span>
+            </a>
+          )}
+        </div>
+
+        <div class="pied__pile">
+          <div>
+            <h4>Prestations</h4>
+            <ul>
+              {rubriques.map((r) => {
+                const href = lienRubrique(r.cle);
+                return <li>{href ? <a href={href}>{r.label}</a> : <span class="attente">{r.label}</span>}</li>;
+              })}
+            </ul>
+          </div>
+          <div>
+            <h4>Informations</h4>
+            <ul>
+              <li><a href="/devis-gratuit/">Devis gratuit</a></li>
+              <li><a href="/plan-du-site/">Plan du site</a></li>
+              <li><a href="/mentions-legales/">Mentions légales</a></li>
+              <li><a href="#" data-cookies>Gérer les cookies</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h4>Zone d'intervention</h4>
+          <ul class="pied__villes">
+            {/* Tant qu'aucune page ville n'est migrée, on affiche les
+                communes en texte : elles informent le visiteur et donnent le
+                contexte géographique sans créer de lien mort. */}
+            {villesPubliees.length > 0
+              ? villesPubliees.map((v) => <li><a href={v.path}>{v.label}</a></li>)
+              : communes.map((c) => <li><span class="attente">{c}</span></li>)}
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="pied__bas">
+        <p>
+          {site.brand} — Artisan couvreur zingueur en {site.address.region} ({site.address.department}).
+          Devis gratuit et déplacement offert.
+        </p>
+        <p class="pied__legal">{site.legalName} · SIRET {site.siret}</p>
+        <a class="pied__signature" href="https://local-place.fr/" target="_blank" rel="noopener noreferrer">
+          <span class="pied__signature-badge"><img src="/logo-the-local-place.png" width="65" height="22" alt="The Local Place" loading="lazy" /></span>
+          <span>Site créé et référencé par The Local Place</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="bandeau-cookies" class="bandeau-cookies" role="dialog" aria-live="polite" aria-label="Gestion des cookies" hidden>
+    <div class="bandeau-cookies__carte">
+      <p class="bandeau-cookies__texte">
+        🍪 Ce site utilise des cookies de mesure d'audience pour comprendre comment il est consulté. Vous pouvez les accepter ou les refuser — le site fonctionne à l'identique dans les deux cas.
+        <a href="/mentions-legales/#cookies">En savoir plus</a>
+      </p>
+      <div class="bandeau-cookies__actions">
+        <button type="button" class="btn btn--contour" id="cookies-refus">Refuser</button>
+        <button type="button" class="btn btn--rouge" id="cookies-accord">Tout accepter</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var racine = document.documentElement;
+      if (!racine.classList.contains('js-anim')) return;
+
+      // Filet de sécurité : si quoi que ce soit échoue ci-dessous, on retire
+      // la classe et tout redevient visible. Mieux vaut une page sans
+      // animation qu'une page vide.
+      try {
+        var CIBLES = [
+          '.chapeau', '.reassurance__item', '.prestation',
+          '.artisan__media', '.artisan__texte',
+          '.duo__texte', '.duo__media',
+          '.etape', '.suite__item', '.liens a',
+          '.appel__grille > *',
+          '.devis__intro', '.formulaire-carte', '.carte-zone', '.communes',
+          '.mairie', '.titre-liste',
+        ].join(',');
+
+        var blocs = document.querySelectorAll(CIBLES);
+        for (var i = 0; i < blocs.length; i++) blocs[i].classList.add('apparait');
+
+        // Apparition en cascade au sein d'un même groupe : les cartes d'une
+        // grille arrivent l'une après l'autre plutôt qu'en bloc. Plafonné à
+        // 320 ms — au-delà, la dernière carte se fait attendre.
+        var groupes = document.querySelectorAll(
+          '.prestations, .reassurance__grille, .etapes, .suite, .liens'
+        );
+        for (var g = 0; g < groupes.length; g++) {
+          var enfants = groupes[g].children;
+          for (var e = 0; e < enfants.length; e++) {
+            if (enfants[e].classList.contains('apparait')) {
+              enfants[e].style.transitionDelay = Math.min(e * 80, 320) + 'ms';
+            }
+          }
+        }
+
+        var observateur = new IntersectionObserver(function (entrees) {
+          for (var k = 0; k < entrees.length; k++) {
+            if (!entrees[k].isIntersecting) continue;
+            entrees[k].target.classList.add('est-visible');
+            // Une seule fois : rejouer l'animation à chaque passage fatigue,
+            // et c'est le genre de détail qui fait fermer un onglet.
+            observateur.unobserve(entrees[k].target);
+          }
+        }, {
+          // Le bloc doit être entré d'un dixième d'écran avant d'apparaître :
+          // déclenché pile au bord, le mouvement passe inaperçu.
+          rootMargin: '0px 0px -10% 0px',
+          threshold: 0.05,
+        });
+
+        for (var j = 0; j < blocs.length; j++) observateur.observe(blocs[j]);
+      } catch (err) {
+        racine.classList.remove('js-anim');
+      }
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      // Mesure d'audience : le script n'est chargé QU'APRÈS un consentement
+      // explicite. Tant que le visiteur n'a pas répondu, aucun cookie tiers
+      // n'est déposé — c'est ce que la CNIL exige, et le bandeau ne sert à
+      // rien s'il s'affiche après le dépôt.
+      // À COMPLÉTER : remplacer par l'identifiant de mesure réel (G-XXXX)
+      // le jour où le compte Analytics est créé pour ce site.
+      var GA_ID = '';
+      var CLE = 'simonard-cookies';
+      var bandeau = document.getElementById('bandeau-cookies');
+
+      function chargerGA() {
+        if (!GA_ID || window.__gaCharge) return;
+        window.__gaCharge = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+      }
+
+      function afficher() {
+        bandeau.hidden = false;
+        requestAnimationFrame(function () { bandeau.classList.add('est-visible'); });
+      }
+      function masquer() {
+        bandeau.classList.remove('est-visible');
+        setTimeout(function () { bandeau.hidden = true; }, 450);
+      }
+
+      var choix = null;
+      try { choix = localStorage.getItem(CLE); } catch (e) {}
+      if (choix === 'oui') { chargerGA(); }
+      else if (choix !== 'non') {
+        // Le bandeau attend le premier défilement : affiché d'emblée, il
+        // masque le hero et fait fuir sur mobile.
+        var auDefilement = function () {
+          if (window.scrollY > 120) { afficher(); window.removeEventListener('scroll', auDefilement); }
+        };
+        window.addEventListener('scroll', auDefilement, { passive: true });
+        auDefilement();
+      }
+
+      document.getElementById('cookies-accord').addEventListener('click', function () {
+        try { localStorage.setItem(CLE, 'oui'); } catch (e) {}
+        chargerGA(); masquer();
+      });
+      document.getElementById('cookies-refus').addEventListener('click', function () {
+        try { localStorage.setItem(CLE, 'non'); } catch (e) {}
+        masquer();
+      });
+      document.addEventListener('click', function (e) {
+        var lien = e.target.closest('[data-cookies]');
+        if (!lien) return;
+        e.preventDefault();
+        afficher();
+      });
+    })();
+  </script>
+</body>
+</html>

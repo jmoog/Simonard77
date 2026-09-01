@@ -1,0 +1,22 @@
+{
+  "name": "simonard-77",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site M. Simonard — artisan couvreur en Seine-et-Marne (77), sous Astro. Migration du site WordPress simonard-77.fr : les URLs et le contenu de l'ancien site sont conservés.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^8.3.4",
+    "astro": "^4.16.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3"
+  }
+}

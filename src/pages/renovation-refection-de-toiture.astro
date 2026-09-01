@@ -1,0 +1,263 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page pilier du silo « couverture » — et GABARIT DE RÉFÉRENCE des pages de
+ * prestation. Les quatre autres piliers (entretien, zinguerie, isolation,
+ * étanchéité) se dupliquent depuis ce fichier : mêmes sections, mêmes
+ * alternances de fond, seul le contenu change.
+ *
+ * Structure reprise des pages de service de lafleurcouvreur77 :
+ *   fil d'Ariane → hero deux colonnes → réassurance → 4 sections en duo à
+ *   fonds alternés → FAQ → bandeau d'appel.
+ * Trois écarts volontaires, imposés par la charte Simonard :
+ *   - pas de surtitres au-dessus des H2 (Lafleur en met un par section) ;
+ *   - pas de bordure colorée sur les cartes de FAQ ;
+ *   - pas de bloc d'avis Google : la fiche n'est pas encore renseignée, et
+ *     on n'affiche pas une note qu'on n'a pas.
+ *
+ * ⚠ TEXTE PROVISOIRE — tous les paragraphes sont en lorem ipsum. Titres,
+ * structure, photos et liens sont définitifs. La page reste en noindex et
+ * hors sitemap tant que sa ligne dans data/urls.js n'est pas passée à 'ok'.
+ */
+const path = '/renovation-refection-de-toiture/';
+const brouillon = !estPubliee(path);
+
+// Libellé court et constant pour le fil d'Ariane (repris de data/urls.js),
+// passé à la fois à <Ariane> et à pageSchema() pour que l'affiché et le
+// balisé soient identiques.
+const filAriane = 'Rénovation & réfection de toiture';
+
+const h1 = 'Rénovation de toiture en Seine-et-Marne';
+const title = `Rénovation et réfection de toiture en ${site.address.region} (77)`;
+const description = `Réfection partielle ou remplacement complet de votre couverture en ${site.address.region} : dépose, écran sous-toiture, tuile, ardoise, zinc. Devis gratuit ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/vue-aerienne-toiture-ardoise-et-tourelle-terminees-simonard-couvreur-77.webp';
+
+const LOREM_COURT =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+const LOREM_LONG =
+  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.";
+
+// Les listes à puces des pages Lafleur ouvrent sur un terme en gras suivi
+// d'une explication : on garde la forme, le terme reste réel, l'explication
+// est en lorem.
+const etapes = [
+  { t: "Dépose de l'ancienne couverture", d: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.' },
+  { t: "Pose de l'écran sous-toiture", d: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.' },
+  { t: 'Liteaunage', d: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.' },
+  { t: 'Pose de la couverture', d: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.' },
+  { t: 'Zinguerie', d: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.' },
+  { t: 'Finitions et nettoyage', d: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.' },
+];
+
+const materiaux = [
+  { t: 'La tuile plate', d: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.' },
+  { t: 'La tuile mécanique', d: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.' },
+  { t: "L'ardoise", d: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.' },
+  { t: 'Le zinc à joint debout', d: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.' },
+  { t: 'Le bac acier', d: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.' },
+];
+
+const faq = [
+  { q: 'Quand faut-il remplacer sa toiture plutôt que la réparer ?', a: LOREM_COURT.slice(0, 190) + '…' },
+  { q: 'Combien de temps dure un remplacement de toiture ?', a: LOREM_LONG.slice(0, 185) + '…' },
+  { q: 'Faut-il une autorisation pour refaire sa toiture ?', a: LOREM_COURT.slice(0, 175) + '…' },
+  { q: 'La maison reste-t-elle à découvert ?', a: LOREM_LONG.slice(0, 195) + '…' },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    service: { name: 'Rénovation et réfection de toiture', description },
+    faq,
+  })}
+>
+  <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════
+       Même bloc que les pages ville : deux colonnes sur desktop, et sur
+       mobile la photo remonte juste sous le titre (voir .hero-page). -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Rénovation de toiture en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+          incididunt ut labore et dolore magna aliqua.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Lorem ipsum dolor sit amet consectetur</li>
+          <li><Icone nom="coche" taille={18} />Sed do eiusmod tempor incididunt ut labore</li>
+          <li><Icone nom="coche" taille={18} />Ut enim ad minim veniam quis nostrud</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1442" height="989"
+          fetchpriority="high" decoding="async"
+          alt={`Vue aérienne d'une toiture en ardoise terminée, avec ses lucarnes et sa tourelle — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Garantie décennale</strong>
+            <span>Lorem ipsum dolor sit amet consectetur adipiscing.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1. LE DIAGNOSTIC ═══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Réparer, rénover ou remplacer votre toiture ?</h2>
+        <p>{LOREM_COURT}</p>
+        <h3>Réfection partielle ou remplacement complet</h3>
+        <p>{LOREM_LONG}</p>
+        <h3>Ce que révèle une visite sur le toit</h3>
+        <p>{LOREM_COURT}</p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/pavillon-vue-densemble-du-chantier-de-couverture-simonard-couvreur-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Pavillon vu depuis la rue, échelle en place et panneau de chantier — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. LES ÉTAPES DU CHANTIER ══════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Les étapes d'un remplacement de toiture</h2>
+        <p>{LOREM_COURT}</p>
+        <ul class="liste-detail">
+          {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
+        </ul>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/banderole-simonard-sur-chantier-de-toiture-avec-echafaudage-77.webp"
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Chantier de couverture avec échafaudage et banderole ${site.brand}, toiture mise à nu`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Une toiture à faire refaire ?"
+    note="Déplacement offert"
+    mascotte="face"
+    inverse={true}
+  />
+
+  <!-- ═══ 3. LES MATÉRIAUX ═══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Quel matériau pour votre nouvelle couverture ?</h2>
+        <p>{LOREM_COURT}</p>
+        <ul class="liste-detail">
+          {materiaux.map((m) => <li><strong>{m.t}</strong> — {m.d}</li>)}
+        </ul>
+        <!-- Maillage interne : les liens vers les pages du silo couverture
+             (tuile, ardoise, zinc, bac acier, shingle) s'ajoutent ici au fur
+             et à mesure qu'elles passent à 'ok' dans data/urls.js. On
+             n'écrit jamais un lien vers une page qui n'existe pas. -->
+        <p>{LOREM_LONG}</p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/remplacement-de-toiture-en-cours-sur-pavillon-simonard-couvreur-77.webp"
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Toiture en cours de remplacement : couverture déposée et bâche de protection posée — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4. L'ISOLATION ═════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Le toit ouvert, le bon moment pour isoler</h2>
+        <p>{LOREM_LONG}</p>
+        <p>{LOREM_COURT}</p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/isolation-en-laine-de-verre-entre-les-liteaux-simonard-couvreur-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Isolant en laine minérale posé sous une charpente neuve, avant la pose de la couverture — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur la rénovation de toiture" items={faq} gris={false} />
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <section class="appel">
+    <div class="conteneur">
+      <h2>Votre toiture mérite un vrai diagnostic</h2>
+      <p>{LOREM_COURT}</p>
+      <ul class="appel__points">
+        <li>Devis et déplacement gratuits</li>
+        <li>Interlocuteur unique</li>
+        <li>Garantie décennale</li>
+        <li>Urgences traitées en priorité</li>
+      </ul>
+      <div class="appel__actions">
+        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
+        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={20} />{site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

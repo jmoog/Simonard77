@@ -1,0 +1,33 @@
+---
+import Icone from './Icones.astro';
+import { estPubliee } from '../data/urls.js';
+
+/**
+ * Carte de rubrique de l'accueil.
+ *
+ * La carte devient un LIEN si et seulement si sa page est marquée `ok` dans
+ * data/urls.js. Sinon elle se rend en <div> : le visiteur voit bien la
+ * prestation et ce qu'elle recouvre, mais rien ne lui promet un clic qui
+ * finirait en 404. Faire passer la page à `ok` suffit à la rendre cliquable,
+ * ici comme dans le menu, le footer, le plan du site et le sitemap.
+ */
+const { titre, texte, icone, href, items = [] } = Astro.props;
+const active = href && estPubliee(href);
+const Balise = active ? 'a' : 'div';
+---
+<Balise class={`prestation${active ? '' : ' prestation--attente'}`} {...(active ? { href } : {})}>
+  <img class="prestation__icone" src={icone} width="256" height="256" loading="lazy" decoding="async" alt="" aria-hidden="true" />
+  <h3>{titre}</h3>
+  <p>{texte}</p>
+  {items.length > 0 && (
+    <ul class="prestation__liste">
+      {items.map((i) => <li>{i}</li>)}
+    </ul>
+  )}
+  {active && (
+    <span class="prestation__pied">
+      Voir la prestation
+      <span class="prestation__rond"><Icone nom="fleche" taille={15} /></span>
+    </span>
+  )}
+</Balise>
