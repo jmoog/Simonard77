@@ -48,7 +48,9 @@ const BLEU_ENCRE = '#04202F';
 const ROUGE = '#C2003C';
 const CIEL = '#E9F3FB';
 const GRIS_CLAIR = '#F5F8FA';
-const TEXTE = '#16232E';
+// Texte courant en bleu nuit plutôt qu'en noir quasi-pur (#16232E, --ink du
+// site) : plus de bleu que de noir dans les e-mails, à la demande de Joseph.
+const TEXTE = BLEU_NUIT;
 const GRIS = '#5B6B78';
 const BORDURE = '#E2EAF0';
 
@@ -64,6 +66,22 @@ const LOGO_H = 200;
 const logoBox = (l: number) => ({ l, h: Math.round((l * LOGO_H) / LOGO_L) });
 // PNG et non WebP : Outlook n'affiche pas le WebP.
 const LOGO_URL = `${URL_SITE}/logo-simonard-couvreur-77.png`;
+
+// Mascotte — même règle d'orientation que sur le site (AppelMascotte.astro) :
+// le pouce doit se placer du côté du texte/CTA qu'elle désigne. `gauche` a
+// le pouce à droite du cadre → mascotte posée à GAUCHE du bouton (montage
+// normal). `face` a le pouce à gauche → mascotte posée à DROITE (montage
+// inverse). `droite` est écartée : mal détourée (voir feedback_design.md).
+// PNG et non WebP — Outlook n'affiche pas le WebP (mêmes fichiers que
+// public/mascotte-simonard-*.webp, reconvertis pour l'e-mail).
+const MASCOTTE_GAUCHE_L = 241;
+const MASCOTTE_GAUCHE_H = 242;
+const MASCOTTE_FACE_L = 197;
+const MASCOTTE_FACE_H = 183;
+const mascotteBox = (l: number, natL: number, natH: number) => ({ l, h: Math.round((l * natH) / natL) });
+const MASCOTTE_GAUCHE_URL = `${URL_SITE}/mascotte-simonard-gauche-email.png`;
+const MASCOTTE_FACE_URL = `${URL_SITE}/mascotte-simonard-face-email.png`;
+
 const TEL = site.phone;
 const TEL_HREF = `tel:${site.phoneHref}`;
 const ENTREPRISE = site.brand;
@@ -148,6 +166,7 @@ function notificationTemplate(d: DevisData) {
   const subject = `Nouvelle demande ${site.address.department} — ${presta} à ${d.ville}`;
   const prenom = (d.nom || '').split(' ')[0] || 'le client';
   const logo = logoBox(190);
+  const mascotteFace = mascotteBox(100, MASCOTTE_FACE_L, MASCOTTE_FACE_H);
   const urgence = d.prestation === 'urgence';
 
   const html = `<!DOCTYPE html>
@@ -186,11 +205,20 @@ function notificationTemplate(d: DevisData) {
         <tr><td style="padding:8px 32px 22px;">
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td align="center" style="padding:8px 8px 8px 0;" width="50%">
-                <a href="tel:${echapper(telNet)}" style="display:block;background:${ROUGE};color:#fff;text-decoration:none;padding:14px 16px;border-radius:999px;font-weight:700;font-size:14px;">Appeler ${echapper(prenom)}</a>
+              <td valign="middle">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding:8px 8px 8px 0;" width="50%">
+                      <a href="tel:${echapper(telNet)}" style="display:block;background:${ROUGE};color:#fff;text-decoration:none;padding:14px 16px;border-radius:12px;font-weight:700;font-size:14px;">Appeler ${echapper(prenom)}</a>
+                    </td>
+                    <td align="center" style="padding:8px 0 8px 8px;" width="50%">
+                      <a href="mailto:${echapper(d.email)}?subject=${encodeURIComponent(`Re: votre demande de devis — ${ENTREPRISE}`)}" style="display:block;background:${BLEU};color:#fff;text-decoration:none;padding:14px 16px;border-radius:12px;font-weight:700;font-size:14px;">Répondre par email</a>
+                    </td>
+                  </tr>
+                </table>
               </td>
-              <td align="center" style="padding:8px 0 8px 8px;" width="50%">
-                <a href="mailto:${echapper(d.email)}?subject=${encodeURIComponent(`Re: votre demande de devis — ${ENTREPRISE}`)}" style="display:block;background:${BLEU};color:#fff;text-decoration:none;padding:14px 16px;border-radius:999px;font-weight:700;font-size:14px;">Répondre par email</a>
+              <td width="${mascotteFace.l}" valign="middle" style="padding-left:14px;">
+                <img src="${MASCOTTE_FACE_URL}" width="${mascotteFace.l}" height="${mascotteFace.h}" alt="" style="display:block;width:${mascotteFace.l}px;height:${mascotteFace.h}px;border:0;">
               </td>
             </tr>
           </table>
@@ -224,6 +252,7 @@ function accuseTemplate(d: DevisData) {
   const subject = `Nous avons bien reçu votre demande — ${ENTREPRISE}`;
   const prenom = (d.nom || '').split(' ')[0];
   const logo = logoBox(230);
+  const mascotteGauche = mascotteBox(100, MASCOTTE_GAUCHE_L, MASCOTTE_GAUCHE_H);
 
   const html = `<!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${echapper(subject)}</title></head>
@@ -247,8 +276,17 @@ function accuseTemplate(d: DevisData) {
             Si votre situation est urgente — une fuite en cours, des tuiles arrachées —, n'attendez pas mon rappel : appelez-moi directement.
           </p>
         </td></tr>
-        <tr><td style="padding:0 32px 26px;" align="center">
-          <a href="${TEL_HREF}" style="display:inline-block;background:${ROUGE};color:#fff;text-decoration:none;padding:15px 30px;border-radius:999px;font-weight:700;font-size:15px;">Appeler le ${TEL}</a>
+        <tr><td style="padding:6px 32px 26px;" align="center">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td width="${mascotteGauche.l}" valign="middle" style="padding-right:16px;">
+                <img src="${MASCOTTE_GAUCHE_URL}" width="${mascotteGauche.l}" height="${mascotteGauche.h}" alt="" style="display:block;width:${mascotteGauche.l}px;height:${mascotteGauche.h}px;border:0;">
+              </td>
+              <td valign="middle">
+                <a href="${TEL_HREF}" style="display:inline-block;background:${ROUGE};color:#fff;text-decoration:none;padding:15px 30px;border-radius:12px;font-weight:700;font-size:15px;">Appeler le ${TEL}</a>
+              </td>
+            </tr>
+          </table>
         </td></tr>
         <tr><td style="padding:0 32px 28px;">
           <div style="background:${CIEL};border-radius:12px;padding:18px 20px;">
