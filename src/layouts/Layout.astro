@@ -23,13 +23,18 @@ const canonical = new URL(path, site.domain).toString();
 // ont une page en ligne deviennent des liens, les autres restent en texte.
 const rubriques = [
   { cle: 'couverture', label: 'Couverture' },
-  { cle: 'entretien', label: 'Entretien de toiture' },
+  // Le silo « entretien » est présenté sous le nom de la prestation que les
+  // gens recherchent (nettoyage, démoussage), pas sous le mot « entretien » :
+  // le lien vise donc explicitement la page nettoyage, pas la page pilier.
+  { cle: 'entretien', label: 'Nettoyage toiture', path: '/nettoyage-demoussage-de-toiture/' },
   { cle: 'zinguerie', label: 'Zinguerie' },
   { cle: 'isolation', label: 'Isolation' },
   { cle: 'etancheite', label: 'Étanchéité' },
 ];
-// Pour chaque rubrique : le lien de sa page pilier si elle est publiée.
-const lienRubrique = (cle) => {
+// Pour chaque rubrique : la page imposée (`path`) si elle est publiée, sinon
+// le lien de sa page pilier si elle est publiée.
+const lienRubrique = ({ cle, path }) => {
+  if (path) return parSilo(cle).some((u) => u.path === path) ? path : null;
   const pilier = parSilo(cle).find((u) => u.pilier) || parSilo(cle)[0];
   return pilier ? pilier.path : null;
 };
@@ -49,6 +54,9 @@ const villesPubliees = parSilo('ville');
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+  {/* Vérification de la propriété Search Console (méthode « Balise HTML »).
+      Ne dépose rien et ne dépend d'aucun consentement — voir data/site.js. */}
+  {site.googleSiteVerification && <meta name="google-site-verification" content={site.googleSiteVerification} />}
   <!-- Favicons. Googlebot-Image ne récupère de façon fiable qu'un fichier
        matriciel : l'ICO est déclaré en premier et reste servi sur
        /favicon.ico, l'URL que les crawlers demandent par défaut. -->
@@ -80,6 +88,32 @@ const villesPubliees = parSilo('ville');
 </head>
 <body>
   <a class="saut-contenu" href="#contenu">Aller au contenu</a>
+
+  {/* Bandeau cookies. Placé en tête du document pour qu'un visiteur au
+      clavier l'atteigne en deux tabulations ; visuellement il est fixé en
+      bas. Non bloquant : pas de voile, le site reste utilisable derrière.
+      Masqué (hidden) tant que le script ne l'ouvre pas : sans JavaScript il
+      n'apparaît jamais — et rien n'est chargé non plus. */}
+  <div id="bandeau-cookies" class="bandeau-cookies" hidden>
+    <div class="bandeau-cookies__carte" role="dialog" aria-labelledby="cookies-titre" aria-describedby="cookies-texte">
+      <div class="bandeau-cookies__entete">
+        <span class="bandeau-cookies__icone"><Icone nom="cookie" taille={22} /></span>
+        <p class="bandeau-cookies__titre" id="cookies-titre">Cookies : à vous de choisir</p>
+      </div>
+      <p class="bandeau-cookies__texte" id="cookies-texte">
+        Ce site utilise Google Analytics pour savoir combien de personnes le visitent et quelles
+        pages les intéressent. Rien n'est déposé tant que vous n'avez pas choisi, et le site
+        fonctionne exactement pareil si vous refusez.
+        <a href="/mentions-legales/#cookies">En savoir plus</a>
+      </p>
+      <p class="bandeau-cookies__etat" id="cookies-etat" hidden></p>
+      <div class="bandeau-cookies__actions">
+        <button type="button" class="btn btn--bleu" id="cookies-refus">Refuser</button>
+        <button type="button" class="btn btn--bleu" id="cookies-accord">Accepter</button>
+      </div>
+      <p class="bandeau-cookies__note">Vous pourrez changer d'avis à tout moment via « Gérer les cookies », en bas de page.</p>
+    </div>
+  </div>
 
   <div class="barre-haute">
     <div class="conteneur">
@@ -198,7 +232,7 @@ const villesPubliees = parSilo('ville');
             <h4>Prestations</h4>
             <ul>
               {rubriques.map((r) => {
-                const href = lienRubrique(r.cle);
+                const href = lienRubrique(r);
                 return <li>{href ? <a href={href}>{r.label}</a> : <span class="attente">{r.label}</span>}</li>;
               })}
             </ul>
@@ -209,7 +243,7 @@ const villesPubliees = parSilo('ville');
               <li><a href="/devis-gratuit/">Devis gratuit</a></li>
               <li><a href="/plan-du-site/">Plan du site</a></li>
               <li><a href="/mentions-legales/">Mentions légales</a></li>
-              <li><a href="#" data-cookies>Gérer les cookies</a></li>
+              <li><a href="/mentions-legales/#cookies" data-cookies>Gérer les cookies</a></li>
             </ul>
           </div>
         </div>
@@ -241,19 +275,6 @@ const villesPubliees = parSilo('ville');
       </div>
     </div>
   </footer>
-
-  <div id="bandeau-cookies" class="bandeau-cookies" role="dialog" aria-live="polite" aria-label="Gestion des cookies" hidden>
-    <div class="bandeau-cookies__carte">
-      <p class="bandeau-cookies__texte">
-        🍪 Ce site utilise des cookies de mesure d'audience pour comprendre comment il est consulté. Vous pouvez les accepter ou les refuser — le site fonctionne à l'identique dans les deux cas.
-        <a href="/mentions-legales/#cookies">En savoir plus</a>
-      </p>
-      <div class="bandeau-cookies__actions">
-        <button type="button" class="btn btn--contour" id="cookies-refus">Refuser</button>
-        <button type="button" class="btn btn--rouge" id="cookies-accord">Tout accepter</button>
-      </div>
-    </div>
-  </div>
 
   <script is:inline>
     (function () {
@@ -314,67 +335,125 @@ const villesPubliees = parSilo('ville');
     })();
   </script>
 
-  <script is:inline>
+  <script is:inline define:vars={{ GA_ID: site.gaId }}>
     (function () {
-      // Mesure d'audience : le script n'est chargé QU'APRÈS un consentement
-      // explicite. Tant que le visiteur n'a pas répondu, aucun cookie tiers
-      // n'est déposé — c'est ce que la CNIL exige, et le bandeau ne sert à
-      // rien s'il s'affiche après le dépôt.
-      // À COMPLÉTER : remplacer par l'identifiant de mesure réel (G-XXXX)
-      // le jour où le compte Analytics est créé pour ce site.
-      var GA_ID = '';
+      // Mesure d'audience — mode strict CNIL (« basic » du Consent Mode) :
+      // le script Google n'est chargé QU'APRÈS un clic sur « Accepter ».
+      // Avant ce clic, et en cas de refus, aucune requête ne part vers Google
+      // et aucun cookie n'est déposé. GA_ID vient de data/site.js ; vide, le
+      // bandeau ne s'affiche pas (il n'aurait rien à demander).
       var CLE = 'simonard-cookies';
+      // À incrémenter si la finalité ou l'outil change : le bandeau se
+      // représente alors à tous les visiteurs, y compris ceux qui avaient déjà
+      // répondu — un consentement donné pour autre chose ne vaut plus.
+      var VERSION = 1;
+      // Le choix (accord ou refus) est mémorisé 6 mois, durée recommandée par
+      // la CNIL, puis la question est reposée.
+      var DUREE_CHOIX = 182 * 24 * 3600 * 1000;
+      // Les cookies déposés par Analytics sont plafonnés à 13 mois (durée de
+      // vie maximale d'un traceur selon la CNIL ; par défaut GA4 met 2 ans).
+      var DUREE_COOKIES_GA = 33696000;
+
       var bandeau = document.getElementById('bandeau-cookies');
+      if (!bandeau || !GA_ID) return;
+      var etat = document.getElementById('cookies-etat');
+      var btnAccord = document.getElementById('cookies-accord');
+      var btnRefus = document.getElementById('cookies-refus');
+      var declencheur = null;
+
+      function lireChoix() {
+        try {
+          var brut = JSON.parse(localStorage.getItem(CLE));
+          if (!brut || brut.v !== VERSION) return null;
+          if (Date.now() - brut.t > DUREE_CHOIX) return null;
+          return brut.c === 'oui' ? 'oui' : 'non';
+        } catch (e) { return null; }
+      }
+      function ecrireChoix(c) {
+        try { localStorage.setItem(CLE, JSON.stringify({ v: VERSION, c: c, t: Date.now() })); } catch (e) {}
+      }
 
       function chargerGA() {
-        if (!GA_ID || window.__gaCharge) return;
+        if (window.__gaCharge) return;
         window.__gaCharge = true;
+        window['ga-disable-' + GA_ID] = false;
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        // Signaux Consent Mode v2 : seule la mesure d'audience est accordée,
+        // le site n'utilise ni Google Ads ni personnalisation publicitaire.
+        gtag('consent', 'default', {
+          ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+          analytics_storage: 'granted'
+        });
+        gtag('js', new Date());
+        gtag('config', GA_ID, { cookie_expires: DUREE_COOKIES_GA });
         var s = document.createElement('script');
         s.async = true;
         s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
         document.head.appendChild(s);
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', GA_ID);
+      }
+      // Retrait du consentement : Analytics est coupé pour la page en cours
+      // et ses cookies effacés (sur l'hôte et sur le domaine parent, GA les
+      // pose sur ce dernier).
+      function couperGA() {
+        window['ga-disable-' + GA_ID] = true;
+        var hote = location.hostname, parts = hote.split('.');
+        var domaines = ['', hote];
+        if (parts.length > 2) domaines.push(parts.slice(-2).join('.'));
+        document.cookie.split(';').forEach(function (c) {
+          var nom = c.split('=')[0].trim();
+          if (nom !== '_ga' && nom !== '_gid' && nom.indexOf('_ga_') !== 0) return;
+          domaines.forEach(function (d) {
+            document.cookie = nom + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+          });
+        });
       }
 
-      function afficher() {
+      function afficher(depuis) {
+        declencheur = depuis || null;
+        var choix = lireChoix();
+        if (choix) {
+          etat.textContent = 'Votre choix actuel : mesure d’audience ' + (choix === 'oui' ? 'acceptée' : 'refusée') + '.';
+          etat.hidden = false;
+        } else {
+          etat.hidden = true;
+        }
         bandeau.hidden = false;
-        requestAnimationFrame(function () { bandeau.classList.add('est-visible'); });
+        requestAnimationFrame(function () {
+          bandeau.classList.add('est-visible');
+          // Ouverture demandée par le visiteur : le focus suit, pour le
+          // clavier et les lecteurs d'écran. À l'ouverture automatique on ne
+          // vole pas le focus — le bandeau n'est pas modal.
+          if (depuis) btnRefus.focus();
+        });
       }
       function masquer() {
         bandeau.classList.remove('est-visible');
         setTimeout(function () { bandeau.hidden = true; }, 450);
+        if (declencheur) { declencheur.focus(); declencheur = null; }
       }
 
-      var choix = null;
-      try { choix = localStorage.getItem(CLE); } catch (e) {}
-      if (choix === 'oui') { chargerGA(); }
-      else if (choix !== 'non') {
-        // Le bandeau attend le premier défilement : affiché d'emblée, il
-        // masque le hero et fait fuir sur mobile.
-        var auDefilement = function () {
-          if (window.scrollY > 120) { afficher(); window.removeEventListener('scroll', auDefilement); }
-        };
-        window.addEventListener('scroll', auDefilement, { passive: true });
-        auDefilement();
-      }
+      var choix = lireChoix();
+      if (choix === 'oui') chargerGA();
+      // Pas encore répondu (ou choix périmé) : le bandeau arrive après un
+      // court délai, une fois la page posée, plutôt qu'en même temps qu'elle.
+      else if (choix === null) setTimeout(function () { afficher(); }, 700);
 
-      document.getElementById('cookies-accord').addEventListener('click', function () {
-        try { localStorage.setItem(CLE, 'oui'); } catch (e) {}
-        chargerGA(); masquer();
+      btnAccord.addEventListener('click', function () {
+        ecrireChoix('oui'); chargerGA(); masquer();
       });
-      document.getElementById('cookies-refus').addEventListener('click', function () {
-        try { localStorage.setItem(CLE, 'non'); } catch (e) {}
-        masquer();
+      btnRefus.addEventListener('click', function () {
+        ecrireChoix('non'); masquer();
+        if (window.__gaCharge) couperGA();
       });
+      // Liens « Gérer les cookies » (pied de page, mentions légales) : sans
+      // JavaScript ils mènent au paragraphe cookies des mentions légales.
       document.addEventListener('click', function (e) {
         var lien = e.target.closest('[data-cookies]');
         if (!lien) return;
         e.preventDefault();
-        afficher();
+        afficher(lien);
       });
     })();
   </script>

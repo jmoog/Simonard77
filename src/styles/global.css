@@ -572,17 +572,35 @@ html:has(.nav-bascule:checked){overflow:hidden}
 @media(max-width:1199px){.pied{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}}
 
 /* ═══ BANDEAU COOKIES ═══════════════════════════════════════════════════ */
-.bandeau-cookies{position:fixed;left:0;right:0;bottom:0;z-index:999;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;transform:translateY(130%);opacity:0;transition:transform .45s ease,opacity .45s ease;pointer-events:none}
-.bandeau-cookies.est-visible{transform:translateY(0);opacity:1;pointer-events:auto}
-.bandeau-cookies[hidden]{display:flex}
-.bandeau-cookies__carte{width:100%;max-width:740px;background:#fff;border:1px solid var(--bordure);border-radius:var(--r-lg);box-shadow:var(--ombre-carte);padding:22px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:16px}
-.bandeau-cookies__texte{flex:1 1 340px;margin:0;font-size:.92rem;color:var(--ink);line-height:1.55}
-.bandeau-cookies__actions{display:flex;gap:10px;margin-left:auto}
-.bandeau-cookies__actions .btn{padding:11px 20px;font-size:.9rem}
-@media(max-width:600px){
-  .bandeau-cookies__carte{flex-direction:column;align-items:stretch;padding:18px}
-  .bandeau-cookies__actions{margin-left:0}
-  .bandeau-cookies__actions .btn{flex:1}
+/* Non bloquant : pas de voile, le site reste utilisable derrière (la CNIL
+   proscrit le « cookie wall »). Carte posée en bas à gauche sur grand écran,
+   pleine largeur en bas sur mobile. `hidden` = display:none tant que le
+   script ne l'ouvre pas ; l'ouverture retire hidden puis ajoute .est-visible
+   une image plus tard, ce qui laisse jouer la transition. `visibility`
+   suit avec un délai à la fermeture : les boutons ne restent jamais
+   focalisables quand le bandeau est invisible. */
+.bandeau-cookies{position:fixed;left:0;right:0;bottom:0;z-index:999;display:flex;justify-content:flex-start;padding:0 20px calc(20px + env(safe-area-inset-bottom,0px));pointer-events:none;visibility:hidden;opacity:0;transform:translateY(24px);transition:transform .45s cubic-bezier(.22,.8,.3,1),opacity .4s ease,visibility 0s linear .45s}
+.bandeau-cookies[hidden]{display:none}
+.bandeau-cookies.est-visible{visibility:visible;opacity:1;transform:none;pointer-events:auto;transition-delay:0s}
+.bandeau-cookies__carte{width:100%;max-width:440px;background:#fff;border:1px solid var(--bordure);border-radius:var(--r-lg);box-shadow:var(--ombre-carte);padding:22px 24px 20px}
+.bandeau-cookies__entete{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bandeau-cookies__icone{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:var(--radius);background:var(--ciel);color:var(--bleu);flex:none}
+.bandeau-cookies__titre{margin:0;font-family:var(--titre);font-weight:700;font-size:1.08rem;line-height:1.25;color:var(--bleu-nuit)}
+.bandeau-cookies__texte{margin:0;font-size:.92rem;line-height:1.55;color:var(--ink)}
+.bandeau-cookies__texte a{color:var(--bleu);font-weight:600;white-space:nowrap}
+.bandeau-cookies__etat{margin:10px 0 0;font-size:.86rem;font-weight:600;color:var(--bleu)}
+/* Refuser et Accepter : même style, même taille, même rang — refuser doit
+   être aussi simple qu'accepter. Largeur naturelle, jamais étirés. */
+.bandeau-cookies__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.bandeau-cookies__actions .btn{padding:12px 22px;font-size:.92rem}
+.bandeau-cookies__note{margin:12px 0 0;font-size:.8rem;line-height:1.45;color:var(--gris)}
+@media(max-width:640px){
+  .bandeau-cookies{padding:0 10px calc(10px + env(safe-area-inset-bottom,0px))}
+  .bandeau-cookies__carte{max-width:none;padding:18px 18px 16px}
+  .bandeau-cookies__actions .btn{padding:12px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .bandeau-cookies{transform:none;transition:opacity .2s ease,visibility 0s linear .2s}
 }
 
 /* ═══ UTILITAIRES DE CONTENU ════════════════════════════════════════════ */

@@ -80,6 +80,22 @@ export const site = {
   googleReviewUrl: '',
   sameAs: [],
 
+  // ── Mesure d'audience & Search Console ────────────────────────────────
+  // Identifiant de mesure Google Analytics 4 (propriété simonard-77.fr).
+  // Le script Google n'est chargé QU'APRÈS le clic « Accepter » du bandeau
+  // cookies (voir Layout.astro) : avant ce clic, aucune requête ne part vers
+  // Google, aucun cookie n'est déposé. Champ vide = pas de mesure d'audience,
+  // et le bandeau ne s'affiche pas (il n'aurait rien à demander).
+  gaId: 'G-G1SJQ84DXM',
+  // À COMPLÉTER : vérification de la propriété dans la Google Search Console
+  // par la méthode « Balise HTML » (Paramètres → Validation de la propriété).
+  // Coller UNIQUEMENT la valeur de l'attribut content, pas la balise entière.
+  // Pourquoi cette méthode : la vérification « via Google Analytics » lit le
+  // snippet gtag dans le HTML de l'accueil, or ici il n'y est pas tant que le
+  // visiteur n'a pas consenti — elle échouerait. La balise meta, elle, ne
+  // dépose rien et ne dépend d'aucun consentement.
+  googleSiteVerification: '',
+
   // ── Hébergeur (mentions légales) ──────────────────────────────────────
   // Seul écart assumé par rapport au texte du site WordPress, qui déclarait
   // encore Hostinger : le site est hébergé sur le VPS Hetzner (CPX32), et le

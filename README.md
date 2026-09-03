@@ -250,9 +250,12 @@ Restent à renseigner :
 1. **Fiche Google Business** (`site.googleReviewUrl`, `site.sameAs`) — le bloc
    « Laissez-nous un avis » du footer n'apparaît que lorsque l'URL est
    renseignée.
-2. **Identifiant Google Analytics** — variable `GA_ID` dans `Layout.astro`,
-   vide pour l'instant : aucun script tiers n'est chargé tant qu'elle l'est,
-   donc aucun cookie n'est déposé.
+2. **Vérification Search Console** — `site.googleSiteVerification`
+   (`data/site.js`), vide pour l'instant : coller la valeur `content` de la
+   méthode « Balise HTML ». L'identifiant Google Analytics (`site.gaId`,
+   G-G1SJQ84DXM) est renseigné ; le script n'est chargé qu'après le clic
+   « Accepter » du bandeau cookies, donc la vérification « via Analytics »
+   ne peut pas fonctionner — d'où la balise meta.
 3. **Clés Brevo et Turnstile** — variables d'environnement, voir `.env.example`.
 4. **Année de création** (`site.foundingDate`, facultatif) — alimente
    `foundingDate` en schema.org.
