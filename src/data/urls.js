@@ -40,8 +40,8 @@ export const urls = [
   { path: '/contact/',          silo: 'transverse', label: 'Contact',                status: 'todo' },
 
   // ── Couverture ───────────────────────────────────────────────────────
-  { path: '/renovation-refection-de-toiture/',                          silo: 'couverture', label: 'Rénovation & réfection de toiture',   status: 'todo' },
-  { path: '/reparation-de-toiture/',                                    silo: 'couverture', label: 'Réparation de toiture',               status: 'todo' },
+  { path: '/renovation-refection-de-toiture/',                          silo: 'couverture', label: 'Rénovation & réfection de toiture',   status: 'ok'   },
+  { path: '/reparation-de-toiture/',                                    silo: 'couverture', label: 'Réparation de toiture',               status: 'ok'   },
   { path: '/reparation-de-vos-fuites-de-toiture/',                      silo: 'couverture', label: 'Réparation de fuites de toiture',     status: 'todo' },
   { path: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/',silo: 'couverture', label: 'Urgences de toiture',                 status: 'todo' },
   { path: '/remplacement-de-couverture-en-tuile/',                      silo: 'couverture', label: 'Couverture en tuile',                 status: 'todo' },
@@ -55,7 +55,7 @@ export const urls = [
 
   // ── Entretien de toiture ─────────────────────────────────────────────
   { path: '/entretien-de-toiture/',                                     silo: 'entretien', label: 'Entretien de toiture',                 status: 'todo', pilier: true },
-  { path: '/nettoyage-demoussage-de-toiture/',                          silo: 'entretien', label: 'Nettoyage & démoussage de toiture',    status: 'todo' },
+  { path: '/nettoyage-demoussage-de-toiture/',                          silo: 'entretien', label: 'Nettoyage & démoussage de toiture',    status: 'ok'   },
   { path: '/application-de-traitement-de-toiture/',                     silo: 'entretien', label: 'Application de traitement de toiture', status: 'todo' },
   { path: '/application-de-traitement-anti-mousse-professionnel/',      silo: 'entretien', label: 'Traitement anti-mousse',               status: 'todo' },
   { path: '/application-de-traitement-hydrofuge-incolore/',             silo: 'entretien', label: 'Hydrofuge incolore',                   status: 'todo' },
@@ -63,7 +63,7 @@ export const urls = [
 
   // ── Zinguerie ────────────────────────────────────────────────────────
   { path: '/refection-zinguerie/',                                      silo: 'zinguerie', label: 'Réfection de zinguerie',               status: 'todo', pilier: true },
-  { path: '/installation-remplacement-de-gouttieres/',                  silo: 'zinguerie', label: 'Installation & remplacement de gouttières', status: 'todo' },
+  { path: '/installation-remplacement-de-gouttieres/',                  silo: 'zinguerie', label: 'Installation & remplacement de gouttières', status: 'ok'   },
   { path: '/installation-et-etancheite-noue-toiture/',                  silo: 'zinguerie', label: 'Noues de toiture',                     status: 'todo' },
   { path: '/etancheite-cheminee/',                                      silo: 'zinguerie', label: 'Étanchéité de cheminée',               status: 'todo' },
 

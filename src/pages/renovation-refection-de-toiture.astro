@@ -11,29 +11,12 @@ import { pageSchema } from '../data/schema.js';
 
 /**
  * Page pilier du silo « couverture » — et GABARIT DE RÉFÉRENCE des pages de
- * prestation. Les quatre autres piliers (entretien, zinguerie, isolation,
- * étanchéité) se dupliquent depuis ce fichier : mêmes sections, mêmes
- * alternances de fond, seul le contenu change.
- *
- * Structure reprise des pages de service de lafleurcouvreur77 :
- *   fil d'Ariane → hero deux colonnes → réassurance → 4 sections en duo à
- *   fonds alternés → FAQ → bandeau d'appel.
- * Trois écarts volontaires, imposés par la charte Simonard :
- *   - pas de surtitres au-dessus des H2 (Lafleur en met un par section) ;
- *   - pas de bordure colorée sur les cartes de FAQ ;
- *   - pas de bloc d'avis Google : la fiche n'est pas encore renseignée, et
- *     on n'affiche pas une note qu'on n'a pas.
- *
- * ⚠ TEXTE PROVISOIRE — tous les paragraphes sont en lorem ipsum. Titres,
- * structure, photos et liens sont définitifs. La page reste en noindex et
- * hors sitemap tant que sa ligne dans data/urls.js n'est pas passée à 'ok'.
+ * prestation. Texte rédigé le 03/09/2026, à partir des seuls faits
+ * documentés dans data/site.js (rien sur l'entreprise n'est inventé).
  */
 const path = '/renovation-refection-de-toiture/';
 const brouillon = !estPubliee(path);
 
-// Libellé court et constant pour le fil d'Ariane (repris de data/urls.js),
-// passé à la fois à <Ariane> et à pageSchema() pour que l'affiché et le
-// balisé soient identiques.
 const filAriane = 'Rénovation & réfection de toiture';
 
 const h1 = 'Rénovation de toiture en Seine-et-Marne';
@@ -42,36 +25,28 @@ const description = `Réfection partielle ou remplacement complet de votre couve
 
 const heroPhoto = '/photos/vue-aerienne-toiture-ardoise-et-tourelle-terminees-simonard-couvreur-77.webp';
 
-const LOREM_COURT =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-const LOREM_LONG =
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.";
-
-// Les listes à puces des pages Lafleur ouvrent sur un terme en gras suivi
-// d'une explication : on garde la forme, le terme reste réel, l'explication
-// est en lorem.
 const etapes = [
-  { t: "Dépose de l'ancienne couverture", d: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.' },
-  { t: "Pose de l'écran sous-toiture", d: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.' },
-  { t: 'Liteaunage', d: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.' },
-  { t: 'Pose de la couverture', d: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.' },
-  { t: 'Zinguerie', d: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.' },
-  { t: 'Finitions et nettoyage', d: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.' },
+  { t: "Dépose de l'ancienne couverture", d: "Je retire les tuiles, ardoises ou plaques existantes et j'évacue les gravats au fur et à mesure du chantier." },
+  { t: "Pose de l'écran sous-toiture", d: 'Une sous-toiture respirante protège la charpente de l\'humidité avant la pose des liteaux.' },
+  { t: 'Liteaunage', d: "Les liteaux sont posés à l'écartement du matériau choisi, pour un calepinage régulier d'un bout à l'autre du pan." },
+  { t: 'Pose de la couverture', d: 'Tuiles, ardoises ou zinc sont posés rang par rang, en respectant les recouvrements et les points singuliers : faîtage, rives, noues.' },
+  { t: 'Zinguerie', d: "Gouttières, descentes et solins sont refaits ou raccordés à la nouvelle couverture pour que l'eau soit évacuée correctement." },
+  { t: 'Finitions et nettoyage', d: 'Le chantier est nettoyé, les abords vérifiés, et je fais le tour du toit avec vous avant de partir.' },
 ];
 
 const materiaux = [
-  { t: 'La tuile plate', d: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.' },
-  { t: 'La tuile mécanique', d: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.' },
-  { t: "L'ardoise", d: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.' },
-  { t: 'Le zinc à joint debout', d: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.' },
-  { t: 'Le bac acier', d: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.' },
+  { t: 'La tuile plate', d: "Aspect traditionnel, format court et pose dense — c'est la tuile des toitures anciennes et des zones où le PLU impose ce rendu." },
+  { t: 'La tuile mécanique', d: "Emboîtement qui accélère la pose et allège la charpente, tout en gardant l'aspect d'une toiture en tuile." },
+  { t: "L'ardoise", d: 'Matériau naturel et durable, souvent imposé par le règlement local sur les toitures à forte pente.' },
+  { t: 'Le zinc à joint debout', d: 'Étanchéité sans jointoiement apparent, adapté aux faibles pentes et aux formes de toit complexes.' },
+  { t: 'Le bac acier', d: 'Solution économique et rapide à poser, pour une dépendance, une extension ou un bâtiment agricole.' },
 ];
 
 const faq = [
-  { q: 'Quand faut-il remplacer sa toiture plutôt que la réparer ?', a: LOREM_COURT.slice(0, 190) + '…' },
-  { q: 'Combien de temps dure un remplacement de toiture ?', a: LOREM_LONG.slice(0, 185) + '…' },
-  { q: 'Faut-il une autorisation pour refaire sa toiture ?', a: LOREM_COURT.slice(0, 175) + '…' },
-  { q: 'La maison reste-t-elle à découvert ?', a: LOREM_LONG.slice(0, 195) + '…' },
+  { q: 'Quand faut-il remplacer sa toiture plutôt que la réparer ?', a: "Si les tuiles se descellent ou se cassent régulièrement, si la mousse recouvre une grande partie du pan, ou si la charpente montre des traces d'humidité, la réparation ponctuelle ne suffit plus. Un diagnostic sur place permet de trancher." },
+  { q: 'Combien de temps dure un remplacement de toiture ?', a: 'Cela dépend de la surface, de la pente et du matériau choisi. Je vous donne une durée précise après le diagnostic, inscrite dans le devis.' },
+  { q: 'Faut-il une autorisation pour refaire sa toiture ?', a: "Une déclaration préalable de travaux est nécessaire dès que l'aspect extérieur change (matériau, couleur, forme). Je peux vous indiquer les pièces à fournir selon votre commune." },
+  { q: 'La maison reste-t-elle à découvert pendant les travaux ?', a: "Non : la toiture reste bâchée tant que la nouvelle couverture n'est pas posée, pour rester protégée en cas de pluie." },
 ];
 ---
 <Layout
@@ -91,21 +66,20 @@ const faq = [
   <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
   <Ariane label={filAriane} />
 
-  <!-- ═══ HERO ═══════════════════════════════════════════════════════
-       Même bloc que les pages ville : deux colonnes sur desktop, et sur
-       mobile la photo remonte juste sous le titre (voir .hero-page). -->
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
   <section class="hero-page">
     <div class="conteneur hero-page__grille">
       <div class="hero-page__texte">
         <h1>Rénovation de toiture en <em>{site.address.region}</em></h1>
         <p class="hero-page__chapo">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua.
+          Toiture ancienne, tuiles qui se déplacent, infiltrations qui reviennent : je
+          remplace ou je refais la couverture, du diagnostic jusqu'à la remise en état
+          complète.
         </p>
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Lorem ipsum dolor sit amet consectetur</li>
-          <li><Icone nom="coche" taille={18} />Sed do eiusmod tempor incididunt ut labore</li>
-          <li><Icone nom="coche" taille={18} />Ut enim ad minim veniam quis nostrud</li>
+          <li><Icone nom="coche" taille={18} />Diagnostic sur place, sans engagement</li>
+          <li><Icone nom="coche" taille={18} />Tuile, ardoise, zinc ou bac acier</li>
+          <li><Icone nom="coche" taille={18} />Garantie décennale sur les travaux</li>
         </ul>
         <div class="hero-page__actions">
           <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
@@ -126,7 +100,7 @@ const faq = [
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
             <strong>Garantie décennale</strong>
-            <span>Lorem ipsum dolor sit amet consectetur adipiscing.</span>
+            <span>Tous les travaux de couverture sont couverts.</span>
           </div>
         </div>
       </div>
@@ -152,11 +126,25 @@ const faq = [
     <div class="conteneur duo">
       <div class="duo__texte">
         <h2>Réparer, rénover ou remplacer votre toiture ?</h2>
-        <p>{LOREM_COURT}</p>
+        <p>
+          Une tuile cassée ici ou là se répare. Mais quand les tuiles se déplacent
+          d'elles-mêmes, que la mousse gagne tout le pan ou que les infiltrations
+          reviennent après chaque réparation, c'est le signe qu'il faut aller plus loin
+          qu'un rafistolage.
+        </p>
         <h3>Réfection partielle ou remplacement complet</h3>
-        <p>{LOREM_LONG}</p>
+        <p>
+          Une réfection partielle reprend un pan abîmé sans toucher au reste de la
+          toiture. Un remplacement complet dépose toute la couverture et pose un écran
+          sous-toiture neuf avant de reposer un matériau — c'est le choix quand l'usure
+          touche l'ensemble du toit ou que la charpente doit être mise à nu.
+        </p>
         <h3>Ce que révèle une visite sur le toit</h3>
-        <p>{LOREM_COURT}</p>
+        <p>
+          Le diagnostic se fait sur place, pas sur photo : état des liteaux, de la
+          charpente, ventilation des combles, humidité résiduelle. C'est ce qui permet de
+          vous dire honnêtement si une réparation suffit ou s'il faut remplacer.
+        </p>
       </div>
       <div class="duo__media">
         <img
@@ -173,7 +161,7 @@ const faq = [
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
         <h2>Les étapes d'un remplacement de toiture</h2>
-        <p>{LOREM_COURT}</p>
+        <p>Un remplacement complet suit toujours le même ordre, du plus gros œuvre aux finitions :</p>
         <ul class="liste-detail">
           {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
         </ul>
@@ -201,7 +189,7 @@ const faq = [
     <div class="conteneur duo">
       <div class="duo__texte">
         <h2>Quel matériau pour votre nouvelle couverture ?</h2>
-        <p>{LOREM_COURT}</p>
+        <p>Le choix dépend de la pente du toit, du style de la maison et, souvent, du règlement d'urbanisme de la commune :</p>
         <ul class="liste-detail">
           {materiaux.map((m) => <li><strong>{m.t}</strong> — {m.d}</li>)}
         </ul>
@@ -209,7 +197,7 @@ const faq = [
              (tuile, ardoise, zinc, bac acier, shingle) s'ajoutent ici au fur
              et à mesure qu'elles passent à 'ok' dans data/urls.js. On
              n'écrit jamais un lien vers une page qui n'existe pas. -->
-        <p>{LOREM_LONG}</p>
+        <p>J'en discute avec vous lors de la visite de diagnostic, avec un devis détaillé pour chaque option envisagée.</p>
       </div>
       <div class="duo__media">
         <img
@@ -226,8 +214,14 @@ const faq = [
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
         <h2>Le toit ouvert, le bon moment pour isoler</h2>
-        <p>{LOREM_LONG}</p>
-        <p>{LOREM_COURT}</p>
+        <p>
+          Tant que la charpente est à nu, poser ou renforcer l'isolation coûte moins cher
+          et va plus vite que d'ouvrir le toit une seconde fois plus tard.
+        </p>
+        <p>
+          Si c'est votre cas, j'en parle avec vous pendant le diagnostic pour l'intégrer
+          au même chantier plutôt que d'ouvrir le toit une seconde fois plus tard.
+        </p>
       </div>
       <div class="duo__media">
         <img
@@ -245,7 +239,7 @@ const faq = [
   <section class="appel">
     <div class="conteneur">
       <h2>Votre toiture mérite un vrai diagnostic</h2>
-      <p>{LOREM_COURT}</p>
+      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
       <ul class="appel__points">
         <li>Devis et déplacement gratuits</li>
         <li>Interlocuteur unique</li>

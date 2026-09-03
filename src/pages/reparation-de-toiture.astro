@@ -1,0 +1,233 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page de prestation « Réparation de toiture » — gabarit dupliqué depuis
+ * renovation-refection-de-toiture.astro. Texte rédigé le 03/09/2026.
+ */
+const path = '/reparation-de-toiture/';
+const brouillon = !estPubliee(path);
+
+const filAriane = 'Réparation de toiture';
+
+const h1 = 'Réparation de toiture en Seine-et-Marne';
+const title = `Réparation de toiture en ${site.address.region} (77)`;
+const description = `Fuite, tuile cassée, infiltration : je répare votre toiture en ${site.address.region}. Bâchage si besoin, devis et déplacement gratuits ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/banderole-simonard-sur-chantier-de-toiture-avec-echafaudage-77.webp';
+
+const etapes = [
+  { t: 'Repérage de la fuite', d: "Je recherche l'origine exacte de l'infiltration, qui n'est pas toujours à l'aplomb de la tache visible depuis l'intérieur." },
+  { t: 'Bâchage si nécessaire', d: 'En attendant la réparation définitive, une bâche met la toiture hors d\'eau.' },
+  { t: 'Remplacement des éléments abîmés', d: 'Tuiles cassées, ardoises fendues ou solins décollés sont remplacés à l\'identique.' },
+  { t: 'Contrôle des points singuliers', d: 'Faîtage, rives, noues et abergements sont vérifiés : ce sont les endroits qui fuient le plus souvent.' },
+  { t: "Reprise de l'étanchéité", d: "Les raccords autour d'une cheminée, d'une fenêtre de toit ou d'un arêtier sont repris pour que l'eau ne s'infiltre plus." },
+  { t: 'Nettoyage et vérification', d: "Le chantier est nettoyé et je contrôle qu'il n'y a plus d'infiltration avant de partir." },
+];
+
+const pannes = [
+  { t: 'Tuiles ou ardoises cassées', d: 'Un choc, le gel ou le vent en déplace ou en fendille quelques-unes, ce qui suffit à laisser passer l\'eau.' },
+  { t: 'Faîtage fissuré', d: 'Le mortier de faîtage se fissure avec le temps et laisse l\'eau s\'infiltrer sous les tuiles de couronnement.' },
+  { t: 'Solin de cheminée décollé', d: 'La jonction entre la cheminée et la couverture est un point sensible, souvent à l\'origine des infiltrations autour du conduit.' },
+  { t: 'Gouttière bouchée ou percée', d: "L'eau qui ne s'évacue plus remonte sous les tuiles basses au lieu de couler dans la descente." },
+  { t: 'Écran de sous-toiture déchiré', d: "Quand il est percé ou mal raccordé, l'humidité passe directement sur la charpente." },
+];
+
+const faq = [
+  { q: 'Une petite fuite peut-elle attendre ?', a: "Mieux vaut ne pas attendre : une infiltration continue humidifie la charpente et l'isolant, ce qui aggrave les dégâts et le coût de la réparation." },
+  { q: 'Intervenez-vous après une tempête ou un épisode de grêle ?', a: "Oui, je me déplace pour évaluer les dégâts et poser une bâche si la toiture est mise à découvert." },
+  { q: "Comment savoir d'où vient une tache au plafond ?", a: "L'eau chemine souvent le long d'un chevron avant de retomber : la tache n'est pas toujours sous la fuite. Un passage sur le toit permet de remonter à la source." },
+  { q: 'La réparation est-elle garantie ?', a: "Oui, les travaux sont couverts par la garantie décennale, comme l'ensemble de mes interventions de couverture." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    service: { name: 'Réparation de toiture', description },
+    faq,
+  })}
+>
+  <Ariane label={filAriane} />
+
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Réparation de toiture en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Un toit qui fuit ? Des tuiles arrachées après le vent ? Je recherche l'origine
+          de la fuite et je répare, avec un bâchage rapide si la situation l'exige.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Recherche de fuite sur place</li>
+          <li><Icone nom="coche" taille={18} />Bâchage d'urgence si nécessaire</li>
+          <li><Icone nom="coche" taille={18} />Garantie décennale sur les travaux</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1200" height="900"
+          fetchpriority="high" decoding="async"
+          alt={`Chantier de réparation de toiture avec échafaudage — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Urgences toiture</strong>
+            <span>Fuite ou tuiles arrachées : intervention rapide.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>D'où vient la fuite ou l'infiltration ?</h2>
+        <p>
+          Une tuile déplacée, un faîtage fissuré, un solin de cheminée décollé ou une
+          gouttière bouchée qui fait remonter l'eau sous la couverture : les causes sont
+          rarement là où la tache apparaît au plafond.
+        </p>
+        <h3>Une intervention rapide pour limiter les dégâts</h3>
+        <p>
+          Quand la toiture est ouverte ou qu'une fuite active menace l'intérieur, une
+          bâche met le toit hors d'eau le temps d'organiser la réparation définitive.
+        </p>
+        <h3>Un diagnostic qui va au-delà de la fuite visible</h3>
+        <p>
+          Un point de fuite s'accompagne souvent d'autres éléments fragilisés autour :
+          je vérifie les tuiles voisines et les points singuliers du toit avant de
+          refermer le chantier.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/artisan-simonard-sur-echelle-pour-le-nettoyage-dune-toiture-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Artisan sur échelle pour intervenir sur une toiture — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Les étapes d'une réparation de toiture</h2>
+        <ul class="liste-detail">
+          {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
+        </ul>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Maison sous échafaudage pendant une réparation de toiture — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Un toit qui fuit ?"
+    note="Déplacement offert"
+    mascotte="gauche"
+  />
+
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Les pannes les plus fréquentes sur une toiture</h2>
+        <ul class="liste-detail">
+          {pannes.map((p) => <li><strong>{p.t}</strong> — {p.d}</li>)}
+        </ul>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/gouttiere-et-descente-en-zinc-sur-chantier-simonard-couvreur-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Gouttière et descente en zinc sur un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Après une tempête ou un épisode de grêle</h2>
+        <p>
+          Tuiles arrachées, ardoises fendues, gouttière décrochée : après un coup de
+          vent, je me déplace pour évaluer les dégâts et bâcher si le toit est mis à
+          découvert, avant d'organiser la réparation.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp"
+          width="1600" height="1200" loading="lazy" decoding="async"
+          alt={`Toiture en tuiles réparée, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur la réparation de toiture" items={faq} gris={false} />
+
+  <section class="appel">
+    <div class="conteneur">
+      <h2>Un toit qui fuit ne se répare pas tout seul</h2>
+      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
+      <ul class="appel__points">
+        <li>Devis et déplacement gratuits</li>
+        <li>Interlocuteur unique</li>
+        <li>Garantie décennale</li>
+        <li>Urgences traitées en priorité</li>
+      </ul>
+      <div class="appel__actions">
+        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
+        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={20} />{site.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
