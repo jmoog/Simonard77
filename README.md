@@ -8,8 +8,10 @@ zingueur en Seine-et-Marne) sous Astro, sur le même socle technique que
 
 ## La règle du projet : les URLs ne bougent pas
 
-Les **47 URLs du site WordPress sont conservées à l'identique**, barre oblique
-finale comprise. C'est la condition pour basculer sans redirection et sans
+Les **46 URLs du site WordPress sont conservées à l'identique**, barre oblique
+finale comprise. Seule exception, décidée le 3 septembre 2026 : `/claye-souilly/`
+a été retirée — l'accueil porte « couvreur Claye-Souilly », et une page ville en
+doublon aurait cannibalisé ce mot-clé. C'est la condition pour basculer sans redirection et sans
 perdre les positions acquises.
 
 Elles sont toutes recensées dans **`src/data/urls.js`**, qui est la source de
@@ -24,13 +26,14 @@ vérité unique de l'avancement :
 `status` à `'ok'`.** Rien d'autre : le sitemap, le plan du site, le menu, le
 footer et le balisage schema.org se mettent à jour tout seuls.
 
-État actuel : **4 pages sur 48** (les 47 URLs WordPress + `/devis-gratuit/`,
+État actuel : **14 pages sur 47** (les 46 URLs WordPress + `/devis-gratuit/`,
 qui est nouvelle et ne remplace pas `/contact/`).
 
 - `/` — accueil
 - `/devis-gratuit/` — formulaire + zone d'intervention *(nouvelle page)*
 - `/mentions-legales/`
 - `/plan-du-site/` — sert aussi de tableau de bord de la migration
+- les dix pages ville `/couvreur-<commune>/` (voir plus bas)
 
 Plus deux pages hors index : `/merci/` et la 404.
 
@@ -137,25 +140,25 @@ seuil.
 
 ---
 
-## Pages ville (gabarit posé, texte à écrire)
+## Pages ville (rédigées et publiées)
 
-Les onze pages ville existent et se construisent, **mais leur texte est du
-lorem ipsum**. Elles sont donc toutes en `status: 'todo'` dans
-`data/urls.js`, ce qui suffit à les tenir à l'écart : `noindex`, absentes du
-sitemap, du plan du site, du menu et du footer, et aucun lien du site ne
-pointe vers elles. Pour publier une ville : écrire son texte, renseigner ses
-données locales, puis passer sa ligne à `'ok'` — rien d'autre.
+Les dix pages ville sont rédigées (3 septembre 2026) d'après le modèle
+générique LocalPlace : title et H1 avec deux expressions différentes, accroche
+en deux versions, six prestations, trois arguments, quatre cartes de
+prestations dont l'ordre tourne, section photo, section longue et encadré
+mairie. Les coordonnées des dix mairies (`infosVille`) viennent de l'annuaire
+officiel de l'administration (lannuaire.service-public.gouv.fr). Les dix
+lignes sont en `status: 'ok'` dans `data/urls.js` : indexables, dans le
+sitemap, le plan du site et le footer ; l'accueil et chaque page ville lient
+les communes publiées. Pour retirer une ville : repasser sa ligne à `'todo'`.
 
-**Un seul gabarit, deux routes.** `components/PageVille.astro` contient toute
-la page. Deux fichiers de route l'appellent :
+**Un seul gabarit, une seule route.** `components/PageVille.astro` contient
+toute la page ; `pages/couvreur-[ville].astro` produit les dix
+`/couvreur-annet-sur-marne/`, `/couvreur-charny/`… Claye-Souilly n'a pas de
+page ville : l'accueil porte ce mot-clé (voir la règle du projet plus haut).
 
-| Route | URLs produites |
-| --- | --- |
-| `pages/couvreur-[ville].astro` | les dix `/couvreur-annet-sur-marne/`, `/couvreur-charny/`… |
-| `pages/claye-souilly.astro` | `/claye-souilly/` — l'exception WordPress, sans préfixe |
-
-**Anti-duplication.** Onze pages bâties sur le même gabarit ne doivent pas
-ouvrir sur onze fois la même phrase : `data/villes.js` fournit quatre
+**Anti-duplication.** Dix pages bâties sur le même gabarit ne doivent pas
+ouvrir sur dix fois la même phrase : `data/villes.js` fournit quatre
 variantes de titre et quatre d'accroche, choisies par le rang de la commune
 (`rang % 4`). Les trois mascottes tournent de la même façon (`rang % 3`).
 Le H1 porte la variante ; le fil d'Ariane garde la forme courte et constante
@@ -253,8 +256,8 @@ Restent à renseigner :
 3. **Clés Brevo et Turnstile** — variables d'environnement, voir `.env.example`.
 4. **Année de création** (`site.foundingDate`, facultatif) — alimente
    `foundingDate` en schema.org.
-5. **Texte et données des onze pages ville** — voir la section ci-dessus :
-   aujourd'hui en lorem ipsum, et `infosVille` (mairie, quartiers) est vide.
+5. **Pages ville** — texte et coordonnées de mairie en place, publiées le
+   3 septembre 2026 (`status: 'ok'`).
 6. **Texte des pages de prestation** — le gabarit est posé sur le pilier
    couverture, en lorem ipsum ; les quatre autres piliers restent à créer par
    duplication.

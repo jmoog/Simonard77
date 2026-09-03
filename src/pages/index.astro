@@ -5,13 +5,18 @@ import Fleche from '../components/Fleche.astro';
 import CartePrestation from '../components/CartePrestation.astro';
 import AppelMascotte from '../components/AppelMascotte.astro';
 import { site, reassurance, communes } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { villes } from '../data/villes.js';
 import { pageSchema } from '../data/schema.js';
 
-// Balises reprises du site WordPress actuel, à dessein : ce sont elles qui
-// portent les positions acquises. Le title fait 60 caractères, la meta 143 —
-// aucune n'est tronquée dans les résultats de recherche.
-const title = 'Couvreur en Seine-et-Marne (77) - M Simonard - Devis gratuit';
-const description = `${site.brand}, artisan couvreur zingueur à ${site.address.city} : couverture, entretien de toiture, zinguerie, isolation. Devis gratuit ✓ ${site.phone}.`;
+// Balises retravaillées le 3 septembre 2026. L'accueil vise deux requêtes sur
+// une seule URL : « couvreur Claye-Souilly » en principal (c'est l'adresse du
+// bureau et de la fiche Google, et aucun concurrent de la SERP ne cible la
+// commune) et « couvreur 77 » / Seine-et-Marne en secondaire. Les deux
+// figurent dans le title, le H1, la meta, le premier paragraphe et la section
+// zone d'intervention. Title 50 caractères, meta 148 : rien n'est tronqué.
+const title = `Couvreur ${site.address.city} | Couvreur ${site.address.department} – ${site.brand}`;
+const description = `Couvreur zingueur à ${site.address.city} et dans toute la ${site.address.region} (${site.address.department}) : couverture, entretien, zinguerie, isolation. Devis gratuit ✓ ${site.phone}`;
 
 const heroPhoto = '/photos/vue-aerienne-maison-avec-toiture-ardoise-terminee-simonard-couvreur-77.webp';
 
@@ -56,10 +61,10 @@ const rubriques = [
   },
   {
     titre: 'Urgences & recherche de fuite',
-    texte: "Une infiltration, des tuiles arrachées par le vent : j'interviens pour bâcher et mettre hors d'eau, puis je cherche l'origine réelle du problème.",
+    texte: "Une infiltration, des tuiles déplacées ou cassées : j'interviens pour bâcher et mettre hors d'eau, puis je cherche l'origine réelle du problème avant de réparer.",
     icone: '/icones/reparation.webp',
     href: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/',
-    items: ['Bâchage', 'Infiltration', 'Tempête'],
+    items: ['Bâchage', 'Infiltration', "Mise hors d'eau"],
   },
 ];
 
@@ -67,15 +72,16 @@ const etapes = [
   { titre: 'Votre appel', texte: "Vous m'expliquez ce que vous avez constaté. Je vous dis tout de suite si cela demande une visite ou si la réponse tient en trois minutes." },
   { titre: 'La visite', texte: 'Je monte voir la toiture, je passe dans les combles quand il y a une trace, et je constate au lieu de supposer. Le déplacement est gratuit.' },
   { titre: 'Le devis écrit', texte: 'Un devis détaillé poste par poste : surfaces, matériaux, dépose et évacuation, échafaudage. Comparable, et sans engagement.' },
-  { titre: "Le chantier", texte: "Une date fixée, un chantier protégé et nettoyé chaque soir. Les travaux sont couverts par la garantie décennale." },
+  { titre: 'Le chantier', texte: 'Une date fixée, un chantier protégé et nettoyé chaque soir. Les travaux sont couverts par la garantie décennale.' },
 ];
+
 ---
 <Layout
   title={title}
   description={description}
   path="/"
   jsonLd={pageSchema('/', 'Accueil', {
-    pageName: `${site.brand} — couvreur zingueur en ${site.address.region}`,
+    pageName: `${site.brand} — couvreur zingueur à ${site.address.city} et en ${site.address.region}`,
     description,
     image: heroPhoto,
   })}
@@ -87,17 +93,18 @@ const etapes = [
         src={heroPhoto}
         width="1444" height="993"
         fetchpriority="high" decoding="async"
-        alt={`Toiture en ardoise entièrement refaite, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
+        alt={`Toiture en ardoise entièrement refaite, vue aérienne — ${site.brand}, couvreur à ${site.address.city} (${site.address.region})`}
       />
     </div>
     <div class="hero__inner">
       <div class="conteneur">
         <div class="hero__carte">
-          <h1>Couvreur en Seine-et-Marne (77) : <em>M. Simonard</em></h1>
+          <h1><em>{site.brand}</em>, couvreur à <span class="nowrap">{site.address.city} ({site.address.department})</span></h1>
           <p class="hero__texte">
-            Couvreur zingueur en {site.address.region}, je prends en charge votre toiture de
-            bout en bout : couverture, entretien, zinguerie, isolation et étanchéité. Un seul
-            interlocuteur, du diagnostic à la dernière tuile posée.
+            Entreprise de couverture artisanale, nous entretenons, réparons et rénovons votre
+            toiture dans tout le nord de la {site.address.region}. Compétence, expérience, amour
+            du travail bien fait : mon équipe et moi plaçons la satisfaction du client au cœur
+            de chaque chantier.
           </p>
           <div class="hero__actions">
             <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
@@ -128,10 +135,10 @@ const etapes = [
   <section class="section">
     <div class="conteneur">
       <div class="chapeau">
-        <h2>L'expert de la couverture de toiture en Seine-et-Marne</h2>
+        <h2>Mes prestations de couvreur à <span class="nowrap">{site.address.city}</span></h2>
         <p>
-          De la simple tuile cassée à la réfection complète d'une toiture, je couvre toute
-          la chaîne du métier de couvreur zingueur — sans sous-traiter.
+          De la simple tuile cassée à la réfection complète : couverture, zinguerie, isolation
+          et étanchéité, réalisées par mon équipe, sans sous-traitance.
         </p>
       </div>
       <div class="prestations">
@@ -140,7 +147,12 @@ const etapes = [
     </div>
   </section>
 
-  <AppelMascotte mascotte="gauche" />
+  <AppelMascotte
+    mascotte="gauche"
+    titre="Demandez l'intervention de votre couvreur près de chez vous"
+    texte={`J'interviens rapidement, en urgence comme sur rendez-vous, à ${site.address.city} et dans toutes les communes proches, pour entretenir, réparer ou rénover votre toiture.`}
+    note="Devis gratuit, déplacement offert"
+  />
 
   <!-- ═══ ARTISAN ════════════════════════════════════════════════════ -->
   <section class="section section--gris">
@@ -155,21 +167,17 @@ const etapes = [
       <div class="artisan__texte">
         <h2>Couvreur depuis deux générations</h2>
         <p>
-          Le métier, je l'ai appris sur les chantiers, aux côtés de la génération d'avant.
-          C'est un savoir-faire qui se transmet et qui s'affine : on n'aborde pas de la même
-          façon une toiture ancienne en tuiles plates et un pavillon des années 80 en tuiles
-          mécaniques.
+          Le métier, je l'ai appris sur les chantiers, aux côtés de la génération d'avant : un
+          savoir-faire artisanal qui se transmet et qui s'affine. Tuiles plates ou mécaniques,
+          ardoise, zinc, bac acier, shingle — je connais les matériaux de couverture, leurs
+          contraintes et leur mise en œuvre.
         </p>
         <p>
-          Je travaille aussi bien le neuf que l'ancien, la technique traditionnelle que les
-          matériaux d'aujourd'hui. Et je reste l'interlocuteur unique du début à la fin :
-          celui qui monte sur votre toit est celui qui a rédigé votre devis.
+          Avec cette expérience, j'interviens à {site.address.city} et dans les communes
+          alentour sur n'importe quel type de toiture, pour l'entretenir, la réparer ou la
+          rénover : couverture, zinguerie, isolation et charpente. Mon équipe et moi mettons la
+          même exigence dans le remplacement de quelques tuiles que dans une réfection complète.
         </p>
-        <div class="artisan__chiffres">
-          <div class="artisan__chiffre"><strong>2</strong><span>générations de couvreurs</span></div>
-          <div class="artisan__chiffre"><strong>77</strong><span>Seine-et-Marne et limitrophes</span></div>
-          <div class="artisan__chiffre"><strong>10 ans</strong><span>de garantie décennale</span></div>
-        </div>
         <a class="btn btn--bleu" href="/devis-gratuit/">Me contacter<Fleche /></a>
       </div>
     </div>
@@ -179,26 +187,25 @@ const etapes = [
   <section class="section">
     <div class="conteneur duo">
       <div class="duo__texte">
-        <h2>Un spécialiste de l'entretien de toiture en Seine-et-Marne</h2>
+        <h2>L'expert du nettoyage de toiture en {site.address.region}</h2>
         <p>
-          Les mousses et les lichens s'installent sur les tuiles, retiennent l'humidité et
-          rendent les matériaux poreux. Le gel fait le reste : la tuile éclate, l'eau passe.
-          Un démoussage réalisé au bon moment coûte une fraction de ce que coûte le pan de
-          toiture qu'il aurait fallu reprendre.
+          Entretenir sa toiture, c'est retirer régulièrement les mousses, les lichens et les
+          végétaux qui s'y installent : ils rendent les tuiles poreuses, retiennent l'eau et
+          finissent par les fissurer. Pour cela, j'utilise des techniques adaptées à chaque
+          couverture, qui nettoient la toiture sans l'abîmer.
         </p>
         <p>
-          J'interviens en nettoyage basse pression ou manuel selon l'état de la couverture,
-          j'applique un traitement anti-mousse, puis un hydrofuge — incolore ou coloré — qui
-          retarde la repousse et fait ruisseler l'eau. J'en profite toujours pour contrôler
-          les points sensibles : faîtage, solins, pieds de cheminée. Ce sont eux qui
-          fuient en premier.
+          Nettoyage basse pression ou manuel selon l'état des tuiles, traitement anti-mousse,
+          puis hydrofuge — incolore ou coloré — qui retarde la repousse et fait ruisseler l'eau.
+          J'en profite toujours pour contrôler les points sensibles : faîtage, solins, pieds de
+          cheminée. Ce sont eux qui fuient en premier.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/artisan-simonard-sur-echelle-pour-le-nettoyage-dune-toiture-77.webp"
           width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Nettoyage d'une toiture en tuiles depuis une échelle — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Nettoyage d'une toiture en tuiles depuis une échelle — ${site.brand}, couvreur à ${site.address.city}`}
         />
       </div>
     </div>
@@ -208,7 +215,7 @@ const etapes = [
   <section class="section section--sombre">
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
-        <h2>Tous travaux de zinguerie</h2>
+        <h2>Zinguerie en {site.address.region} ({site.address.department})</h2>
         <p>
           Gouttières, descentes, noues, chéneaux, solins et pieds de cheminée : la zinguerie,
           c'est tout ce qui conduit l'eau hors de votre toit. Un ouvrage percé, déformé ou
@@ -217,8 +224,10 @@ const etapes = [
         </p>
         <p>
           Je façonne et je pose ces ouvrages en zinc, en aluminium ou en PVC : dépose de
-          l'existant, pose des crochets, réglage des pentes, soudure des jonctions. Et je
-          vous dis franchement quand une gouttière se répare plutôt qu'elle ne se remplace.
+          l'existant, pose des crochets, réglage des pentes, soudure des jonctions. Que le
+          chantier soit à {site.address.city}, à Mitry-Mory ou à Lagny-sur-Marne, les pièces
+          sont façonnées aux cotes relevées sur place. Et je vous dis franchement quand une
+          gouttière se répare plutôt qu'elle ne se remplace.
         </p>
         <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
       </div>
@@ -254,42 +263,37 @@ const etapes = [
   <section class="section section--ciel">
     <div class="conteneur">
       <div class="chapeau">
-        <h2>Le nord de la Seine-et-Marne, et au-delà</h2>
+        <h2>Couvreur 77 : le nord de la {site.address.region} et au-delà</h2>
         <p>
-          J'interviens sur tout le nord du département et les communes limitrophes. Si votre
-          commune n'est pas dans la liste, appelez-moi : elle est probablement dans ma
-          tournée.
+          J'interviens autour de {site.address.city}, sur tout le nord du département et dans
+          les communes limitrophes. Si la vôtre n'est pas dans la liste, appelez-moi : elle est
+          probablement dans ma tournée.
         </p>
       </div>
       <ul class="communes">
-        {communes.map((c) => (
-          <li class={c === site.address.city ? 'est-bureau' : undefined}>{c}</li>
-        ))}
+        {communes.map((c) => {
+          // Lien vers la page ville dès qu'elle est publiée (data/urls.js),
+          // texte simple sinon : jamais de lien vers une page absente.
+          const cible = villes.find((v) => v.nom === c);
+          const href = cible && estPubliee(cible.path) ? cible.path : null;
+          return (
+            <li class={c === site.address.city ? 'est-bureau' : undefined}>
+              {href ? <a href={href}>{c}</a> : c}
+            </li>
+          );
+        })}
       </ul>
     </div>
   </section>
 
-  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
-  <section class="appel">
-    <div class="conteneur">
-      <h2>Une toiture à voir ? Le déplacement est gratuit.</h2>
-      <p>
-        Décrivez votre projet en deux minutes, ou appelez-moi directement. Je me déplace,
-        je monte voir le toit et vous recevez un devis écrit — gratuit, détaillé et sans
-        engagement.
-      </p>
-      <ul class="appel__points">
-        <li>Devis et déplacement gratuits</li>
-        <li>Interlocuteur unique</li>
-        <li>Garantie décennale</li>
-        <li>Urgences traitées en priorité</li>
-      </ul>
-      <div class="appel__actions">
-        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
-        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
-          <Icone nom="tel" taille={20} />{site.phone}
-        </a>
-      </div>
-    </div>
-  </section>
+  <!-- ═══ APPEL FINAL ════════════════════════════════════════════════
+       Même encart que plus haut, avec l'autre mascotte (`face`, pouce à
+       gauche → montage inversé) pour que le bloc ne semble pas recopié. -->
+  <AppelMascotte
+    mascotte="face"
+    inverse
+    titre="Une toiture à voir ? Le déplacement est gratuit."
+    texte="Un toit qui fuit, des tuiles cassées, une gouttière qui déborde ? Appelez-moi : je viens voir la toiture et vous recevez un devis écrit et détaillé."
+    note="Garantie décennale sur tous les travaux"
+  />
 </Layout>

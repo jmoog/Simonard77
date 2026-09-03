@@ -81,21 +81,20 @@ export const urls = [
   { path: '/etancheite-bitume-isolation-bitumineuse/',                  silo: 'etancheite', label: 'Étanchéité bitume',                   status: 'todo' },
 
   // ── Zones d'intervention ─────────────────────────────────────────────
-  // Attention : la page de Claye-Souilly n'a PAS le préfixe « couvreur- »
-  // dans le site WordPress (/claye-souilly/). On conserve cette exception
-  // telle quelle plutôt que d'uniformiser : changer ce slug ferait perdre
-  // l'historique de la page de la commune du bureau secondaire.
-  { path: '/claye-souilly/',            silo: 'ville', label: 'Claye-Souilly',      commune: 'Claye-Souilly',      status: 'todo' },
-  { path: '/couvreur-annet-sur-marne/', silo: 'ville', label: 'Annet-sur-Marne',    commune: 'Annet-sur-Marne',    status: 'todo' },
-  { path: '/couvreur-charmentray/',     silo: 'ville', label: 'Charmentray',        commune: 'Charmentray',        status: 'todo' },
-  { path: '/couvreur-charny/',          silo: 'ville', label: 'Charny',             commune: 'Charny',             status: 'todo' },
-  { path: '/couvreur-fresnes-sur-marne/',silo: 'ville',label: 'Fresnes-sur-Marne',  commune: 'Fresnes-sur-Marne',  status: 'todo' },
-  { path: '/couvreur-gressy/',          silo: 'ville', label: 'Gressy',             commune: 'Gressy',             status: 'todo' },
-  { path: '/couvreur-messy/',           silo: 'ville', label: 'Messy',              commune: 'Messy',              status: 'todo' },
-  { path: '/couvreur-precy-sur-marne/', silo: 'ville', label: 'Précy-sur-Marne',    commune: 'Précy-sur-Marne',    status: 'todo' },
-  { path: '/couvreur-saint-mesmes/',    silo: 'ville', label: 'Saint-Mesmes',       commune: 'Saint-Mesmes',       status: 'todo' },
-  { path: '/couvreur-villeroy/',        silo: 'ville', label: 'Villeroy',           commune: 'Villeroy',           status: 'todo' },
-  { path: '/couvreur-villevaude/',      silo: 'ville', label: 'Villevaudé',         commune: 'Villevaudé',         status: 'todo' },
+  // L'URL WordPress /claye-souilly/ (sans préfixe « couvreur- ») a été
+  // RETIRÉE le 3 septembre 2026 : c'est l'accueil qui porte désormais
+  // « couvreur Claye-Souilly », et une page ville en doublon aurait
+  // cannibalisé ce mot-clé. Le site conserve donc 46 URLs historiques.
+  { path: '/couvreur-annet-sur-marne/', silo: 'ville', label: 'Annet-sur-Marne',    commune: 'Annet-sur-Marne',    status: 'ok' },
+  { path: '/couvreur-charmentray/',     silo: 'ville', label: 'Charmentray',        commune: 'Charmentray',        status: 'ok' },
+  { path: '/couvreur-charny/',          silo: 'ville', label: 'Charny',             commune: 'Charny',             status: 'ok' },
+  { path: '/couvreur-fresnes-sur-marne/',silo: 'ville',label: 'Fresnes-sur-Marne',  commune: 'Fresnes-sur-Marne',  status: 'ok' },
+  { path: '/couvreur-gressy/',          silo: 'ville', label: 'Gressy',             commune: 'Gressy',             status: 'ok' },
+  { path: '/couvreur-messy/',           silo: 'ville', label: 'Messy',              commune: 'Messy',              status: 'ok' },
+  { path: '/couvreur-precy-sur-marne/', silo: 'ville', label: 'Précy-sur-Marne',    commune: 'Précy-sur-Marne',    status: 'ok' },
+  { path: '/couvreur-saint-mesmes/',    silo: 'ville', label: 'Saint-Mesmes',       commune: 'Saint-Mesmes',       status: 'ok' },
+  { path: '/couvreur-villeroy/',        silo: 'ville', label: 'Villeroy',           commune: 'Villeroy',           status: 'ok' },
+  { path: '/couvreur-villevaude/',      silo: 'ville', label: 'Villevaudé',         commune: 'Villevaudé',         status: 'ok' },
 ];
 
 /** Pages réellement en ligne : seule liste dans laquelle on peut créer un lien. */

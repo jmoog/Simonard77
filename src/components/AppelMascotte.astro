@@ -33,6 +33,8 @@ import { site } from '../data/site.js';
  */
 const {
   titre = 'Demandez une intervention',
+  // Phrase d'accroche facultative, entre le titre et le numéro.
+  texte = '',
   note = 'Déplacement offert',
   mascotte = 'droite',
   inverse = false,
@@ -59,6 +61,7 @@ const t = TAILLES[mascotte] ?? TAILLES.droite;
       />
       <div class="appel-mascotte__texte">
         <p class="appel-mascotte__titre">{titre}</p>
+        {texte && <p class="appel-mascotte__intro">{texte}</p>}
         <a class="btn btn--bleu btn--lg" href={`tel:${site.phoneHref}`}>
           <Icone nom="tel" taille={22} />{site.phone}
         </a>

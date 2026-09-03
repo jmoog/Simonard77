@@ -281,6 +281,8 @@ html:has(.nav-bascule:checked){overflow:hidden}
    desktop : c'est ce léger décalage qui « accroche » les deux blocs. */
 .reassurance{position:relative;z-index:2;margin-top:-34px}
 .reassurance__grille{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bordure);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--ombre-carte)}
+/* Pages ville : trois arguments au lieu de quatre. */
+.reassurance__grille--3{grid-template-columns:repeat(3,1fr)}
 .reassurance__item{background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:6px}
 .reassurance__item strong{font-family:var(--titre);font-size:1.02rem;color:var(--bleu-nuit);display:flex;align-items:center;gap:10px}
 .reassurance__item strong::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--rouge);flex:none}
@@ -294,6 +296,15 @@ html:has(.nav-bascule:checked){overflow:hidden}
    soulève et la pastille de la flèche passe au rouge : le signal
    d'interactivité ne passe jamais par une bordure colorée. */
 .prestations{display:grid;gap:22px;grid-template-columns:repeat(3,1fr)}
+/* Pages ville : quatre cartes en deux rangées de deux, dans une largeur de
+   lecture confortable ; une seule colonne sous 640 px (règle générale). */
+.prestations--4{grid-template-columns:repeat(2,1fr);max-width:920px;margin-inline:auto}
+/* Pages ville : galerie de trois photos de chantier, légende sous chacune. */
+.galerie{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.galerie figure{margin:0}
+.galerie img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-lg);display:block;box-shadow:var(--ombre-carte)}
+.galerie figcaption{margin-top:10px;font-size:.92rem;color:var(--gris)}
+@media(max-width:820px){.galerie{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
 .prestation{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--bordure);border-radius:var(--radius);padding:30px 28px 26px;transition:transform .15s ease,box-shadow .15s ease}
 .prestation:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(7,47,76,.12);text-decoration:none}
 .prestation__icone{width:66px;height:66px;display:block;margin-bottom:18px}
@@ -722,6 +733,7 @@ html:has(.nav-bascule:checked){overflow:hidden}
   font-weight:800;color:var(--bleu);
   margin:0 0 18px;line-height:1.2;
 }
+.appel-mascotte__intro{margin:0 auto 20px;max-width:46ch;color:var(--gris);font-size:1.02rem;line-height:1.55}
 .appel-mascotte__note{margin:14px 0 0;color:var(--bleu);font-size:.95rem}
 /* Montage inversé : la mascotte passe à droite du texte. À n'utiliser
    qu'avec un dessin dont le pouce est à GAUCHE du cadre (`face`), sinon le
@@ -731,6 +743,7 @@ html:has(.nav-bascule:checked){overflow:hidden}
 /* Sur fond sombre, l'encart s'inverse : carte bleu nuit, textes en blanc. */
 .section--sombre .appel-mascotte__carte{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
 .section--sombre .appel-mascotte__titre,.section--sombre .appel-mascotte__note{color:#fff}
+.section--sombre .appel-mascotte__intro{color:#BCD3E4}
 @media(max-width:680px){
   .appel-mascotte{padding-bottom:52px}
   .section--sombre + .appel-mascotte,
@@ -896,3 +909,18 @@ html:has(.nav-bascule:checked){overflow:hidden}
 .duo__texte h3{margin:26px 0 10px;font-size:1.1rem}
 .duo__texte h3:first-child{margin-top:0}
 @media(max-width:420px){.duo__texte h3{font-size:1.04rem}}
+
+/* Nom de commune insécable dans les titres : sans cela, le navigateur coupe
+   « Claye-Souilly » au trait d'union et laisse « Souilly » seul en début de
+   ligne. */
+.nowrap{white-space:nowrap}
+
+/* Pages ville : la section longue est une colonne de lecture centrée dans la
+   page, texte aligné à gauche à l'intérieur (titre, paragraphes et encadré
+   mairie partagent le même bord gauche). */
+.colonne{max-width:820px;margin-inline:auto}
+.colonne .chapeau--gauche{margin-bottom:30px}
+/* Trois arguments : trois colonnes tant que la largeur le permet, puis une
+   seule — jamais une grille de deux avec une case vide. */
+@media(max-width:980px){.reassurance__grille--3{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.reassurance__grille--3{grid-template-columns:1fr}}

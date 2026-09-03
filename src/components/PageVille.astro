@@ -5,84 +5,125 @@ import Fleche from './Fleche.astro';
 import Ariane from './Ariane.astro';
 import CartePrestation from './CartePrestation.astro';
 import AppelMascotte from './AppelMascotte.astro';
-import { site, reassurance, communes } from '../data/site.js';
+import { site, communes } from '../data/site.js';
 import { estPubliee } from '../data/urls.js';
-import { villes, infosVille, variantesTitre, variantesAccroche } from '../data/villes.js';
+import {
+  villes, infosVille, EXPRESSIONS, METAS, ACCROCHES, PRESTATIONS_HERO,
+  ARGUMENTS, SUJETS_LONG, OBJETS_LONG,
+  PHOTOS_HERO, PHOTOS_INTERVENTION, PORTRAITS, PHOTOS_GALERIE,
+} from '../data/villes.js';
 import { pageSchema } from '../data/schema.js';
 
 /**
- * Gabarit unique des onze pages ville.
+ * Gabarit unique des dix pages ville — les variantes sont dans data/villes.js.
  *
- * Deux routes l'utilisent : `couvreur-[ville].astro` pour les dix communes
- * préfixées, et `claye-souilly.astro` pour l'exception sans préfixe (l'URL
- * WordPress historique). Le gabarit est donc écrit une seule fois.
+ * Une seule route l'utilise : `couvreur-[ville].astro`, pour les dix communes
+ * préfixées « couvreur- ». Claye-Souilly n'a pas de page ville : l'accueil
+ * porte « couvreur Claye-Souilly » (URL /claye-souilly/ retirée le 3 septembre
+ * 2026).
  *
- * ⚠ TEXTE PROVISOIRE — tous les paragraphes sont en lorem ipsum. Les
- * titres, la structure, les photos et les liens sont eux définitifs : c'est
- * la maquette qui se juge, pas la rédaction. La page reste en noindex tant
- * que sa ligne dans data/urls.js n'est pas passée à `status: 'ok'`.
+ * Structure (modèle LocalPlace, rédaction du 3 septembre 2026) : fil
+ * d'Ariane · hero (H1, accroche, six prestations, boutons, photo) · trois
+ * arguments · quatre cartes de prestations dont l'ordre tourne · section
+ * photo · section longue · encadré mairie · encart mascotte · communes
+ * voisines.
+ *
+ * La page reste en noindex tant que sa ligne dans data/urls.js n'est pas
+ * passée à `status: 'ok'`.
  */
 const { ville } = Astro.props;
-const { nom, path, rang } = ville;
+const { nom, path, rang, slug } = ville;
 
-const v = rang % 4;
-const h1 = variantesTitre[v](nom);
-const accroche = variantesAccroche[v](nom);
-const title = `${h1} - ${site.brand} - Devis gratuit`;
+// Trois expressions différentes pour le title, le H1 et le H2 de la section
+// photo — jamais la même deux fois sur une page.
+const exprTitle = EXPRESSIONS[rang % 4];
+const exprH1 = EXPRESSIONS[(rang + 1) % 4];
+const exprPhoto = EXPRESSIONS[(rang + 2) % 4];
 
-// Le fil d'Ariane porte la forme COURTE et constante (« Couvreur à Gressy »),
-// pas la variante du H1 : un fil d'Ariane est un repère de navigation, il doit
-// rester court et identique d'une ville à l'autre. La même chaîne est passée à
-// pageSchema() pour que le fil balisé corresponde exactement à l'affiché.
+// « de Gressy » mais « d'Annet-sur-Marne » : élision devant une voyelle.
+const deNom = /^[aeiouyàâäéèêëîïôöùûüh]/i.test(nom) ? `d'${nom}` : `de ${nom}`;
+
+const h1 = `${exprH1} à ${nom}`;
+
+// « Devis gratuit » reste dans le title tant qu'il tient sous 60 caractères ;
+// au-delà (expression longue + nom de commune long), on le retire plutôt que
+// de laisser Google tronquer la marque.
+const titreLong = `${exprTitle} ${nom} - Devis gratuit | ${site.brand}`;
+const title = titreLong.length <= 60 ? titreLong : `${exprTitle} ${nom} | ${site.brand}`;
+
+const description = METAS[rang % METAS.length](nom);
+
+// Le fil d'Ariane garde la forme COURTE et constante : c'est un repère de
+// navigation, identique d'une ville à l'autre, et à l'affiché correspond
+// exactement le balisé (même chaîne passée à pageSchema).
 const filAriane = `Couvreur à ${nom}`;
 
-// Le H1 affiché EST la variante : on entoure le nom de la commune d'un <em>
-// pour le mettre en bleu, sans dupliquer les quatre libellés en HTML.
-const description = `${accroche} Devis et déplacement gratuits ✓ ${site.phone}.`;
+const accroche = ACCROCHES[rang % 2](nom);
+// Version sans balise pour le balisage schema.org.
+const accrocheTexte = accroche.replace(/<[^>]+>/g, '');
+const decalage = rang % PRESTATIONS_HERO.length;
+const prestationsHero = [...PRESTATIONS_HERO.slice(decalage), ...PRESTATIONS_HERO.slice(0, decalage)];
+const argumentsVille = ARGUMENTS.map((pool, i) => pool[(rang + i) % pool.length]);
 
-// La page n'entre dans l'index qu'une fois sa rédaction faite, c'est-à-dire
-// une fois son status passé à 'ok' dans data/urls.js. Aucun réglage manuel.
+// La page n'entre dans l'index qu'une fois son status passé à 'ok'.
 const brouillon = !estPubliee(path);
 
-const infos = infosVille[ville.slug] || null;
+const infos = infosVille[slug] || null;
+const carteMairie = infos?.mairie
+  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Mairie ${deNom}, ${infos.mairie.adresse}`)}`
+  : null;
 
-const heroPhoto = '/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp';
+// Photos : hero, intervention et portrait tournent avec le rang ; la galerie
+// prend trois photos qui ne sont pas déjà affichées sur la page.
+const photoHero = PHOTOS_HERO[rang % PHOTOS_HERO.length];
+const photoSection = PHOTOS_INTERVENTION[rang % PHOTOS_INTERVENTION.length];
+const portrait = PORTRAITS[rang % PORTRAITS.length];
+const dejaVues = new Set([photoHero.src, photoSection.src, portrait.src]);
+const restantes = PHOTOS_GALERIE.filter((ph) => !dejaVues.has(ph.src));
+const depart = (rang * 3) % restantes.length;
+const galerie = [...restantes.slice(depart), ...restantes.slice(0, depart)].slice(0, 3);
+const heroPhoto = photoHero.src;
 
-// La mascotte alterne d'une ville à l'autre : onze pages bâties sur le même
-// gabarit ne doivent pas afficher onze fois le même dessin. Deux dessins
-// seulement — `droite` est hors service, voir AppelMascotte.astro. Chacun
-// est monté du côté vers lequel son pouce pointe, sinon il désigne le vide.
-const MASCOTTES = [
-  { mascotte: 'gauche', inverse: false },  // pouce à droite → mascotte à gauche
-  { mascotte: 'face', inverse: true },     // pouce à gauche → mascotte à droite
+// Les quatre cartes de prestations. Leur ordre d'affichage tourne avec le
+// rang. La carte ne devient un lien que le jour où sa page pilier est
+// marquée `ok` dans data/urls.js (voir CartePrestation.astro).
+const CARTES = [
+  {
+    titre: `${rang % 2 ? 'Nettoyage' : 'Démoussage'} de toiture à ${nom}`,
+    texte: `Le nettoyage d'une toiture à ${nom} demande des techniques adaptées : retirer mousses, lichens et salissures sans abîmer la couverture. Les procédés employés préservent le revêtement existant, et un traitement hydrofuge vient prolonger le résultat.`,
+    icone: '/icones/entretien.webp',
+    href: '/entretien-de-toiture/',
+    items: ['Démoussage', 'Anti-mousse', 'Hydrofuge'],
+  },
+  {
+    titre: `${rang % 2 ? 'Remplacement' : 'Rénovation'} de toiture à ${nom}`,
+    texte: `${site.brand} maîtrise tous les matériaux de couverture posés à ${nom} : tuile plate, tuile mécanique, ardoise, zinc, bac acier ou shingle. Les travaux respectent les règles de pose de chaque matériau, pour une toiture remise à neuf qui tient dans le temps.`,
+    icone: '/icones/couverture.webp',
+    href: '/renovation-refection-de-toiture/',
+    items: ['Tuile', 'Ardoise', 'Zinc', 'Bac acier'],
+  },
+  {
+    titre: `Zinguerie à ${nom}`,
+    texte: `Gouttières, descentes, noues, solins et abergements de cheminée : la zinguerie conduit l'eau hors du toit. ${site.brand} façonne et pose ces ouvrages sur mesure, en zinc, en aluminium ou en PVC, et répare l'existant quand c'est possible.`,
+    icone: '/icones/zinguerie.webp',
+    href: '/refection-zinguerie/',
+    items: ['Gouttières', 'Noues', 'Cheminée'],
+  },
+  {
+    titre: `Réparation de toiture à ${nom}`,
+    texte: `L'artisan intervient rapidement pour réparer la toiture. En urgence, la pose d'une bâche met le toit hors d'eau ; l'expérience permet ensuite de trouver l'origine de la fuite ou de l'infiltration et d'y apporter une solution concrète. La proximité fait la différence sur ces interventions.`,
+    icone: '/icones/reparation.webp',
+    href: '/reparation-de-toiture/',
+    items: ['Bâchage', 'Fuite', 'Infiltration'],
+  },
 ];
-const masc = MASCOTTES[rang % 2];
+const debut = rang % CARTES.length;
+const cartes = [...CARTES.slice(debut), ...CARTES.slice(0, debut)];
 
-const LOREM_COURT =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-const LOREM_LONG =
-  "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.";
+const h2Long = `Faites appel à ${SUJETS_LONG[rang % 4]} pour ${OBJETS_LONG[(rang + 1) % 4]}`;
 
-const rubriques = [
-  { titre: 'Couverture & rénovation', icone: '/icones/couverture.webp', href: '/renovation-refection-de-toiture/', items: ['Tuile', 'Ardoise', 'Zinc', 'Bac acier'] },
-  { titre: 'Entretien de toiture', icone: '/icones/entretien.webp', href: '/entretien-de-toiture/', items: ['Démoussage', 'Anti-mousse', 'Hydrofuge'] },
-  { titre: 'Zinguerie', icone: '/icones/zinguerie.webp', href: '/refection-zinguerie/', items: ['Gouttières', 'Noues', 'Cheminée'] },
-  { titre: 'Isolation', icone: '/icones/isolation.webp', href: '/isolation-de-toiture/', items: ['Combles', 'Rampants', 'Bardage'] },
-  { titre: 'Étanchéité', icone: '/icones/etancheite.webp', href: '/etancheite-toit-terrasse/', items: ['Toit-terrasse', 'Bitume'] },
-  { titre: 'Urgences & recherche de fuite', icone: '/icones/reparation.webp', href: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/', items: ['Bâchage', 'Infiltration'] },
-].map((r) => ({ ...r, texte: LOREM_COURT.slice(0, 140) + '…' }));
-
-const etapes = [
-  { titre: 'Votre appel', texte: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.' },
-  { titre: 'La visite', texte: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.' },
-  { titre: 'Le devis écrit', texte: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.' },
-  { titre: 'Le chantier', texte: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.' },
-];
-
-
-// Communes voisines : les autres communes de la zone d'intervention, la
-// commune courante en moins. Elles ne deviennent des liens que le jour où
-// leur propre page passe à `ok` — jamais de lien vers une page en brouillon.
+// Communes voisines : les autres communes de la zone d'intervention. Elles ne
+// deviennent des liens que le jour où leur propre page passe à `ok`.
 const voisines = communes.filter((c) => c !== nom);
 const lienVoisine = (nomCommune) => {
   const cible = villes.find((x) => x.nom === nomCommune);
@@ -100,7 +141,7 @@ const lienVoisine = (nomCommune) => {
     description,
     image: heroPhoto,
     commune: nom,
-    service: { name: `Couvreur zingueur à ${nom}`, description: accroche },
+    service: { name: h1, description: accrocheTexte },
   })}
 >
   <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
@@ -109,17 +150,14 @@ const lienVoisine = (nomCommune) => {
   <!-- ═══ HERO ═══════════════════════════════════════════════════════
        Deux colonnes sur desktop. Sur mobile, la photo REMONTE juste sous
        le titre : les deux colonnes sont aplaties en CSS (display:contents)
-       et chaque élément est replacé par `order`. Le balisage n'est donc
-       écrit qu'une fois — voir .hero-page dans global.css. -->
+       et chaque élément est replacé par `order` — voir .hero-page. -->
   <section class="hero-page">
     <div class="conteneur hero-page__grille">
       <div class="hero-page__texte">
-        <h1 set:html={h1.replace(nom, `<em>${nom}</em>`)} />
-        <p class="hero-page__chapo">{accroche}</p>
+        <h1 set:html={h1.replace(nom, `<em class="nowrap">${nom}</em>`)} />
+        <p class="hero-page__chapo" set:html={accroche} />
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Lorem ipsum dolor sit amet consectetur</li>
-          <li><Icone nom="coche" taille={18} />Sed do eiusmod tempor incididunt ut labore</li>
-          <li><Icone nom="coche" taille={18} />Ut enim ad minim veniam quis nostrud</li>
+          {prestationsHero.map((p) => <li><Icone nom="coche" taille={18} />{p}</li>)}
         </ul>
         <div class="hero-page__actions">
           <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
@@ -132,180 +170,239 @@ const lienVoisine = (nomCommune) => {
         <img
           class="hero-page__photo"
           src={heroPhoto}
-          width="1600" height="1199"
+          width={photoHero.w} height={photoHero.h}
           fetchpriority="high" decoding="async"
-          alt={`Chantier de couverture sur un pavillon, échafaudage installé, vue depuis la rue — ${site.brand}, couvreur à ${nom}`}
+          alt={`${photoHero.alt} — ${site.brand}, couvreur à ${nom}`}
         />
-        <!-- Pas de mascotte ici : elle porte l'appel au téléphone plus bas,
-             et un personnage qui pointe le vide n'est qu'une décoration. -->
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
             <strong>Déplacement et devis gratuits</strong>
-            <span>Lorem ipsum dolor sit amet consectetur adipiscing.</span>
+            <span>Un devis écrit et détaillé, sans engagement.</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <!-- ═══ TROIS ARGUMENTS ════════════════════════════════════════════ -->
   <section class="reassurance reassurance--plate">
     <div class="conteneur">
-      <div class="reassurance__grille">
-        {reassurance.map((r) => (
+      <div class="reassurance__grille reassurance__grille--3">
+        {argumentsVille.map((a) => (
           <div class="reassurance__item">
-            <strong>{r.titre}</strong>
-            <span>{r.texte}</span>
+            <strong>{a.titre}</strong>
+            <span>{a.texte}</span>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ═══ URGENCES ═══════════════════════════════════════════════════ -->
+  <!-- ═══ QUATRE CARTES ══════════════════════════════════════════════ -->
   <section class="section">
-    <div class="conteneur duo">
-      <div class="duo__texte">
-        <h2>Dépannage de toiture à {nom}</h2>
-        <p>{LOREM_COURT}</p>
-        <h3>Lorem ipsum dolor sit amet</h3>
-        <p>{LOREM_LONG}</p>
-        <h3>Consectetur adipiscing elit</h3>
-        <p>{LOREM_COURT}</p>
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Mes prestations de {rang % 2 ? 'couvreur zingueur' : 'couvreur'} à <span class="nowrap">{nom}</span></h2>
       </div>
-      <div class="duo__media">
-        <img
-          src="/photos/mise-en-etancheite-dun-pied-de-cheminee-simonard-couvreur-77.webp"
-          width="733" height="550" loading="lazy" decoding="async"
-          alt={`Mise en étanchéité d'un pied de cheminée — ${site.brand}, couvreur à ${nom}`}
-        />
+      <div class="prestations prestations--4">
+        {cartes.map((c) => <CartePrestation {...c} />)}
       </div>
     </div>
   </section>
 
-  <!-- ═══ RÉNOVATION ═════════════════════════════════════════════════ -->
-  <section class="section section--sombre">
-    <div class="conteneur duo duo--inverse">
+  <!-- ═══ INTERVENTION, AVEC PHOTO ═══════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo">
       <div class="duo__texte">
-        <h2>Rénovation de toiture à {nom}</h2>
-        <p>{LOREM_LONG}</p>
-        <p>{LOREM_COURT}</p>
+        <h2>{exprPhoto} à <span class="nowrap">{nom}</span></h2>
+        <p>
+          {site.brand} se déplace rapidement chez vous pour examiner la toiture. Formé sur les
+          chantiers aux côtés de la génération d'avant, il met son expérience des travaux de
+          couverture au service des toits {deNom}. Le regard technique permet d'établir
+          précisément l'état de la couverture, des ouvrages de zinguerie et de la charpente
+          visible.
+        </p>
+        <p>
+          La maîtrise des procédés de pose, d'entretien et de réparation débouche sur des
+          solutions ajustées à votre toiture : rien de plus que ce qu'il faut pour la remettre
+          en état et la faire durer.
+        </p>
         <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
       </div>
       <div class="duo__media">
         <img
-          src="/photos/remplacement-de-toiture-en-cours-sur-pavillon-simonard-couvreur-77.webp"
-          width="1600" height="1199" loading="lazy" decoding="async"
-          alt={`Remplacement d'une toiture en cours sur un pavillon — ${site.brand}, couvreur à ${nom}`}
+          src={photoSection.src}
+          width={photoSection.w} height={photoSection.h} loading="lazy" decoding="async"
+          alt={`${photoSection.alt} — ${site.brand}, couvreur à ${nom}`}
         />
       </div>
     </div>
   </section>
 
-  <AppelMascotte
-    titre={`Une toiture à voir à ${nom} ?`}
-    note="Déplacement offert"
-    mascotte={masc.mascotte}
-    inverse={masc.inverse}
-  />
+  <!-- ═══ L'ARTISAN ══════════════════════════════════════════════════
+       Le portrait, et le nom : le visiteur doit savoir qui viendra sur son
+       toit. Deux portraits et deux textes en alternance. -->
+  <section class="section">
+    <div class="conteneur artisan">
+      <div class="artisan__media">
+        <img
+          src={portrait.src}
+          width={portrait.w} height={portrait.h} loading="lazy" decoding="async"
+          alt={`${portrait.alt} — ${site.brand}, couvreur à ${nom}`}
+        />
+      </div>
+      <div class="artisan__texte">
+        {rang % 2 === 0 ? (
+          <>
+            <h2>{site.founder}, couvreur de père en fils</h2>
+            <p>
+              Le métier, je l'ai appris sur les chantiers, aux côtés de la génération d'avant.
+              C'est ce savoir-faire artisanal que mon équipe et moi apportons sur les toitures
+              de {nom} : le geste juste, le bon matériau, et une finition qu'on n'a pas besoin
+              de reprendre.
+            </p>
+            <p>
+              Je viens voir votre toit, je vous dis ce qu'il faut faire — et ce qu'il ne faut
+              pas faire — puis je réalise les travaux avec mon équipe. La qualité de l'ouvrage
+              et votre satisfaction sont ce qui compte, du premier appel à la fin du chantier.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2>{site.founder}, un savoir-faire d'artisan couvreur</h2>
+            <p>
+              Artisan couvreur zingueur formé sur les chantiers, j'ai repris le métier de la
+              génération d'avant avec ses exigences : un diagnostic honnête, des matériaux
+              choisis pour durer, une pose dans les règles de l'art. C'est ce professionnalisme
+              que mon équipe et moi apportons sur les toitures de {nom}.
+            </p>
+            <p>
+              Compétence, expérience et amour du travail bien fait : c'est ce que vous êtes en
+              droit d'attendre d'une entreprise de couverture, et c'est ce que nous mettons
+              dans le moindre chantier. Tous les travaux sont couverts par la garantie
+              décennale.
+            </p>
+          </>
+        )}
+        <a class="btn btn--bleu" href="/devis-gratuit/">Me contacter<Fleche /></a>
+      </div>
+    </div>
+  </section>
 
-  <!-- ═══ ACCÈS, ÉCHAFAUDAGE, URBANISME ══════════════════════════════ -->
+  <!-- ═══ GALERIE ════════════════════════════════════════════════════ -->
   <section class="section section--gris">
     <div class="conteneur">
       <div class="chapeau">
-        <h2>Accès et échafaudage à {nom}</h2>
-        <p>{LOREM_COURT.slice(0, 160)}…</p>
+        <h2>Des travaux de couverture réalisés à <span class="nowrap">{nom}</span></h2>
+        <p>Trois chantiers de couverture, de zinguerie et d'isolation menés par l'équipe, à {nom} et dans les communes voisines.</p>
       </div>
-      <div class="duo">
-        <div class="duo__texte">
-          <h3>Accès au chantier et installation</h3>
-          <p>{LOREM_LONG}</p>
-          <h3>Déclaration préalable et règles locales</h3>
-          <p>{LOREM_COURT}</p>
-        </div>
-        <div class="duo__media">
-          <img
-            src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
-            width="1200" height="900" loading="lazy" decoding="async"
-            alt={`Maison sous échafaudage pendant un chantier de couverture — ${site.brand}, couvreur à ${nom}`}
-          />
-        </div>
+      <div class="galerie">
+        {galerie.map((ph) => (
+          <figure>
+            <img src={ph.src} width={ph.w} height={ph.h} loading="lazy" decoding="async" alt={`${ph.alt} — ${site.brand}`} />
+            <figcaption>{ph.alt}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SECTION LONGUE + MAIRIE ════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur">
+      <div class="colonne">
+      <div class="chapeau chapeau--gauche">
+        <h2>{h2Long}</h2>
+      </div>
+      <div class="page-texte">
+        <p>
+          L'expérience accumulée sur les chantiers permet des interventions précises sur tous
+          les types de toitures. Le savoir-faire s'exprime dans les gestes techniques du
+          quotidien, de la préparation des supports jusqu'aux finitions d'étanchéité. Les
+          opérations d'entretien demandent une analyse attentive pour prolonger la tenue des
+          matériaux, et la maîtrise des procédés professionnels assure un résultat qui tient
+          dans le temps. L'artisan met ses compétences au service de la couverture pour en
+          maintenir les performances sur le long terme.
+        </p>
+        <p>
+          La connaissance approfondie des matériaux permet de s'adapter aux contraintes
+          techniques rencontrées sur le terrain. Tuile plate, tuile mécanique, ardoise, zinc ou
+          bac acier : chaque matériau se pose selon ses règles propres, et les fournitures sont
+          choisies en continuité avec la couverture existante, pour une étanchéité complète et
+          une pose solide. La sélection des éléments répond strictement aux exigences
+          mécaniques d'une toiture.
+        </p>
+        <p>
+          Les travaux de couverture exigent une observation détaillée pour définir les actions
+          correctives adéquates. La rénovation des éléments abîmés s'effectue avec précision
+          afin de préserver la charpente sous-jacente. Les techniques de pose respectent les
+          règles de l'art pour la fiabilité de l'ensemble de la structure, et le suivi des
+          étapes de réfection protège l'installation pour de nombreuses années. La pose des
+          éléments de zinguerie vient compléter l'ouvrage pour un écoulement parfait de l'eau.
+        </p>
+        <p>
+          Refaire certains travaux sur une toiture implique le respect du code de l'urbanisme,
+          et notamment du plan local d'urbanisme (PLU) ou du plan d'occupation des sols. Pour
+          certains aménagements, une déclaration préalable doit obligatoirement être déposée
+          auprès de l'administration compétente pour obtenir les validations requises. Les
+          documents d'urbanisme définissent les règles applicables aux modifications
+          extérieures des bâtiments. Il convient de se référer directement au service de
+          l'urbanisme de la mairie pour valider la faisabilité des travaux avant d'ouvrir le
+          chantier.
+        </p>
       </div>
 
-      <!-- Mairie : affichée uniquement si les coordonnées réelles ont été
-           renseignées dans data/villes.js. Sinon, un encart d'attente —
-           on n'invente pas une adresse de mairie. -->
+      <!-- Mairie : coordonnées relevées sur l'annuaire officiel (data/villes.js).
+           Sans coordonnées vérifiées, un encart d'attente — jamais une adresse
+           inventée. -->
       {infos?.mairie ? (
         <div class="mairie">
           <div class="mairie__icone"><Icone nom="epingle" taille={24} /></div>
           <div class="mairie__texte">
-            <strong>Mairie de {nom}</strong>
-            <p>{infos.mairie.adresse}</p>
+            <strong>Mairie {deNom}</strong>
+            <p>
+              Renseignez-vous auprès des services de la mairie {deNom} pour vos démarches et
+              déclarations préalables.<br />
+              Adresse de la mairie : {infos.mairie.adresse}
+              {infos.mairie.tel && <><br />Téléphone : <span class="nowrap">{infos.mairie.tel}</span></>}
+            </p>
           </div>
           <div class="mairie__actions">
-            {infos.mairie.carte && <a class="btn btn--contour" href={infos.mairie.carte} target="_blank" rel="noopener">Voir sur la carte</a>}
-            {infos.mairie.site && <a class="btn btn--contour" href={infos.mairie.site} target="_blank" rel="noopener">Site officiel</a>}
+            {carteMairie && <a class="btn btn--contour" href={carteMairie} target="_blank" rel="noopener">Voir sur la carte</a>}
+            {infos.mairie.site && <a class="btn btn--contour" href={infos.mairie.site} target="_blank" rel="noopener">Site internet</a>}
           </div>
         </div>
       ) : (
         <div class="mairie mairie--attente">
           <div class="mairie__icone"><Icone nom="epingle" taille={24} /></div>
           <div class="mairie__texte">
-            <strong>Mairie de {nom}</strong>
+            <strong>Mairie {deNom}</strong>
             <p>Coordonnées à renseigner dans <code>data/villes.js</code> — aucune adresse n'est affichée tant qu'elle n'a pas été vérifiée.</p>
           </div>
         </div>
       )}
-
-      <h3 class="titre-liste">Les quartiers de {nom}</h3>
-      {infos?.quartiers?.length ? (
-        <ul class="communes communes--gauche">
-          {infos.quartiers.map((q) => <li>{q}</li>)}
-        </ul>
-      ) : (
-        <p class="note-attente">Liste des quartiers à renseigner dans <code>data/villes.js</code>.</p>
-      )}
-    </div>
-  </section>
-
-  <!-- ═══ PRESTATIONS ════════════════════════════════════════════════ -->
-  <section class="section">
-    <div class="conteneur">
-      <div class="chapeau">
-        <h2>Mes prestations de couvreur à {nom}</h2>
-        <p>{LOREM_COURT.slice(0, 150)}…</p>
-      </div>
-      <div class="prestations">
-        {rubriques.map((r) => <CartePrestation {...r} />)}
       </div>
     </div>
   </section>
 
-  <!-- ═══ ÉTAPES ═════════════════════════════════════════════════════ -->
-  <section class="section section--gris">
-    <div class="conteneur">
-      <div class="chapeau">
-        <h2>De votre appel à la fin du chantier</h2>
-        <p>Quatre étapes, sans mauvaise surprise et sans engagement de votre part.</p>
-      </div>
-      <ol class="etapes">
-        {etapes.map((e) => (
-          <li class="etape">
-            <h3>{e.titre}</h3>
-            <p>{e.texte}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
+  <!-- ═══ APPEL MASCOTTE ═════════════════════════════════════════════
+       Les deux dessins alternent d'une ville à l'autre ; chacun est monté
+       du côté vers lequel son pouce pointe (voir AppelMascotte.astro). -->
+  <AppelMascotte
+    titre={`Une toiture à voir à ${nom} ?`}
+    texte="Appelez-moi : je me déplace, j'examine la toiture et vous recevez un devis écrit, détaillé et gratuit."
+    note="Devis gratuit, déplacement offert"
+    mascotte={rang % 2 ? 'face' : 'gauche'}
+    inverse={rang % 2 === 1}
+  />
 
   <!-- ═══ COMMUNES VOISINES ══════════════════════════════════════════ -->
   <section class="section section--ciel">
     <div class="conteneur">
       <div class="chapeau">
-        <h2>Autour de {nom}</h2>
-        <p>{LOREM_COURT.slice(0, 145)}…</p>
+        <h2>Autour <span class="nowrap">{deNom}</span></h2>
+        <p>Les communes voisines où {site.brand} intervient également.</p>
       </div>
       <ul class="communes">
         {voisines.map((c) => {
@@ -313,26 +410,6 @@ const lienVoisine = (nomCommune) => {
           return <li>{href ? <a href={href}>{c}</a> : c}</li>;
         })}
       </ul>
-    </div>
-  </section>
-
-  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
-  <section class="appel">
-    <div class="conteneur">
-      <h2>Votre toiture à {nom} : parlons-en</h2>
-      <p>{LOREM_COURT}</p>
-      <ul class="appel__points">
-        <li>Devis et déplacement gratuits</li>
-        <li>Interlocuteur unique</li>
-        <li>Garantie décennale</li>
-        <li>Urgences traitées en priorité</li>
-      </ul>
-      <div class="appel__actions">
-        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
-        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
-          <Icone nom="tel" taille={20} />{site.phone}
-        </a>
-      </div>
     </div>
   </section>
 </Layout>
