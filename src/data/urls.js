@@ -63,7 +63,7 @@ export const urls = [
 
   // ── Zinguerie ────────────────────────────────────────────────────────
   { path: '/refection-zinguerie/',                                      silo: 'zinguerie', label: 'Réfection de zinguerie',               status: 'todo', pilier: true },
-  { path: '/installation-remplacement-de-gouttieres/',                  silo: 'zinguerie', label: 'Installation & remplacement de gouttières', status: 'ok'   },
+  { path: '/installation-remplacement-de-gouttieres/',                  silo: 'zinguerie', label: 'Pose & remplacement de gouttières',         status: 'ok'   },
   { path: '/installation-et-etancheite-noue-toiture/',                  silo: 'zinguerie', label: 'Noues de toiture',                     status: 'todo' },
   { path: '/etancheite-cheminee/',                                      silo: 'zinguerie', label: 'Étanchéité de cheminée',               status: 'todo' },
 
@@ -105,6 +105,14 @@ export const parSilo = (silo) => pagesPubliees.filter((u) => u.silo === silo);
 
 /** Une page est-elle en ligne ? Sert à décider lien ou texte simple. */
 export const estPubliee = (path) => pagesPubliees.some((u) => u.path === path);
+
+/**
+ * Lien HTML vers une page SI elle est publiée, sinon le texte seul. Pour les
+ * textes rédigés en chaînes (data/villes.js) rendus avec set:html : la règle
+ * « jamais de lien vers une page todo » est ainsi appliquée automatiquement.
+ */
+export const lienSiPubliee = (path, texte) =>
+  estPubliee(path) ? `<a href="${path}">${texte}</a>` : texte;
 
 /** Compteur d'avancement, affiché dans le README. */
 export const avancement = { total: urls.length, faites: pagesPubliees.length };

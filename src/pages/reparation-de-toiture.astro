@@ -10,8 +10,13 @@ import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
 
 /**
- * Page de prestation « Réparation de toiture » — gabarit dupliqué depuis
- * renovation-refection-de-toiture.astro. Texte rédigé le 03/09/2026.
+ * Page « Réparation de toiture » — gabarit dupliqué depuis
+ * renovation-refection-de-toiture.astro (mêmes sections, mêmes alternances).
+ *
+ * Faits utilisés, tous documentés sur l'accueil : intervention rapide en
+ * urgence comme sur rendez-vous, bâchage et mise hors d'eau puis recherche
+ * de l'origine réelle avant réparation, visite du toit et des combles,
+ * garantie décennale, devis écrit poste par poste.
  */
 const path = '/reparation-de-toiture/';
 const brouillon = !estPubliee(path);
@@ -19,33 +24,33 @@ const brouillon = !estPubliee(path);
 const filAriane = 'Réparation de toiture';
 
 const h1 = 'Réparation de toiture en Seine-et-Marne';
-const title = `Réparation de toiture en ${site.address.region} (77)`;
-const description = `Fuite, tuile cassée, infiltration : je répare votre toiture en ${site.address.region}. Bâchage si besoin, devis et déplacement gratuits ✓ ${site.phone}.`;
+const title = `Réparation de toiture en ${site.address.region} (77) | ${site.brand}`;
+const description = `Toit qui fuit, tuiles cassées ou arrachées ? Bâchage si besoin, recherche de l'origine de la fuite et réparation en ${site.address.region}. Devis gratuit ✓ ${site.phone}.`;
 
 const heroPhoto = '/photos/banderole-simonard-sur-chantier-de-toiture-avec-echafaudage-77.webp';
 
 const etapes = [
-  { t: 'Repérage de la fuite', d: "Je recherche l'origine exacte de l'infiltration, qui n'est pas toujours à l'aplomb de la tache visible depuis l'intérieur." },
-  { t: 'Bâchage si nécessaire', d: 'En attendant la réparation définitive, une bâche met la toiture hors d\'eau.' },
-  { t: 'Remplacement des éléments abîmés', d: 'Tuiles cassées, ardoises fendues ou solins décollés sont remplacés à l\'identique.' },
-  { t: 'Contrôle des points singuliers', d: 'Faîtage, rives, noues et abergements sont vérifiés : ce sont les endroits qui fuient le plus souvent.' },
-  { t: "Reprise de l'étanchéité", d: "Les raccords autour d'une cheminée, d'une fenêtre de toit ou d'un arêtier sont repris pour que l'eau ne s'infiltre plus." },
-  { t: 'Nettoyage et vérification', d: "Le chantier est nettoyé et je contrôle qu'il n'y a plus d'infiltration avant de partir." },
+  { t: 'Bâchage si nécessaire', d: "Si la fuite est active ou le toit ouvert, je bâche d'abord : la maison est hors d'eau le temps de préparer la réparation." },
+  { t: 'Recherche de fuite', d: "Sur le toit et dans les combles, je remonte jusqu'au point d'entrée de l'eau, qui n'est presque jamais sous la tache." },
+  { t: 'Remplacement des éléments abîmés', d: "Tuiles cassées, ardoises fendues, solins décollés : je remplace à l'identique, avec le même matériau que la couverture existante." },
+  { t: 'Contrôle des points singuliers', d: 'Faîtage, rives, noues, pieds de cheminée et fenêtres de toit : ce sont eux qui fuient en premier, je les vérifie tous.' },
+  { t: "Reprise de l'étanchéité", d: "Je refais les raccords qui laissent passer l'eau, autour d'une cheminée, d'une fenêtre de toit ou d'un arêtier." },
+  { t: 'Vérification et nettoyage', d: "Je contrôle qu'il n'y a plus d'infiltration et je nettoie le chantier avant de partir." },
 ];
 
 const pannes = [
-  { t: 'Tuiles ou ardoises cassées', d: 'Un choc, le gel ou le vent en déplace ou en fendille quelques-unes, ce qui suffit à laisser passer l\'eau.' },
-  { t: 'Faîtage fissuré', d: 'Le mortier de faîtage se fissure avec le temps et laisse l\'eau s\'infiltrer sous les tuiles de couronnement.' },
-  { t: 'Solin de cheminée décollé', d: 'La jonction entre la cheminée et la couverture est un point sensible, souvent à l\'origine des infiltrations autour du conduit.' },
-  { t: 'Gouttière bouchée ou percée', d: "L'eau qui ne s'évacue plus remonte sous les tuiles basses au lieu de couler dans la descente." },
-  { t: 'Écran de sous-toiture déchiré', d: "Quand il est percé ou mal raccordé, l'humidité passe directement sur la charpente." },
+  { t: 'Tuiles ou ardoises cassées', d: "Un choc, le gel ou le vent suffisent à en casser ou à en déplacer quelques-unes, et l'eau passe." },
+  { t: 'Faîtage fissuré', d: "Le mortier du faîtage se fissure avec les années et laisse l'eau s'infiltrer sous les tuiles faîtières." },
+  { t: 'Solin de cheminée décollé', d: "La jonction entre la cheminée et la couverture est le point faible du toit : c'est souvent par là que l'eau entre." },
+  { t: 'Gouttière bouchée ou percée', d: "L'eau qui ne s'évacue plus déborde et remonte sous les premiers rangs de tuiles au lieu de partir dans la descente." },
+  { t: 'Écran de sous-toiture déchiré', d: "Percé ou mal raccordé, il laisse l'humidité arriver directement sur la charpente." },
 ];
 
 const faq = [
-  { q: 'Une petite fuite peut-elle attendre ?', a: "Mieux vaut ne pas attendre : une infiltration continue humidifie la charpente et l'isolant, ce qui aggrave les dégâts et le coût de la réparation." },
-  { q: 'Intervenez-vous après une tempête ou un épisode de grêle ?', a: "Oui, je me déplace pour évaluer les dégâts et poser une bâche si la toiture est mise à découvert." },
-  { q: "Comment savoir d'où vient une tache au plafond ?", a: "L'eau chemine souvent le long d'un chevron avant de retomber : la tache n'est pas toujours sous la fuite. Un passage sur le toit permet de remonter à la source." },
-  { q: 'La réparation est-elle garantie ?', a: "Oui, les travaux sont couverts par la garantie décennale, comme l'ensemble de mes interventions de couverture." },
+  { q: 'Une petite fuite peut-elle attendre ?', a: "Non. Une infiltration, même légère, humidifie la charpente et l'isolant, et les dégâts grossissent en silence. Plus on attend, plus la réparation coûte cher." },
+  { q: 'Intervenez-vous en urgence après une tempête ?', a: "Oui. Je me déplace pour constater les dégâts et bâcher si le toit est ouvert, puis j'organise la réparation." },
+  { q: "J'ai une tache au plafond : d'où vient l'eau ?", a: "Rarement de juste au-dessus. L'eau suit un chevron ou un liteau avant de retomber, parfois à plusieurs mètres du point d'entrée. Je passe dans les combles et sur le toit pour remonter jusqu'à la source." },
+  { q: 'La réparation est-elle garantie ?', a: 'Oui. Tous mes travaux sont couverts par la garantie décennale, la réparation comme le remplacement.' },
 ];
 ---
 <Layout
@@ -69,12 +74,13 @@ const faq = [
       <div class="hero-page__texte">
         <h1>Réparation de toiture en <em>{site.address.region}</em></h1>
         <p class="hero-page__chapo">
-          Un toit qui fuit ? Des tuiles arrachées après le vent ? Je recherche l'origine
-          de la fuite et je répare, avec un bâchage rapide si la situation l'exige.
+          Un toit qui fuit ? Des tuiles cassées ou arrachées par le vent ? J'interviens vite,
+          je mets le toit hors d'eau si c'est urgent, puis je cherche l'origine réelle de la
+          fuite avant de réparer.
         </p>
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Recherche de fuite sur place</li>
-          <li><Icone nom="coche" taille={18} />Bâchage d'urgence si nécessaire</li>
+          <li><Icone nom="coche" taille={18} />Intervention rapide, en urgence comme sur rendez-vous</li>
+          <li><Icone nom="coche" taille={18} />Réparation à l'identique : tuile, ardoise, zinc</li>
           <li><Icone nom="coche" taille={18} />Garantie décennale sur les travaux</li>
         </ul>
         <div class="hero-page__actions">
@@ -90,13 +96,13 @@ const faq = [
           src={heroPhoto}
           width="1200" height="900"
           fetchpriority="high" decoding="async"
-          alt={`Chantier de réparation de toiture avec échafaudage — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Banderole Simonard sur un chantier de toiture sous échafaudage — ${site.brand}, couvreur en ${site.address.region}`}
         />
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Urgences toiture</strong>
-            <span>Fuite ou tuiles arrachées : intervention rapide.</span>
+            <strong>Bâchage d'urgence</strong>
+            <span>Le toit est mis hors d'eau en attendant la réparation.</span>
           </div>
         </div>
       </div>
@@ -119,29 +125,30 @@ const faq = [
   <section class="section">
     <div class="conteneur duo">
       <div class="duo__texte">
-        <h2>D'où vient la fuite ou l'infiltration ?</h2>
+        <h2>D'où vient la fuite ?</h2>
         <p>
-          Une tuile déplacée, un faîtage fissuré, un solin de cheminée décollé ou une
-          gouttière bouchée qui fait remonter l'eau sous la couverture : les causes sont
-          rarement là où la tache apparaît au plafond.
+          Une tuile déplacée, un faîtage fissuré, un solin de cheminée décollé, une gouttière
+          bouchée qui fait remonter l'eau sous les tuiles : les causes sont nombreuses, et
+          rarement à l'aplomb de la tache au plafond. L'eau chemine le long d'un chevron
+          avant de retomber.
         </p>
-        <h3>Une intervention rapide pour limiter les dégâts</h3>
+        <h3>Mettre hors d'eau d'abord</h3>
         <p>
-          Quand la toiture est ouverte ou qu'une fuite active menace l'intérieur, une
-          bâche met le toit hors d'eau le temps d'organiser la réparation définitive.
+          Quand une fuite est active ou que le toit est ouvert, la première chose à faire est
+          de bâcher. La maison est protégée, et la réparation s'organise sans précipitation.
         </p>
-        <h3>Un diagnostic qui va au-delà de la fuite visible</h3>
+        <h3>Chercher l'origine, pas la trace</h3>
         <p>
-          Un point de fuite s'accompagne souvent d'autres éléments fragilisés autour :
-          je vérifie les tuiles voisines et les points singuliers du toit avant de
-          refermer le chantier.
+          Je monte sur le toit et je passe dans les combles quand il y a une trace. Reboucher
+          là où l'eau apparaît ne sert à rien si elle entre trois mètres plus haut : je répare
+          là où elle entre.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/artisan-simonard-sur-echelle-pour-le-nettoyage-dune-toiture-77.webp"
           width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Artisan sur échelle pour intervenir sur une toiture — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`L'artisan sur son échelle, au pied d'une toiture — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -160,14 +167,14 @@ const faq = [
         <img
           src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
           width="1200" height="900" loading="lazy" decoding="async"
-          alt={`Maison sous échafaudage pendant une réparation de toiture — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Maison sous échafaudage pendant un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
   </section>
 
   <AppelMascotte
-    titre="Un toit qui fuit ?"
+    titre="Une tache au plafond ?"
     note="Déplacement offert"
     mascotte="gauche"
   />
@@ -175,16 +182,21 @@ const faq = [
   <section class="section">
     <div class="conteneur duo">
       <div class="duo__texte">
-        <h2>Les pannes les plus fréquentes sur une toiture</h2>
+        <h2>Les pannes les plus fréquentes</h2>
         <ul class="liste-detail">
           {pannes.map((p) => <li><strong>{p.t}</strong> — {p.d}</li>)}
         </ul>
+        <p>
+          Quand c'est la gouttière qui lâche, ce n'est pas la couverture qu'il faut reprendre :
+          j'en parle sur la page consacrée à la
+          <a href="/installation-remplacement-de-gouttieres/">pose et au remplacement de gouttières</a>.
+        </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/gouttiere-et-descente-en-zinc-sur-chantier-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Gouttière et descente en zinc sur un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Gouttière et descente en zinc posées sur un chantier — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -193,18 +205,19 @@ const faq = [
   <section class="section section--gris">
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
-        <h2>Après une tempête ou un épisode de grêle</h2>
+        <h2>Après une tempête ou un orage de grêle</h2>
         <p>
-          Tuiles arrachées, ardoises fendues, gouttière décrochée : après un coup de
-          vent, je me déplace pour évaluer les dégâts et bâcher si le toit est mis à
-          découvert, avant d'organiser la réparation.
+          Tuiles arrachées, ardoises fendues, gouttière décrochée : après un coup de vent,
+          appelez-moi. Je viens constater les dégâts, je bâche si le toit est ouvert, et vous
+          recevez un devis écrit pour la réparation.
         </p>
+        <p>Ce devis, détaillé poste par poste, peut être transmis à votre assurance.</p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Toiture en tuiles réparée, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Toiture en tuiles rénovée, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -214,8 +227,8 @@ const faq = [
 
   <section class="appel">
     <div class="conteneur">
-      <h2>Un toit qui fuit ne se répare pas tout seul</h2>
-      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
+      <h2>Une fuite à réparer ? Le déplacement est gratuit.</h2>
+      <p>Appelez-moi : je viens voir la toiture, je bâche si c'est nécessaire, et vous recevez un devis écrit et détaillé, sans engagement.</p>
       <ul class="appel__points">
         <li>Devis et déplacement gratuits</li>
         <li>Interlocuteur unique</li>

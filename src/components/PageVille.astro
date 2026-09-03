@@ -9,7 +9,7 @@ import { site, communes } from '../data/site.js';
 import { estPubliee } from '../data/urls.js';
 import {
   villes, infosVille, EXPRESSIONS, METAS, ACCROCHES, PRESTATIONS_HERO,
-  ARGUMENTS, SUJETS_LONG, OBJETS_LONG,
+  ARGUMENTS, SUJETS_LONG, OBJETS_LONG, TEXTES_LONGS, TEXTE_URBANISME,
   PHOTOS_HERO, PHOTOS_INTERVENTION, PORTRAITS, PHOTOS_GALERIE,
 } from '../data/villes.js';
 import { pageSchema } from '../data/schema.js';
@@ -104,14 +104,14 @@ const CARTES = [
   },
   {
     titre: `Gouttières à ${nom}`,
-    texte: `Gouttière qui déborde, fissurée ou décrochée : ${site.brand} pose et remplace les gouttières et leurs descentes, en zinc, en aluminium ou en PVC, et raccorde l'écoulement pour que l'eau ne remonte plus sous la couverture.`,
+    texte: `Gouttière qui déborde, fissurée ou décrochée : ${site.brand} la répare quand c'est possible et la remplace quand il le faut, en zinc, en aluminium ou en PVC, descentes comprises. Les pièces sont façonnées aux cotes relevées sur place.`,
     icone: '/icones/zinguerie.webp',
     href: '/installation-remplacement-de-gouttieres/',
     items: ['Gouttières', 'Descentes', 'Zinc, alu, PVC'],
   },
   {
     titre: `Réparation de toiture à ${nom}`,
-    texte: `L'artisan intervient rapidement pour réparer la toiture. En urgence, la pose d'une bâche met le toit hors d'eau ; l'expérience permet ensuite de trouver l'origine de la fuite ou de l'infiltration et d'y apporter une solution concrète. La proximité fait la différence sur ces interventions.`,
+    texte: `${site.brand} intervient rapidement pour réparer la toiture. En urgence, une bâche met le toit hors d'eau ; il cherche ensuite l'origine réelle de la fuite ou de l'infiltration, et répare là où l'eau entre, pas là où elle apparaît.`,
     icone: '/icones/reparation.webp',
     href: '/reparation-de-toiture/',
     items: ['Bâchage', 'Fuite', 'Infiltration'],
@@ -120,7 +120,10 @@ const CARTES = [
 const debut = rang % CARTES.length;
 const cartes = [...CARTES.slice(debut), ...CARTES.slice(0, debut)];
 
+// Le corps de la section longue suit l'OBJET du H2 (même index), pour que le
+// texte parle bien de ce que le titre annonce.
 const h2Long = `Faites appel à ${SUJETS_LONG[rang % 4]} pour ${OBJETS_LONG[(rang + 1) % 4]}`;
+const paragraphesLongs = [...TEXTES_LONGS[(rang + 1) % 4](nom), TEXTE_URBANISME(deNom)];
 
 // Communes voisines : les autres communes de la zone d'intervention. Elles ne
 // deviennent des liens que le jour où leur propre page passe à `ok`.
@@ -224,9 +227,8 @@ const lienVoisine = (nomCommune) => {
           visible.
         </p>
         <p>
-          La maîtrise des procédés de pose, d'entretien et de réparation débouche sur des
-          solutions ajustées à votre toiture : rien de plus que ce qu'il faut pour la remettre
-          en état et la faire durer.
+          Il vous dit ce qu'il faut faire, et rien de plus que ce qu'il faut pour remettre la
+          toiture en état et la faire durer.
         </p>
         <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
       </div>
@@ -259,7 +261,7 @@ const lienVoisine = (nomCommune) => {
             <p>
               Le métier, je l'ai appris sur les chantiers, aux côtés de la génération d'avant.
               C'est ce savoir-faire artisanal que mon équipe et moi apportons sur les toitures
-              de {nom} : le geste juste, le bon matériau, et une finition qu'on n'a pas besoin
+              {deNom} : le geste juste, le bon matériau, et une finition qu'on n'a pas besoin
               de reprendre.
             </p>
             <p>
@@ -275,7 +277,7 @@ const lienVoisine = (nomCommune) => {
               Artisan couvreur zingueur formé sur les chantiers, j'ai repris le métier de la
               génération d'avant avec ses exigences : un diagnostic honnête, des matériaux
               choisis pour durer, une pose dans les règles de l'art. C'est ce professionnalisme
-              que mon équipe et moi apportons sur les toitures de {nom}.
+              que mon équipe et moi apportons sur les toitures {deNom}.
             </p>
             <p>
               Compétence, expérience et amour du travail bien fait : c'est ce que vous êtes en
@@ -315,42 +317,12 @@ const lienVoisine = (nomCommune) => {
       <div class="chapeau chapeau--gauche">
         <h2>{h2Long}</h2>
       </div>
+      <!-- Quatre variantes (data/villes.js, TEXTES_LONGS), choisies par
+           l'objet du H2, puis le paragraphe d'urbanisme qui amène l'encadré
+           mairie. Les liens y sont conditionnés à la publication de la page
+           cible (lienSiPubliee). -->
       <div class="page-texte">
-        <p>
-          L'expérience accumulée sur les chantiers permet des interventions précises sur tous
-          les types de toitures. Le savoir-faire s'exprime dans les gestes techniques du
-          quotidien, de la préparation des supports jusqu'aux finitions d'étanchéité. Les
-          opérations d'entretien demandent une analyse attentive pour prolonger la tenue des
-          matériaux, et la maîtrise des procédés professionnels assure un résultat qui tient
-          dans le temps. L'artisan met ses compétences au service de la couverture pour en
-          maintenir les performances sur le long terme.
-        </p>
-        <p>
-          La connaissance approfondie des matériaux permet de s'adapter aux contraintes
-          techniques rencontrées sur le terrain. Tuile plate, tuile mécanique, ardoise, zinc ou
-          bac acier : chaque matériau se pose selon ses règles propres, et les fournitures sont
-          choisies en continuité avec la couverture existante, pour une étanchéité complète et
-          une pose solide. La sélection des éléments répond strictement aux exigences
-          mécaniques d'une toiture.
-        </p>
-        <p>
-          Les travaux de couverture exigent une observation détaillée pour définir les actions
-          correctives adéquates. La rénovation des éléments abîmés s'effectue avec précision
-          afin de préserver la charpente sous-jacente. Les techniques de pose respectent les
-          règles de l'art pour la fiabilité de l'ensemble de la structure, et le suivi des
-          étapes de réfection protège l'installation pour de nombreuses années. La pose des
-          éléments de zinguerie vient compléter l'ouvrage pour un écoulement parfait de l'eau.
-        </p>
-        <p>
-          Refaire certains travaux sur une toiture implique le respect du code de l'urbanisme,
-          et notamment du plan local d'urbanisme (PLU) ou du plan d'occupation des sols. Pour
-          certains aménagements, une déclaration préalable doit obligatoirement être déposée
-          auprès de l'administration compétente pour obtenir les validations requises. Les
-          documents d'urbanisme définissent les règles applicables aux modifications
-          extérieures des bâtiments. Il convient de se référer directement au service de
-          l'urbanisme de la mairie pour valider la faisabilité des travaux avant d'ouvrir le
-          chantier.
-        </p>
+        {paragraphesLongs.map((texte) => <p set:html={texte} />)}
       </div>
 
       <!-- Mairie : coordonnées relevées sur l'annuaire officiel (data/villes.js).

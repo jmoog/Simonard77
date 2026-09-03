@@ -10,10 +10,17 @@ import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
 
 /**
- * Page de prestation « Nettoyage & démoussage de toiture ». Rédigée en
- * priorité le 03/09/2026 : c'est cette prestation, et non « Entretien de
- * toiture », que les cartes des pages ville publiées mettent déjà en avant
- * (démoussage, anti-mousse, hydrofuge) — voir CartePrestation.astro.
+ * Page « Nettoyage & démoussage de toiture » — gabarit dupliqué depuis
+ * renovation-refection-de-toiture.astro.
+ *
+ * C'est cette prestation, et non « Entretien de toiture », que les cartes
+ * des pages ville mettent en avant (démoussage, anti-mousse, hydrofuge) :
+ * c'est ce que les gens recherchent, pas le mot « entretien ».
+ *
+ * Faits utilisés, tous documentés sur l'accueil : nettoyage manuel ou basse
+ * pression selon l'état des tuiles, traitement anti-mousse, hydrofuge
+ * incolore ou coloré qui retarde la repousse, contrôle des points sensibles
+ * (faîtage, solins, pieds de cheminée) pendant le nettoyage.
  */
 const path = '/nettoyage-demoussage-de-toiture/';
 const brouillon = !estPubliee(path);
@@ -22,24 +29,24 @@ const filAriane = 'Nettoyage & démoussage de toiture';
 
 const h1 = 'Nettoyage et démoussage de toiture en Seine-et-Marne';
 const title = `Nettoyage et démoussage de toiture en ${site.address.region} (77)`;
-const description = `Démoussage manuel, traitement anti-mousse et hydrofuge pour votre toiture en ${site.address.region}. Devis et déplacement gratuits ✓ ${site.phone}.`;
+const description = `Mousse et lichens sur le toit ? Démoussage manuel ou basse pression, anti-mousse et hydrofuge pour votre toiture en ${site.address.region}. Devis gratuit ✓ ${site.phone}.`;
 
 const heroPhoto = '/photos/artisan-simonard-sur-echelle-pour-le-nettoyage-dune-toiture-77.webp';
 
 const etapes = [
-  { t: 'Inspection de la toiture', d: "Je vérifie l'état des tuiles avant de commencer : une tuile fragilisée se repère et se traite à part." },
-  { t: 'Démoussage manuel', d: "Mousses, lichens et salissures sont retirés au grattoir et à la brosse, sans passer au nettoyeur haute pression." },
-  { t: 'Traitement anti-mousse', d: "Un produit fongicide élimine les spores qui restent sur la couverture après le brossage." },
-  { t: 'Rinçage basse pression', d: "La toiture est rincée sans forcer, pour ne pas décaper le grain de la tuile." },
-  { t: 'Application d\'un hydrofuge', d: "Un traitement hydrofuge, incolore ou coloré, ralentit le retour de la mousse et prolonge le résultat." },
-  { t: "Contrôle des évacuations", d: "Je vérifie que les gouttières n'ont pas récupéré de débris pendant le nettoyage." },
+  { t: 'Inspection de la toiture', d: "Avant de commencer, je regarde l'état des tuiles, du faîtage et des solins. Une tuile cassée est signalée avant le nettoyage, pas découverte après." },
+  { t: 'Démoussage', d: 'Je retire mousses, lichens et salissures à la brosse et au grattoir, ou à basse pression si la tuile le supporte.' },
+  { t: 'Traitement anti-mousse', d: "Un produit fongicide élimine les spores qui restent après le brossage. Sans lui, la mousse repousse dès l'hiver suivant." },
+  { t: 'Rinçage', d: 'Je rince la toiture sans forcer, pour ne pas décaper le grain de la tuile.' },
+  { t: 'Hydrofuge', d: "Incolore ou coloré, il fait ruisseler l'eau et retarde la repousse de la mousse." },
+  { t: 'Points sensibles et gouttières', d: "J'en profite pour contrôler faîtage, solins et pieds de cheminée, et je vide les gouttières des débris tombés pendant le nettoyage." },
 ];
 
 const faq = [
-  { q: 'Le démoussage abîme-t-il la toiture ?', a: "Non si les techniques sont adaptées : brossage manuel et rinçage à pression modérée respectent la tuile, contrairement au nettoyeur haute pression qui use la surface." },
-  { q: 'Le traitement hydrofuge suffit-il seul, sans démoussage ?', a: "Non. Appliqué sur une mousse déjà installée, l'hydrofuge l'emprisonne au lieu de l'empêcher de revenir : le nettoyage doit toujours précéder le traitement." },
-  { q: 'À quelle fréquence refaire un démoussage ?', a: "Cela dépend de l'exposition du toit : orientation nord, arbres à proximité, humidité stagnante. Un diagnostic sur place permet d'estimer un intervalle adapté à votre toiture." },
-  { q: "Pourquoi de la mousse apparaît-elle sur certains toits et pas d'autres ?", a: "L'humidité qui stagne favorise son installation : un pan orienté au nord, à l'ombre d'un arbre, ou une tuile poreuse en accumulent davantage." },
+  { q: 'Le démoussage abîme-t-il les tuiles ?', a: "Pas quand il est fait à la brosse ou à basse pression. C'est le nettoyeur haute pression qui décape la surface de la tuile et l'use avant l'heure." },
+  { q: 'Peut-on appliquer un hydrofuge sans démousser avant ?', a: "Non. Sur une toiture encore couverte de mousse, l'hydrofuge l'emprisonne au lieu de l'empêcher de revenir. Le nettoyage vient toujours avant le traitement." },
+  { q: 'À quelle fréquence faut-il démousser une toiture ?', a: "Cela dépend de son exposition : orientation, arbres à proximité, humidité. Je vous indique un rythme après avoir vu la toiture." },
+  { q: 'Pourquoi mon toit a-t-il de la mousse et pas celui du voisin ?', a: "Parce que la mousse pousse là où l'humidité stagne. L'orientation du toit, l'ombre d'un arbre ou l'âge des tuiles suffisent à faire la différence entre deux maisons voisines." },
 ];
 ---
 <Layout
@@ -63,14 +70,14 @@ const faq = [
       <div class="hero-page__texte">
         <h1>Nettoyage et démoussage de toiture en <em>{site.address.region}</em></h1>
         <p class="hero-page__chapo">
-          Mousse, lichens ou salissures sur votre toiture ? Je nettoie sans abîmer la
-          couverture et j'applique un traitement hydrofuge pour ralentir le retour de la
-          mousse.
+          De la mousse sur les tuiles, des lichens, des traînées noires ? Je nettoie la
+          toiture sans l'abîmer, je traite contre la mousse et j'applique un hydrofuge qui
+          retarde la repousse.
         </p>
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Démoussage manuel, sans haute pression</li>
-          <li><Icone nom="coche" taille={18} />Traitement anti-mousse et hydrofuge</li>
-          <li><Icone nom="coche" taille={18} />Devis gratuit après diagnostic sur place</li>
+          <li><Icone nom="coche" taille={18} />Manuel ou basse pression, selon l'état des tuiles</li>
+          <li><Icone nom="coche" taille={18} />Anti-mousse, puis hydrofuge incolore ou coloré</li>
+          <li><Icone nom="coche" taille={18} />Faîtage, solins et cheminée contrôlés au passage</li>
         </ul>
         <div class="hero-page__actions">
           <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
@@ -85,13 +92,13 @@ const faq = [
           src={heroPhoto}
           width="1600" height="1200"
           fetchpriority="high" decoding="async"
-          alt={`Artisan sur échelle pour le nettoyage d'une toiture — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`L'artisan sur son échelle pour le nettoyage d'une toiture — ${site.brand}, couvreur en ${site.address.region}`}
         />
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Devis gratuit</strong>
-            <span>Déplacement et chiffrage offerts.</span>
+            <strong>Brosse ou basse pression</strong>
+            <span>La tuile est nettoyée, pas décapée.</span>
           </div>
         </div>
       </div>
@@ -116,28 +123,28 @@ const faq = [
       <div class="duo__texte">
         <h2>Pourquoi la mousse s'installe sur une toiture</h2>
         <p>
-          Un pan orienté au nord, à l'ombre d'un arbre ou d'un mur voisin, garde
-          l'humidité plus longtemps. Les tuiles poreuses ou anciennes retiennent
-          davantage l'eau : c'est le terrain idéal pour la mousse et les lichens.
+          Un pan orienté au nord, un arbre qui fait de l'ombre, un mur voisin qui garde
+          l'humidité : la mousse pousse là où le toit ne sèche pas. Et plus la tuile vieillit,
+          plus la mousse s'y accroche.
         </p>
         <h3>Ce que la mousse abîme, au-delà de l'aspect</h3>
         <p>
-          Une toiture couverte de mousse retient l'eau au lieu de l'évacuer. Avec le gel,
-          cette eau emprisonnée fragilise la tuile de l'intérieur, et l'humidité finit par
-          gagner la charpente.
+          La mousse retient l'eau au lieu de la laisser ruisseler. Les tuiles restent humides,
+          deviennent poreuses, et le gel finit par les fissurer. Sous la couverture,
+          l'humidité gagne les liteaux, puis la charpente.
         </p>
-        <h3>Nettoyage manuel plutôt qu'au nettoyeur haute pression</h3>
+        <h3>À la brosse ou à basse pression, jamais à haute pression</h3>
         <p>
-          La haute pression décape la surface protectrice de la tuile et accélère
-          l'usure. Je préfère un démoussage manuel, plus long mais qui respecte la
-          couverture.
+          Le nettoyeur haute pression décape la surface de la tuile et accélère son usure.
+          Selon l'état de la couverture, je travaille à la brosse et au grattoir, ou à basse
+          pression. C'est plus long, mais la tuile reste entière.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Toiture en tuiles propre, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Toiture en tuiles rénovée, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -155,15 +162,15 @@ const faq = [
       <div class="duo__media">
         <img
           src="/photos/pavillon-avec-toiture-en-tuiles-terminee-simonard-couvreur-77-02.webp"
-          width="1200" height="900" loading="lazy" decoding="async"
-          alt={`Pavillon avec toiture en tuiles nettoyée — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Pavillon dont la toiture en tuiles vient d'être terminée — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
   </section>
 
   <AppelMascotte
-    titre="Une toiture couverte de mousse ?"
+    titre="Des tuiles vertes de mousse ?"
     note="Déplacement offert"
     mascotte="face"
     inverse={true}
@@ -174,21 +181,45 @@ const faq = [
       <div class="duo__texte">
         <h2>Hydrofuge incolore ou hydrofuge coloré ?</h2>
         <p>
-          Un hydrofuge <strong>incolore</strong> protège la tuile sans changer son
-          aspect : c'est le choix le plus courant sur une toiture en bon état. Un
-          hydrofuge <strong>coloré</strong> ravive en plus la teinte d'une couverture
-          ancienne, ternie par le temps.
+          L'hydrofuge incolore protège la tuile sans changer son aspect. C'est le choix
+          habituel sur une toiture en bon état.
         </p>
         <p>
-          Dans les deux cas, le traitement s'applique uniquement après le démoussage et
-          le rinçage — jamais sur une toiture encore couverte de mousse.
+          L'hydrofuge coloré ajoute une teinte à la couverture et ravive une toiture ancienne,
+          ternie par les années. Dans les deux cas, il s'applique sur une toiture propre et
+          sèche, jamais sur de la mousse.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/vue-aerienne-maison-avec-toiture-ardoise-terminee-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Vue aérienne d'une toiture entretenue — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1444" height="993" loading="lazy" decoding="async"
+          alt={`Toiture en ardoise entièrement refaite, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>À quel rythme faire nettoyer sa toiture ?</h2>
+        <p>
+          Il n'y a pas de règle valable pour tous les toits. Une toiture exposée au sud et
+          dégagée reste propre longtemps ; à l'ombre et à l'humidité, elle se couvre de mousse
+          en quelques années.
+        </p>
+        <p>
+          Ce qui est sûr, c'est que nettoyer avant que la mousse ait rendu les tuiles poreuses
+          coûte beaucoup moins cher que de remplacer la couverture. Je vous donne un rythme
+          adapté à votre toit après l'avoir vu.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/vue-aerienne-toiture-ardoise-et-tourelle-terminees-simonard-couvreur-77.webp"
+          width="1442" height="989" loading="lazy" decoding="async"
+          alt={`Toiture en ardoise et tourelle terminées, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -198,8 +229,8 @@ const faq = [
 
   <section class="appel">
     <div class="conteneur">
-      <h2>Une toiture propre dure plus longtemps</h2>
-      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
+      <h2>Une toiture à nettoyer ? Le déplacement est gratuit.</h2>
+      <p>Appelez-moi : je viens voir l'état des tuiles et vous recevez un devis écrit et détaillé, sans engagement.</p>
       <ul class="appel__points">
         <li>Devis et déplacement gratuits</li>
         <li>Interlocuteur unique</li>

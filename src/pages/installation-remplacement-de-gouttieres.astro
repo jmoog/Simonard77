@@ -10,43 +10,51 @@ import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
 
 /**
- * Page de prestation « Installation & remplacement de gouttières ». Rédigée
- * en priorité le 03/09/2026, à la place du pilier « Réfection de
- * zinguerie » : c'est la gouttière, pas le mot « zinguerie », que les gens
- * recherchent — voir la carte correspondante dans PageVille.astro.
+ * Page « Pose & remplacement de gouttières » — gabarit dupliqué depuis
+ * renovation-refection-de-toiture.astro.
+ *
+ * Rédigée à la place du pilier « Réfection de zinguerie » : c'est
+ * « gouttière », pas « zinguerie », que les gens tapent. L'URL historique
+ * (installation-remplacement-de-gouttieres) est conservée telle quelle ; le
+ * H1 et le title parlent de « pose », qui est le mot recherché.
+ *
+ * Faits utilisés, tous documentés sur l'accueil : zinc, aluminium ou PVC ;
+ * dépose de l'existant, pose des crochets, réglage des pentes, soudure des
+ * jonctions ; pièces façonnées aux cotes relevées sur place ; « je vous dis
+ * franchement quand une gouttière se répare plutôt qu'elle ne se remplace ».
  */
 const path = '/installation-remplacement-de-gouttieres/';
 const brouillon = !estPubliee(path);
 
-const filAriane = 'Installation & remplacement de gouttières';
+const filAriane = 'Pose & remplacement de gouttières';
 
-const h1 = 'Installation et remplacement de gouttières en Seine-et-Marne';
-const title = `Installation et remplacement de gouttières en ${site.address.region} (77)`;
-const description = `Gouttières en zinc, aluminium ou PVC : pose, remplacement et raccordement des descentes en ${site.address.region}. Devis gratuit ✓ ${site.phone}.`;
+const h1 = 'Pose et remplacement de gouttières en Seine-et-Marne';
+const title = `Pose et remplacement de gouttières en ${site.address.region} (77)`;
+const description = `Gouttière qui déborde ou décrochée ? Pose et remplacement de gouttières en zinc, aluminium ou PVC en ${site.address.region}, descentes comprises. Devis gratuit ✓ ${site.phone}.`;
 
 const heroPhoto = '/photos/installation-dune-gouttiere-par-lartisan-simonard-couvreur-77.webp';
 
 const etapes = [
-  { t: "Dépose de l'ancienne gouttière", d: 'Je retire la gouttière et les crochets existants avant de vérifier le support (chevrons, planche de rive).' },
-  { t: "Vérification de la pente d'écoulement", d: "La pente vers la descente est contrôlée et ajustée : c'est elle qui évite les débordements et les stagnations d'eau." },
-  { t: 'Pose de la nouvelle gouttière', d: "La gouttière est posée dans le matériau choisi, en respectant l'écartement des crochets." },
-  { t: 'Raccordement des descentes', d: "Les descentes sont raccordées et orientées pour évacuer l'eau loin des fondations." },
-  { t: 'Étanchéité des jonctions', d: "Angles, jonctions et naissances de descente sont étanchés pour supprimer les fuites." },
-  { t: "Test d'écoulement", d: "Je vérifie que l'eau s'évacue correctement avant de considérer le chantier terminé." },
+  { t: "Dépose de l'ancienne gouttière", d: 'Je retire la gouttière et ses crochets, et je vérifie le support : planche de rive, chevrons.' },
+  { t: 'Pose des crochets', d: 'Fixés à intervalle régulier et alignés pour donner la pente vers la descente.' },
+  { t: 'Réglage de la pente', d: "C'est elle qui évite les débordements et l'eau qui stagne. Je la contrôle avant de poser la gouttière." },
+  { t: 'Pose de la gouttière', d: 'Zinc, aluminium ou PVC, aux cotes relevées sur place, angles et naissances compris.' },
+  { t: 'Raccordement des descentes', d: "Les descentes sont raccordées et orientées pour envoyer l'eau loin des murs et des fondations." },
+  { t: 'Jonctions et écoulement', d: "Je soude ou j'étanche les jonctions, puis je vérifie que l'eau part bien par la descente." },
 ];
 
 const materiaux = [
-  { t: 'Le zinc', d: "Matériau traditionnel et durable, qui s'accorde avec une couverture en zinc ou en ardoise." },
-  { t: "L'aluminium", d: "Léger, ne rouille pas, disponible dans plusieurs teintes pour s'accorder à la façade." },
-  { t: 'Le PVC', d: "Solution économique et rapide à poser, adaptée à un budget serré." },
-  { t: 'Le profil : demi-ronde ou à moulures', d: "Le choix du profil dépend du style de la maison — une demi-ronde sur une maison ancienne, une gouttière à moulures sur du pavillon plus récent." },
+  { t: 'Le zinc', d: "Le matériau traditionnel : durable, soudé aux jonctions, il s'accorde avec une couverture en ardoise ou en zinc." },
+  { t: "L'aluminium", d: "Léger, il ne rouille pas et existe en plusieurs teintes pour s'accorder à la façade." },
+  { t: 'Le PVC', d: 'Le moins cher et le plus rapide à poser, mais il vieillit plus vite au soleil.' },
+  { t: 'Demi-ronde ou à moulures', d: 'Le profil se choisit selon le style de la maison : demi-ronde sur une maison ancienne, à moulures sur un pavillon plus récent.' },
 ];
 
 const faq = [
-  { q: 'Une gouttière qui déborde est-elle grave ?', a: "Oui : l'eau qui déborde ruisselle le long de la façade et finit par s'infiltrer au niveau des fondations ou du soubassement. Mieux vaut ne pas laisser traîner." },
-  { q: 'Quelle est la durée de vie d\'une gouttière en zinc ?', a: "Une gouttière en zinc bien entretenue tient plusieurs dizaines d'années, contre une durée de vie plus courte pour le PVC." },
-  { q: 'Faut-il remplacer toute la gouttière ou juste une partie ?', a: "Une fuite ponctuelle sur une gouttière saine se répare localement. Si plusieurs sections sont fissurées, décrochées ou corrodées, le remplacement complet évite de réintervenir sans cesse." },
-  { q: 'Peut-on remplacer une gouttière sans toucher à la toiture ?', a: "Oui dans la plupart des cas. Si la couverture est elle-même endommagée, j'en profite pour vérifier les deux en même temps." },
+  { q: 'Une gouttière qui déborde, est-ce grave ?', a: "Oui. L'eau qui déborde coule le long de la façade, tache le mur et finit par s'infiltrer dans le soubassement. Une gouttière se répare vite ; un mur humide, beaucoup moins." },
+  { q: 'Combien de temps dure une gouttière en zinc ?', a: "Plusieurs dizaines d'années si elle est entretenue et que les jonctions tiennent. Le PVC vieillit plus vite : il se déforme et se fragilise au soleil." },
+  { q: 'Faut-il tout remplacer, ou seulement la partie abîmée ?', a: 'Une fuite ponctuelle sur une gouttière saine se répare localement. Si plusieurs sections sont fissurées, décrochées ou rouillées, mieux vaut remplacer l\'ensemble que multiplier les réparations.' },
+  { q: 'Peut-on changer les gouttières sans toucher à la toiture ?', a: 'Oui, dans la plupart des cas. Si la couverture est abîmée elle aussi, je vous le dis lors de la visite, et les deux peuvent se faire dans le même chantier.' },
 ];
 ---
 <Layout
@@ -59,7 +67,7 @@ const faq = [
     pageName: h1,
     description,
     image: heroPhoto,
-    service: { name: 'Installation et remplacement de gouttières', description },
+    service: { name: 'Pose et remplacement de gouttières', description },
     faq,
   })}
 >
@@ -68,14 +76,15 @@ const faq = [
   <section class="hero-page">
     <div class="conteneur hero-page__grille">
       <div class="hero-page__texte">
-        <h1>Installation et remplacement de gouttières en <em>{site.address.region}</em></h1>
+        <h1>Pose et remplacement de gouttières en <em>{site.address.region}</em></h1>
         <p class="hero-page__chapo">
-          Gouttière qui déborde, fissurée ou décrochée ? Je pose et je remplace vos
-          gouttières en zinc, aluminium ou PVC, descentes comprises.
+          Une gouttière qui déborde, qui fuit à la jonction ou qui pend au bout de ses
+          crochets ? Je la répare quand elle peut l'être, je la remplace quand il le faut, en
+          zinc, en aluminium ou en PVC.
         </p>
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Zinc, aluminium ou PVC</li>
-          <li><Icone nom="coche" taille={18} />Raccordement des descentes inclus</li>
+          <li><Icone nom="coche" taille={18} />Pièces façonnées aux cotes relevées sur place</li>
+          <li><Icone nom="coche" taille={18} />Descentes raccordées, pentes réglées</li>
           <li><Icone nom="coche" taille={18} />Garantie décennale sur les travaux</li>
         </ul>
         <div class="hero-page__actions">
@@ -89,15 +98,15 @@ const faq = [
         <img
           class="hero-page__photo"
           src={heroPhoto}
-          width="1600" height="1200"
+          width="1024" height="768"
           fetchpriority="high" decoding="async"
-          alt={`Installation d'une gouttière par l'artisan — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Installation d'une gouttière par l'artisan — ${site.brand}, couvreur zingueur en ${site.address.region}`}
         />
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Garantie décennale</strong>
-            <span>Tous les travaux de zinguerie sont couverts.</span>
+            <strong>Réparer ou remplacer</strong>
+            <span>Je vous le dis franchement, après avoir vu la gouttière.</span>
           </div>
         </div>
       </div>
@@ -120,31 +129,30 @@ const faq = [
   <section class="section">
     <div class="conteneur duo">
       <div class="duo__texte">
-        <h2>Pourquoi remplacer une gouttière plutôt que la réparer</h2>
+        <h2>Réparer ou remplacer la gouttière ?</h2>
         <p>
-          Des fissures qui reviennent après chaque réparation, une gouttière décrochée
-          de son crochet, de la rouille qui perce le métal, des débordements malgré un
-          nettoyage régulier : ce sont les signes qu'une réparation ponctuelle ne suffit
-          plus.
+          Une jonction qui fuit ou un crochet qui a lâché se reprennent. Mais quand les
+          fissures reviennent après chaque réparation, que la rouille perce le métal ou que
+          la gouttière déborde malgré un nettoyage régulier, la remplacer coûte moins cher que
+          de la rafistoler chaque année.
         </p>
-        <h3>Les conséquences d'une gouttière qui ne fait plus son travail</h3>
+        <h3>Ce qu'une gouttière hors service fait à la maison</h3>
         <p>
-          L'eau qui déborde ruisselle le long de la façade au lieu de s'évacuer, tache le
-          mur et finit par s'infiltrer au niveau du soubassement. Une gouttière hors
-          service touche donc bien plus que le toit.
+          L'eau qui déborde ruisselle sur la façade, tache le mur et finit par s'infiltrer
+          au niveau du soubassement. Le problème ne se limite pas au toit : il descend jusqu'aux
+          fondations.
         </p>
-        <h3>Réparation ponctuelle ou remplacement complet</h3>
+        <h3>Ce que je regarde sur place</h3>
         <p>
-          Un joint refait ou une section changée suffit souvent sur une gouttière encore
-          saine. Quand plusieurs points lâchent en même temps, mieux vaut remplacer
-          l'ensemble plutôt que de réintervenir chaque saison.
+          L'état du métal, la tenue des crochets, la pente vers la descente et les jonctions.
+          Je relève les cotes, et les pièces sont façonnées à ces mesures.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/gouttiere-et-descente-en-zinc-sur-chantier-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Gouttière et descente en zinc posées sur un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Gouttière et descente en zinc posées sur un chantier — ${site.brand}, couvreur zingueur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -161,9 +169,9 @@ const faq = [
       </div>
       <div class="duo__media">
         <img
-          src="/photos/installation-dune-gouttiere-par-lartisan-simonard-couvreur-77.webp"
+          src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
           width="1200" height="900" loading="lazy" decoding="async"
-          alt={`L'artisan pose une gouttière — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Maison sous échafaudage pendant un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -182,13 +190,13 @@ const faq = [
         <ul class="liste-detail">
           {materiaux.map((m) => <li><strong>{m.t}</strong> — {m.d}</li>)}
         </ul>
-        <p>J'en discute avec vous lors du diagnostic, selon la couverture existante et le budget souhaité.</p>
+        <p>On en parle sur place, selon la couverture existante et votre budget.</p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/vue-aerienne-toiture-ardoise-et-tourelle-terminees-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Vue aérienne d'une toiture avec sa zinguerie terminée — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1442" height="989" loading="lazy" decoding="async"
+          alt={`Toiture en ardoise et tourelle terminées, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -197,19 +205,23 @@ const faq = [
   <section class="section section--gris">
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
-        <h2>Gouttières et infiltrations : un lien direct</h2>
+        <h2>Gouttière bouchée et fuite de toiture : le lien est direct</h2>
         <p>
-          Une gouttière bouchée ou percée est l'une des causes les plus fréquentes
-          d'infiltration, sans que la couverture elle-même soit en cause. Si vous
-          constatez une fuite au niveau du toit, voir aussi la page
-          <a href="/reparation-de-toiture/">réparation de toiture</a>.
+          Une gouttière bouchée ou percée est l'une des causes d'infiltration les plus
+          fréquentes, alors que la couverture, elle, est saine. L'eau déborde et remonte sous
+          les premiers rangs de tuiles au lieu de partir dans la descente.
+        </p>
+        <p>
+          Si l'eau entre par le toit lui-même, c'est du côté de la
+          <a href="/reparation-de-toiture/">réparation de toiture</a> qu'il faut regarder.
+          Dans le doute, je vérifie les deux lors de la même visite.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp"
-          width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Toiture en tuiles avec gouttière, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Toiture en tuiles rénovée, vue depuis la rue — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -219,8 +231,8 @@ const faq = [
 
   <section class="appel">
     <div class="conteneur">
-      <h2>Une gouttière hors service ne s'arrange pas seule</h2>
-      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
+      <h2>Une gouttière qui déborde ? Le déplacement est gratuit.</h2>
+      <p>Appelez-moi : je viens voir la gouttière et la toiture, et vous recevez un devis écrit et détaillé, sans engagement.</p>
       <ul class="appel__points">
         <li>Devis et déplacement gratuits</li>
         <li>Interlocuteur unique</li>

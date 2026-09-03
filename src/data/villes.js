@@ -1,4 +1,4 @@
-import { urls } from './urls.js';
+import { urls, lienSiPubliee } from './urls.js';
 import { site } from './site.js';
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -129,6 +129,59 @@ export const ARGUMENTS = [
 /** Section longue : sujet et objet du H2 « Faites appel à … pour … ». */
 export const SUJETS_LONG = ['un couvreur zingueur', 'une entreprise de couverture', 'un artisan couvreur', 'un couvreur'];
 export const OBJETS_LONG = ['entretenir votre toiture', 'refaire votre toiture', 'remplacer votre toiture', 'vos travaux de zinguerie'];
+
+/**
+ * Corps de la section longue : quatre variantes, DANS LE MÊME ORDRE que
+ * OBJETS_LONG, pour que le texte parle de ce que le H2 annonce (entretien,
+ * réfection, remplacement, zinguerie). La page choisit la variante avec le
+ * même index que l'objet du H2. Réécrites le 3 septembre 2026 à la place
+ * d'un bloc unique en jargon d'agence, identique sur les dix pages.
+ *
+ * Registre : première personne, l'artisan explique ce qu'il constate et ce
+ * qu'il fait. Tout fait sur l'entreprise vient de l'accueil (équipe sans
+ * sous-traitance, visite du toit et des combles, devis poste par poste,
+ * chantier nettoyé chaque soir, nettoyage manuel ou basse pression, pièces
+ * façonnées aux cotes relevées sur place). Aucun détail local inventé : le
+ * nom de la commune n'est jamais accompagné d'une affirmation sur ses toits.
+ *
+ * Les liens passent par lienSiPubliee() : texte simple tant que la page
+ * cible est 'todo' dans data/urls.js.
+ */
+const L = lienSiPubliee;
+export const TEXTES_LONGS = [
+  // 0 — entretenir votre toiture
+  (nom) => [
+    `Une toiture s'entretient comme le reste de la maison. À ${nom} comme ailleurs, la mousse s'installe sur les pans à l'ombre, retient l'eau et finit par rendre les tuiles poreuses ; les gouttières se bouchent de feuilles ; le mortier du faîtage se fissure. Rien de tout cela n'est grave la première année. Laissé sans suite, ça devient une réfection.`,
+    `Mon équipe et moi nettoyons la toiture à la brosse ou à basse pression, selon l'état des tuiles, puis nous appliquons un traitement anti-mousse et un hydrofuge, incolore ou coloré, qui fait ruisseler l'eau et retarde la repousse. J'en profite toujours pour contrôler le faîtage, les solins et les pieds de cheminée : ce sont eux qui fuient en premier. Le détail est sur la page ${L('/nettoyage-demoussage-de-toiture/', 'nettoyage et démoussage de toiture')}.`,
+    `Un entretien régulier coûte bien moins qu'un remplacement de couverture, et c'est lui qui repousse ce remplacement le plus longtemps. Si vous ne savez pas dans quel état est votre toit, je viens le voir à ${nom} : le déplacement est gratuit, et vous saurez si votre toit a besoin d'un nettoyage, d'une réparation, ou de rien du tout.`,
+  ],
+  // 1 — refaire votre toiture
+  (nom) => [
+    `Refaire une toiture, ce n'est pas forcément tout remplacer. Une réfection partielle reprend le pan abîmé et laisse le reste en place ; un remplacement complet dépose toute la couverture et repart sur un écran de sous-toiture et des liteaux neufs. Entre les deux, il y a la visite : je monte sur le toit, je passe dans les combles, et je vous dis laquelle des deux s'impose pour votre maison à ${nom}.`,
+    `Tuile plate, tuile mécanique, ardoise, zinc, bac acier ou shingle : chaque matériau a ses règles de pose, son écartement de liteaux, ses recouvrements, et je les respecte. Les fournitures sont choisies dans la continuité de la couverture existante, pour que le pan refait s'accorde avec le reste. Les étapes d'un chantier sont détaillées sur la page ${L('/renovation-refection-de-toiture/', 'rénovation et réfection de toiture')}.`,
+    `Pendant les travaux, la maison reste protégée : le toit est bâché tant que la couverture neuve n'est pas posée, et le chantier est nettoyé chaque soir. Vous recevez avant de commencer un devis écrit, poste par poste — surfaces, matériaux, dépose et évacuation, échafaudage — et la date du chantier est fixée avec vous.`,
+  ],
+  // 2 — remplacer votre toiture
+  (nom) => [
+    `Quand la tuile est devenue poreuse sur tout le pan, que les fixations lâchent et qu'il n'y a plus d'écran sous la couverture, réparer tuile par tuile ne mène nulle part : la couverture est en fin de vie. Si c'est le cas de votre maison à ${nom}, je remplace la toiture entière, de la dépose de l'ancienne couverture jusqu'à la zinguerie.`,
+    `Le chantier suit toujours le même ordre : dépose et évacuation des gravats, écran de sous-toiture, liteaux neufs, pose de la couverture rang par rang, zinguerie raccordée, nettoyage. Le toit ouvert, c'est aussi le bon moment pour isoler les rampants ou les combles : on intervient sur le toit, autant en profiter. Tout est détaillé sur la page ${L('/renovation-refection-de-toiture/', 'remplacement de toiture')}.`,
+    `Avant de vous engager, vous avez un devis écrit et détaillé, poste par poste, et le déplacement pour venir voir le toit est gratuit. Tous les travaux sont couverts par la garantie décennale, et c'est mon équipe qui les réalise, sans sous-traitance.`,
+  ],
+  // 3 — vos travaux de zinguerie
+  (nom) => [
+    `Quand une gouttière est percée, qu'une descente est bouchée ou qu'un solin s'est décollé, l'eau ne suit plus le chemin prévu : elle coule sur la façade, s'infiltre dans le mur ou remonte sous les tuiles. Beaucoup de fuites qu'on attribue à la couverture viennent en réalité de là.`,
+    `Zinc, aluminium ou PVC : je dépose l'ancienne gouttière, je pose les crochets, je règle la pente vers la descente et je soude les jonctions, avec des pièces façonnées aux cotes relevées sur votre toit à ${nom}. Quand une gouttière peut encore se réparer, je le dis : remplacer n'est pas toujours la bonne réponse. Le détail est sur la page ${L('/installation-remplacement-de-gouttieres/', 'pose et remplacement de gouttières')}.`,
+    `Les pieds de cheminée et les noues demandent le même soin : un solin décollé ou une noue mal raccordée laissent passer l'eau au premier orage. Je les contrôle à chaque passage sur un toit, et je les reprends avant qu'ils ne fassent des dégâts à l'intérieur.`,
+  ],
+];
+
+/**
+ * Dernier paragraphe de la section longue, commun aux quatre variantes : il
+ * amène l'encadré mairie. Reçoit `deNom` (« de Gressy » / « d'Annet-sur-Marne »),
+ * l'élision étant calculée dans PageVille.astro.
+ */
+export const TEXTE_URBANISME = (deNom) =>
+  `Un dernier point avant d'ouvrir un chantier : le règlement d'urbanisme ${deNom}. Refaire une toiture à l'identique demande rarement une autorisation, mais changer de matériau, de couleur ou de forme oblige à déposer une déclaration préalable de travaux, et le PLU peut imposer la teinte de la tuile ou interdire certains matériaux. Le service urbanisme de la mairie vous le confirme avant les travaux.`;
 
 /**
  * Informations locales RÉELLES. Source : fiche « Mairie » de chaque commune

@@ -10,9 +10,18 @@ import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
 
 /**
- * Page pilier du silo « couverture » — et GABARIT DE RÉFÉRENCE des pages de
- * prestation. Texte rédigé le 03/09/2026, à partir des seuls faits
- * documentés dans data/site.js (rien sur l'entreprise n'est inventé).
+ * Page « Rénovation & réfection de toiture » — GABARIT DE RÉFÉRENCE des
+ * pages de prestation : fil d'Ariane → hero deux colonnes → réassurance →
+ * quatre sections en duo à fonds alternés (encart mascotte après la 2e) →
+ * FAQ → bandeau d'appel.
+ *
+ * Rédaction : première personne, phrases courtes, vocabulaire du métier.
+ * Tout ce qui est affirmé sur l'entreprise vient de data/site.js ou de
+ * l'accueil (équipe sans sous-traitance, devis poste par poste, chantier
+ * protégé et nettoyé chaque soir, visite du toit et des combles). Le reste
+ * est de l'explication de métier, jamais une promesse chiffrée.
+ *
+ * Lien interne : uniquement vers des pages `status: 'ok'` dans data/urls.js.
  */
 const path = '/renovation-refection-de-toiture/';
 const brouillon = !estPubliee(path);
@@ -21,32 +30,33 @@ const filAriane = 'Rénovation & réfection de toiture';
 
 const h1 = 'Rénovation de toiture en Seine-et-Marne';
 const title = `Rénovation et réfection de toiture en ${site.address.region} (77)`;
-const description = `Réfection partielle ou remplacement complet de votre couverture en ${site.address.region} : dépose, écran sous-toiture, tuile, ardoise, zinc. Devis gratuit ✓ ${site.phone}.`;
+const description = `Toiture usée, tuiles qui glissent, fuites à répétition ? Réfection partielle ou remplacement complet en ${site.address.region} : tuile, ardoise, zinc. Devis gratuit ✓ ${site.phone}.`;
 
 const heroPhoto = '/photos/vue-aerienne-toiture-ardoise-et-tourelle-terminees-simonard-couvreur-77.webp';
 
 const etapes = [
-  { t: "Dépose de l'ancienne couverture", d: "Je retire les tuiles, ardoises ou plaques existantes et j'évacue les gravats au fur et à mesure du chantier." },
-  { t: "Pose de l'écran sous-toiture", d: 'Une sous-toiture respirante protège la charpente de l\'humidité avant la pose des liteaux.' },
-  { t: 'Liteaunage', d: "Les liteaux sont posés à l'écartement du matériau choisi, pour un calepinage régulier d'un bout à l'autre du pan." },
-  { t: 'Pose de la couverture', d: 'Tuiles, ardoises ou zinc sont posés rang par rang, en respectant les recouvrements et les points singuliers : faîtage, rives, noues.' },
-  { t: 'Zinguerie', d: "Gouttières, descentes et solins sont refaits ou raccordés à la nouvelle couverture pour que l'eau soit évacuée correctement." },
-  { t: 'Finitions et nettoyage', d: 'Le chantier est nettoyé, les abords vérifiés, et je fais le tour du toit avec vous avant de partir.' },
+  { t: "Dépose de l'ancienne couverture", d: "Je retire tuiles, ardoises ou plaques et j'évacue les gravats au fur et à mesure. Le chantier est protégé et nettoyé chaque soir." },
+  { t: 'Écran de sous-toiture', d: "Il protège la charpente de l'humidité et de la poussière, et retient l'eau qui passerait sous une tuile déplacée." },
+  { t: 'Liteaunage', d: "Je pose des liteaux neufs à l'écartement du matériau choisi : c'est ce qui donne des rangs droits et réguliers." },
+  { t: 'Pose de la couverture', d: 'Rang par rang, en soignant les recouvrements et les points singuliers : faîtage, rives, noues, arêtiers.' },
+  { t: 'Zinguerie', d: "Gouttières, descentes et solins sont refaits ou raccordés à la couverture neuve, pour que l'eau sorte du toit sans détour." },
+  { t: 'Finitions et nettoyage', d: 'Je nettoie le chantier et je vérifie les abords avant de partir.' },
 ];
 
 const materiaux = [
-  { t: 'La tuile plate', d: "Aspect traditionnel, format court et pose dense — c'est la tuile des toitures anciennes et des zones où le PLU impose ce rendu." },
-  { t: 'La tuile mécanique', d: "Emboîtement qui accélère la pose et allège la charpente, tout en gardant l'aspect d'une toiture en tuile." },
-  { t: "L'ardoise", d: 'Matériau naturel et durable, souvent imposé par le règlement local sur les toitures à forte pente.' },
-  { t: 'Le zinc à joint debout', d: 'Étanchéité sans jointoiement apparent, adapté aux faibles pentes et aux formes de toit complexes.' },
-  { t: 'Le bac acier', d: 'Solution économique et rapide à poser, pour une dépendance, une extension ou un bâtiment agricole.' },
+  { t: 'La tuile plate', d: 'Le format court et traditionnel des maisons anciennes, souvent imposé dans les secteurs protégés.' },
+  { t: 'La tuile mécanique', d: "Elle s'emboîte, se pose plus vite et pèse moins lourd sur la charpente, tout en gardant l'aspect d'un toit en tuile." },
+  { t: "L'ardoise", d: 'Naturelle et très durable, elle convient aux fortes pentes et reste exigée par certains règlements locaux.' },
+  { t: 'Le zinc à joint debout', d: 'Des feuilles assemblées par pliage, sans fixation visible : le bon choix sur une faible pente ou une forme de toit compliquée.' },
+  { t: 'Le bac acier', d: 'Économique et rapide à poser, pour une dépendance, une extension ou un bâtiment agricole.' },
+  { t: 'Le shingle', d: 'Des plaques bitumées, légères, pour un abri de jardin ou une annexe à faible pente.' },
 ];
 
 const faq = [
-  { q: 'Quand faut-il remplacer sa toiture plutôt que la réparer ?', a: "Si les tuiles se descellent ou se cassent régulièrement, si la mousse recouvre une grande partie du pan, ou si la charpente montre des traces d'humidité, la réparation ponctuelle ne suffit plus. Un diagnostic sur place permet de trancher." },
-  { q: 'Combien de temps dure un remplacement de toiture ?', a: 'Cela dépend de la surface, de la pente et du matériau choisi. Je vous donne une durée précise après le diagnostic, inscrite dans le devis.' },
-  { q: 'Faut-il une autorisation pour refaire sa toiture ?', a: "Une déclaration préalable de travaux est nécessaire dès que l'aspect extérieur change (matériau, couleur, forme). Je peux vous indiquer les pièces à fournir selon votre commune." },
-  { q: 'La maison reste-t-elle à découvert pendant les travaux ?', a: "Non : la toiture reste bâchée tant que la nouvelle couverture n'est pas posée, pour rester protégée en cas de pluie." },
+  { q: 'Faut-il refaire toute la toiture, ou une réparation suffit-elle ?', a: "Tout dépend de l'étendue de l'usure. Quelques tuiles cassées se remplacent ; une couverture usée sur tout le pan se refait. Je tranche après être monté sur le toit, pas avant." },
+  { q: 'Combien de temps dure une réfection de toiture ?', a: 'Cela dépend de la surface, de la pente et du matériau. La durée est indiquée sur le devis, et la date du chantier est fixée avec vous.' },
+  { q: 'Faut-il une autorisation de la mairie pour refaire sa toiture ?', a: "Une déclaration préalable de travaux est nécessaire dès que l'aspect extérieur change : matériau, couleur ou forme du toit. Refaire à l'identique en demande rarement, mais chaque commune a ses règles : renseignez-vous auprès du service urbanisme de votre mairie avant le chantier." },
+  { q: 'La maison est-elle protégée pendant les travaux ?', a: "Oui. Tant que la couverture neuve n'est pas posée, le toit est bâché, et le chantier est protégé et nettoyé chaque soir." },
 ];
 ---
 <Layout
@@ -72,14 +82,15 @@ const faq = [
       <div class="hero-page__texte">
         <h1>Rénovation de toiture en <em>{site.address.region}</em></h1>
         <p class="hero-page__chapo">
-          Toiture ancienne, tuiles qui se déplacent, infiltrations qui reviennent : je
-          remplace ou je refais la couverture, du diagnostic jusqu'à la remise en état
-          complète.
+          Des tuiles qui glissent, de la mousse partout, des fuites qui reviennent après
+          chaque réparation : à un moment, rafistoler ne suffit plus. Je refais votre
+          couverture, en partie ou en totalité, et je vous dis avant de commencer laquelle
+          des deux s'impose.
         </p>
         <ul class="hero-page__points">
-          <li><Icone nom="coche" taille={18} />Diagnostic sur place, sans engagement</li>
-          <li><Icone nom="coche" taille={18} />Tuile, ardoise, zinc ou bac acier</li>
-          <li><Icone nom="coche" taille={18} />Garantie décennale sur les travaux</li>
+          <li><Icone nom="coche" taille={18} />Réfection partielle ou remplacement complet</li>
+          <li><Icone nom="coche" taille={18} />Tuile, ardoise, zinc, bac acier ou shingle</li>
+          <li><Icone nom="coche" taille={18} />Garantie décennale sur tous les travaux</li>
         </ul>
         <div class="hero-page__actions">
           <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
@@ -94,13 +105,13 @@ const faq = [
           src={heroPhoto}
           width="1442" height="989"
           fetchpriority="high" decoding="async"
-          alt={`Vue aérienne d'une toiture en ardoise terminée, avec ses lucarnes et sa tourelle — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Toiture en ardoise et tourelle terminées, vue aérienne — ${site.brand}, couvreur en ${site.address.region}`}
         />
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Garantie décennale</strong>
-            <span>Tous les travaux de couverture sont couverts.</span>
+            <strong>Interlocuteur unique</strong>
+            <span>Mon équipe et moi, sans sous-traitance.</span>
           </div>
         </div>
       </div>
@@ -127,30 +138,31 @@ const faq = [
       <div class="duo__texte">
         <h2>Réparer, rénover ou remplacer votre toiture ?</h2>
         <p>
-          Une tuile cassée ici ou là se répare. Mais quand les tuiles se déplacent
-          d'elles-mêmes, que la mousse gagne tout le pan ou que les infiltrations
-          reviennent après chaque réparation, c'est le signe qu'il faut aller plus loin
-          qu'un rafistolage.
+          Une tuile cassée, ça se remplace. Mais quand la tuile est devenue poreuse sur tout
+          le pan, que les fixations lâchent et qu'il n'y a plus d'écran sous la couverture,
+          ce n'est plus une tuile qu'il faut changer : c'est la couverture qui arrive en fin
+          de vie.
         </p>
         <h3>Réfection partielle ou remplacement complet</h3>
         <p>
-          Une réfection partielle reprend un pan abîmé sans toucher au reste de la
-          toiture. Un remplacement complet dépose toute la couverture et pose un écran
-          sous-toiture neuf avant de reposer un matériau — c'est le choix quand l'usure
-          touche l'ensemble du toit ou que la charpente doit être mise à nu.
+          La réfection partielle reprend le pan abîmé et laisse le reste en place. Le
+          remplacement complet dépose toute la couverture, pose un écran de sous-toiture
+          neuf et repart sur du liteau neuf. Le premier suffit quand l'usure est localisée ;
+          le second s'impose quand elle est générale, ou quand la charpente doit être mise
+          à nu.
         </p>
-        <h3>Ce que révèle une visite sur le toit</h3>
+        <h3>Ce que je regarde avant de vous répondre</h3>
         <p>
-          Le diagnostic se fait sur place, pas sur photo : état des liteaux, de la
-          charpente, ventilation des combles, humidité résiduelle. C'est ce qui permet de
-          vous dire honnêtement si une réparation suffit ou s'il faut remplacer.
+          Je monte sur le toit et je passe dans les combles : état des liteaux, de la
+          charpente, ventilation, traces d'humidité. Je constate au lieu de supposer, et je
+          vous dis ensuite si une réparation suffit ou s'il faut refaire.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/pavillon-vue-densemble-du-chantier-de-couverture-simonard-couvreur-77.webp"
           width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Pavillon vu depuis la rue, échelle en place et panneau de chantier — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Vue d'ensemble d'un chantier de couverture sur un pavillon — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -161,7 +173,7 @@ const faq = [
     <div class="conteneur duo duo--inverse">
       <div class="duo__texte">
         <h2>Les étapes d'un remplacement de toiture</h2>
-        <p>Un remplacement complet suit toujours le même ordre, du plus gros œuvre aux finitions :</p>
+        <p>Un remplacement complet suit toujours le même ordre :</p>
         <ul class="liste-detail">
           {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
         </ul>
@@ -171,7 +183,7 @@ const faq = [
         <img
           src="/photos/banderole-simonard-sur-chantier-de-toiture-avec-echafaudage-77.webp"
           width="1200" height="900" loading="lazy" decoding="async"
-          alt={`Chantier de couverture avec échafaudage et banderole ${site.brand}, toiture mise à nu`}
+          alt={`Banderole Simonard sur un chantier de toiture sous échafaudage — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -189,21 +201,20 @@ const faq = [
     <div class="conteneur duo">
       <div class="duo__texte">
         <h2>Quel matériau pour votre nouvelle couverture ?</h2>
-        <p>Le choix dépend de la pente du toit, du style de la maison et, souvent, du règlement d'urbanisme de la commune :</p>
+        <p>Le choix dépend de la pente, du style de la maison et, souvent, de ce qu'autorise la commune :</p>
         <ul class="liste-detail">
           {materiaux.map((m) => <li><strong>{m.t}</strong> — {m.d}</li>)}
         </ul>
-        <!-- Maillage interne : les liens vers les pages du silo couverture
-             (tuile, ardoise, zinc, bac acier, shingle) s'ajoutent ici au fur
-             et à mesure qu'elles passent à 'ok' dans data/urls.js. On
-             n'écrit jamais un lien vers une page qui n'existe pas. -->
-        <p>J'en discute avec vous lors de la visite de diagnostic, avec un devis détaillé pour chaque option envisagée.</p>
+        <!-- Maillage interne : les liens vers les pages matériau (tuile,
+             ardoise, zinc, bac acier, shingle) s'ajoutent ici quand elles
+             passent à 'ok' dans data/urls.js — jamais avant. -->
+        <p>On en parle lors de la visite, et le devis détaille chaque option, poste par poste.</p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/remplacement-de-toiture-en-cours-sur-pavillon-simonard-couvreur-77.webp"
           width="1600" height="1199" loading="lazy" decoding="async"
-          alt={`Toiture en cours de remplacement : couverture déposée et bâche de protection posée — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Remplacement d'une toiture en cours sur un pavillon — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -215,19 +226,20 @@ const faq = [
       <div class="duo__texte">
         <h2>Le toit ouvert, le bon moment pour isoler</h2>
         <p>
-          Tant que la charpente est à nu, poser ou renforcer l'isolation coûte moins cher
-          et va plus vite que d'ouvrir le toit une seconde fois plus tard.
+          Quand la charpente est à nu, poser ou renforcer l'isolation coûte moins cher et va
+          plus vite que de rouvrir le toit plus tard.
         </p>
         <p>
-          Si c'est votre cas, j'en parle avec vous pendant le diagnostic pour l'intégrer
-          au même chantier plutôt que d'ouvrir le toit une seconde fois plus tard.
+          Rampants, combles perdus, sarking : si votre isolation a fait son temps, je vous le
+          dis pendant la visite et je l'intègre au même devis. On intervient sur le toit,
+          autant en profiter.
         </p>
       </div>
       <div class="duo__media">
         <img
           src="/photos/isolation-en-laine-de-verre-entre-les-liteaux-simonard-couvreur-77.webp"
           width="1600" height="1200" loading="lazy" decoding="async"
-          alt={`Isolant en laine minérale posé sous une charpente neuve, avant la pose de la couverture — ${site.brand}, couvreur en ${site.address.region}`}
+          alt={`Isolation en laine de verre posée entre les liteaux — ${site.brand}, couvreur en ${site.address.region}`}
         />
       </div>
     </div>
@@ -238,8 +250,8 @@ const faq = [
   <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
   <section class="appel">
     <div class="conteneur">
-      <h2>Votre toiture mérite un vrai diagnostic</h2>
-      <p>Déplacement et chiffrage offerts, sans engagement de votre part.</p>
+      <h2>Une toiture à refaire ? Le déplacement est gratuit.</h2>
+      <p>Appelez-moi : je monte voir le toit et vous recevez un devis écrit et détaillé, sans engagement.</p>
       <ul class="appel__points">
         <li>Devis et déplacement gratuits</li>
         <li>Interlocuteur unique</li>
