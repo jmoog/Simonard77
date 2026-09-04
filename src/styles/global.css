@@ -296,9 +296,6 @@ html:has(.nav-bascule:checked){overflow:hidden}
    soulève et la pastille de la flèche passe au rouge : le signal
    d'interactivité ne passe jamais par une bordure colorée. */
 .prestations{display:grid;gap:22px;grid-template-columns:repeat(3,1fr)}
-/* Pages ville : quatre cartes en deux rangées de deux, dans une largeur de
-   lecture confortable ; une seule colonne sous 640 px (règle générale). */
-.prestations--4{grid-template-columns:repeat(2,1fr);max-width:920px;margin-inline:auto}
 /* Pages ville : galerie de trois photos de chantier, légende sous chacune. */
 .galerie{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .galerie figure{margin:0}
@@ -387,25 +384,46 @@ html:has(.nav-bascule:checked){overflow:hidden}
   .etape:last-child{padding-bottom:0}
 }
 
-/* ═══ BANDEAU D'APPEL ═══════════════════════════════════════════════════
-   Le symbole du logo sert de filigrane géant. Il est posé en masque CSS
-   (pas en <img>) pour rester purement décoratif et invisible aux lecteurs
-   d'écran. */
+/* ═══ BANDEAU D'APPEL (fin des pages de prestation) ═══════════════════
+   Bleu nuit, la mascotte d'un côté et le texte de l'autre. Le symbole du
+   logo sert de filigrane géant, posé en pseudo-élément (pas en <img>) pour
+   rester purement décoratif et invisible aux lecteurs d'écran ; il se place
+   toujours du côté OPPOSÉ à la mascotte, sinon les deux se brouillent.
+
+   La mascotte est décorative (alt vide) : c'est le texte qui porte l'appel,
+   elle ne fait que diriger le regard — son pouce désigne le texte, jamais
+   le bord de l'écran (voir AppelBandeau.astro pour le choix du dessin). */
 .appel{position:relative;overflow:hidden;background:var(--bleu-nuit);color:#fff;padding-block:76px}
 .appel::after{content:"";position:absolute;right:-60px;bottom:-90px;width:440px;height:440px;background:url(/symbole-simonard.webp) no-repeat center/contain;opacity:.09;pointer-events:none}
+.appel--inverse::after{right:auto;left:-60px}
 .appel .conteneur{position:relative;z-index:1}
-.appel{text-align:center}
-.appel h2{color:#fff;font-size:clamp(1.6rem,3.2vw,2.35rem);font-weight:800;margin:0 auto 14px;max-width:22ch}
+.appel__grille{display:flex;align-items:center;justify-content:center;gap:clamp(24px,5vw,64px)}
+.appel--inverse .appel__grille{flex-direction:row-reverse}
+/* 196 px au plus : le dessin `face` fait 197 px de large, au-delà il
+   s'étire et se floute. */
+.appel__perso{width:clamp(140px,16vw,196px);height:auto;flex:none;display:block}
+.appel__texte{max-width:640px;text-align:left}
+.appel h2{color:#fff;font-size:clamp(1.6rem,3.2vw,2.35rem);font-weight:800;margin:0 0 14px}
 /* Le paragraphe reste ferré à gauche : centré, un texte de trois lignes se
-   lit mal. Seuls le titre et les boutons sont centrés. */
-.appel p{color:#BCD3E4;margin:0 auto 26px;max-width:56ch;text-align:left}
-.appel__points{list-style:none;padding:0;margin:0 auto 30px;max-width:860px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+   lit mal. */
+.appel p{color:#BCD3E4;margin:0 0 24px;max-width:56ch;text-align:left}
+.appel__points{list-style:none;padding:0;margin:0 0 28px;display:flex;flex-wrap:wrap;gap:10px}
 .appel__points li{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:9px 17px;border-radius:var(--radius);font-size:.9rem;font-weight:500;color:#E4EFF6}
 .appel__points li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--rouge);flex:none}
-.appel__actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.appel__actions{display:flex;flex-wrap:wrap;gap:14px}
 @media(max-width:900px){
-  .appel h2{max-width:none}
   .appel::after{width:280px;right:-80px;bottom:-70px}
+  .appel--inverse::after{right:auto;left:-80px}
+}
+/* Sous 680 px, la mascotte passe au-dessus du texte (même palier que
+   l'encart mascotte) : titre, chips et boutons se centrent sous elle, le
+   paragraphe reste ferré à gauche. */
+@media(max-width:680px){
+  .appel{padding-block:56px 64px}
+  .appel__grille,.appel--inverse .appel__grille{flex-direction:column;gap:10px}
+  .appel__perso{width:150px}
+  .appel__texte{text-align:center}
+  .appel__points,.appel__actions{justify-content:center}
 }
 @media(max-width:520px){.appel__actions{flex-direction:column;align-items:center}}
 
@@ -614,6 +632,9 @@ html:has(.nav-bascule:checked){overflow:hidden}
 .faq__item h3{margin:16px 0 8px;font-size:1.04rem}
 .faq__item p{margin:0;color:var(--gris)}
 
+/* Sous 640 px, le H2 de la section longue des pages ville tient la colonne
+   entière : on le descend d'un cran avant le palier général de 420 px. */
+@media(max-width:640px){.chapeau--gauche h2{font-size:1.4rem}}
 /* Sous 420 px, les titres longs passaient à trois lignes : on descend d'un
    cran. Réduire la taille est préférable à raccourcir les intitulés, qui
    portent les mots-clés de la page. */
@@ -631,6 +652,12 @@ html:has(.nav-bascule:checked){overflow:hidden}
      à trois lignes si l'on ne resserre pas à la fois le corps et la carte. */
   .faq__item{padding:6px 18px 16px}
   .faq__item h3{font-size:.97rem}
+  /* Pages ville : le H2 de la section longue (jusqu'à 57 caractères) et les
+     titres des six cartes (« Étanchéité de toit-terrasse à Fresnes-sur-Marne »,
+     avec le nom de commune insécable) passaient à trois lignes. */
+  .chapeau--gauche h2{font-size:1.22rem}
+  .prestation{padding:24px 20px 22px}
+  .prestation h3{font-size:1.06rem}
 }
 /* Le palier suivant démarre à 380 px et non 350 : les deux titres les plus
    longs (58 caractères) tenaient encore sur trois lignes à 360 px. Le chevron
@@ -638,6 +665,7 @@ html:has(.nav-bascule:checked){overflow:hidden}
 @media(max-width:380px){
   .chapeau h2,.appel h2,.etat h1,.page-texte h1{font-size:1.18rem}
   .artisan h2,.duo__texte h2{font-size:1.14rem}
+  .chapeau--gauche h2{font-size:1.1rem}
   .devis__intro h1,.hero h1{font-size:1.18rem}
   .faq__item h3{font-size:.92rem}
   .appel-mascotte__titre{font-size:1rem}
@@ -650,6 +678,15 @@ html:has(.nav-bascule:checked){overflow:hidden}
   .btn--lg{padding:15px 20px;font-size:.94rem}
   .btn--lg .fleche{width:22px;height:22px}
   .btn--lg .fleche svg{width:12px;height:12px}
+}
+/* Dernier palier, 340 px : « Mes prestations de couvreur zingueur à
+   Fresnes-sur-Marne » (56 caractères, nom insécable) tenait encore sur trois
+   lignes à 320 px. */
+@media(max-width:340px){
+  .chapeau h2{font-size:1.06rem}
+  .chapeau--gauche h2{font-size:1rem}
+  .duo__texte h2{font-size:1.06rem}
+  .prestation h3{font-size:.98rem}
 }
 
 /* ═══ ANIMATIONS ════════════════════════════════════════════════════════
@@ -848,6 +885,11 @@ html:has(.nav-bascule:checked){overflow:hidden}
   .hero-page__carte{padding:14px 16px}
   .hero-page__carte img{width:60px}
 }
+/* Sous 380 px, les H1 longs des pages de prestation (« Pose et remplacement
+   de gouttières en Seine-et-Marne », 52 caractères) passaient sur trois
+   lignes : on réduit encore le corps plutôt que de raccourcir l'intitulé. */
+@media(max-width:380px){.hero-page h1{font-size:1.24rem}}
+@media(max-width:340px){.hero-page h1{font-size:1.12rem}}
 
 /* Sur les pages ville, le bandeau de réassurance ne chevauche rien : le
    hero est clair et se termine sur du blanc, pas sur une photo sombre. */

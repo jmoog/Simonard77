@@ -5,6 +5,7 @@ import Fleche from '../components/Fleche.astro';
 import Ariane from '../components/Ariane.astro';
 import Faq from '../components/Faq.astro';
 import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
 import { site, reassurance } from '../data/site.js';
 import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
@@ -249,22 +250,15 @@ const faq = [
   <Faq titre="Vos questions sur la rénovation de toiture" items={faq} gris={false} />
 
   <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
-  <section class="appel">
-    <div class="conteneur">
-      <h2>Une toiture à refaire ? Le déplacement est gratuit.</h2>
-      <p>Appelez-moi : je monte voir le toit et vous recevez un devis écrit et détaillé, sans engagement.</p>
-      <ul class="appel__points">
-        <li>Devis et déplacement gratuits</li>
-        <li>Interlocuteur unique</li>
-        <li>Garantie décennale</li>
-        <li>Urgences traitées en priorité</li>
-      </ul>
-      <div class="appel__actions">
-        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
-        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
-          <Icone nom="tel" taille={20} />{site.phone}
-        </a>
-      </div>
-    </div>
-  </section>
+  <AppelBandeau
+    titre="Une toiture à refaire&nbsp;? Le déplacement est gratuit."
+    texte="Appelez-moi : je monte voir le toit et vous recevez un devis écrit et détaillé, sans engagement."
+    points={[
+      'Devis et déplacement gratuits',
+      'Chantier protégé et nettoyé chaque soir',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="gauche"
+  />
 </Layout>

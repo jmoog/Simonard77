@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page « Recherche de fuite de toiture » — gabarit dupliqué depuis
+ * renovation-refection-de-toiture.astro (mêmes sections, mêmes alternances).
+ *
+ * Intention visée : « recherche de fuite toiture », « fuite toiture d'où
+ * vient l'eau ». La page /reparation-de-toiture/ couvre la RÉPARATION (tuiles
+ * cassées, faîtage, solins) ; celle-ci couvre la RECHERCHE : pourquoi l'eau
+ * ressort loin de son point d'entrée, comment on le trouve, fuite ou
+ * condensation. Les deux pages se renvoient l'une à l'autre sans se répéter.
+ *
+ * Faits utilisés, tous documentés sur l'accueil : visite du toit et des
+ * combles (« je constate au lieu de supposer »), bâchage et mise hors d'eau
+ * puis recherche de l'origine réelle avant réparation, devis écrit poste par
+ * poste, chantier protégé et nettoyé chaque soir, garantie décennale.
+ */
+const path = '/reparation-de-vos-fuites-de-toiture/';
+const brouillon = !estPubliee(path);
+
+const filAriane = 'Recherche de fuite de toiture';
+
+const h1 = 'Recherche de fuite de toiture en Seine-et-Marne';
+const title = `Recherche de fuite de toiture en ${site.address.region} (77)`;
+const description = `Tache au plafond, eau dans les combles ? Je trouve par où l'eau entre dans votre toit et je répare là où elle passe, en ${site.address.region}. Devis gratuit ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/artisan-sur-echelle-pour-une-intervention-de-toiture-simonard-couvreur-77.webp';
+
+const etapes = [
+  { t: 'Vos constats', d: "Vous me montrez la tache et vous me dites depuis quand elle est là, si elle grandit à chaque pluie ou seulement par grand vent. Cela oriente déjà la recherche." },
+  { t: 'Passage dans les combles', d: "Sous le toit, à la lampe : traces de ruissellement sur les chevrons, isolant mouillé, points de jour à travers la couverture." },
+  { t: 'Inspection du toit', d: "Je monte et je passe en revue les endroits où l'eau entre en premier : tuiles fendues ou déplacées, faîtage, solins, noues, pieds de cheminée, fenêtres de toit." },
+  { t: 'Contrôle de la zinguerie', d: "Une gouttière bouchée ou un chéneau percé fait remonter l'eau sous les tuiles : la fuite vient parfois de l'évacuation, pas de la couverture." },
+  { t: 'Arrosage ciblé', d: "Quand rien ne se voit à l'œil, j'arrose le toit zone par zone pendant que quelqu'un surveille dans les combles. La fuite finit par se montrer." },
+  { t: 'Réparation à la source', d: "Une fois le point d'entrée trouvé, je le referme : tuile remplacée, solin refait, noue reprise. Et je vérifie qu'il n'y en a pas un second." },
+];
+
+const faq = [
+  { q: 'Une tache au plafond sans pluie : est-ce le toit ?', a: "Pas forcément. Une tache qui grandit sans pluie fait penser à de la condensation dans les combles ou à une canalisation qui passe au-dessus. Je regarde les trois pistes lors de la visite : inutile de toucher à la couverture pour une canalisation qui goutte." },
+  { q: 'Peut-on réparer le jour même de la recherche ?', a: "Quand la cause est simple, une tuile déplacée, un solin décollé, la réparation peut suivre la recherche. Quand il faut commander du matériau ou ouvrir la couverture, je bâche, et je reviens avec un devis écrit." },
+  { q: 'Faut-il refaire toute la toiture après une fuite ?', a: "Dans la plupart des cas, non : une fuite localisée se répare. Mais si en montant je vois des tuiles poreuses sur tout le pan, je vous le dis franchement : réparer une couverture en fin de vie, c'est me faire revenir chaque hiver." },
+  { q: 'Et si la fuite vient de la gouttière ?', a: "Cela arrive souvent : une gouttière bouchée déborde vers l'intérieur et l'eau remonte sous les premiers rangs de tuiles. Dans ce cas, c'est la gouttière que je débouche, répare ou remplace, pas la couverture." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    service: { name: 'Recherche de fuite de toiture', description },
+    faq,
+  })}
+>
+  <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Recherche de fuite de toiture en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Une auréole au plafond, des gouttes dans les combles, un mur qui moisit ? L'eau entre
+          rarement là où elle apparaît. Je monte sur le toit et je passe dans les combles pour
+          trouver le point d'entrée, avant de réparer quoi que ce soit.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Recherche sur le toit et dans les combles</li>
+          <li><Icone nom="coche" taille={18} />Bâchage si la fuite est encore active</li>
+          <li><Icone nom="coche" taille={18} />Réparation là où l'eau entre, pas là où elle sort</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1200" height="1600"
+          fetchpriority="high" decoding="async"
+          alt={`Couvreur sur une échelle, à la recherche d'une fuite sur la toiture d'un pavillon — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>L'origine, pas le symptôme</strong>
+            <span>Je referme le point d'entrée de l'eau, pas la tache.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1. D'OÙ VIENT L'EAU ════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>D'où vient l'eau qui tache votre plafond&nbsp;?</h2>
+        <p>
+          Une fuite de toiture se voit rarement à l'endroit où elle commence. L'eau passe sous
+          une tuile, suit un liteau ou un chevron, traverse l'isolant et ressort plusieurs
+          mètres plus loin, là où le plafond est le plus bas.
+        </p>
+        <h3>Les signes qui ne trompent pas</h3>
+        <p>
+          Une auréole qui grandit après chaque pluie, de la peinture qui cloque, du bois de
+          charpente noirci, une odeur d'humidité dans les combles. Parfois rien de visible
+          dedans, mais un isolant trempé qui ne sèche plus.
+        </p>
+        <h3>Pourquoi un coup de mastic par l'intérieur ne règle rien</h3>
+        <p>
+          Boucher la tache, c'est déplacer le problème : l'eau continue d'entrer et se cherche
+          une autre sortie. Tant que le point d'entrée n'est pas trouvé et refermé, la
+          charpente et l'isolant restent mouillés.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/mise-en-etancheite-dun-pied-de-cheminee-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Pied de cheminée en zinc sur une toiture en tuiles, cartouche de mastic posée à côté — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. LA MÉTHODE ══════════════════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Comment je cherche une fuite de toiture</h2>
+        <p>Je ne devine pas, je cherche, toujours dans le même ordre :</p>
+        <ul class="liste-detail">
+          {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
+        </ul>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/artisan-en-intervention-sur-toiture-pres-du-mur-mitoyen-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Couvreur sur une toiture en tuiles, près d'une souche de cheminée et du mur mitoyen — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Une auréole qui s'agrandit au plafond&nbsp;?"
+    texte="Appelez-moi : je passe dans les combles et sur le toit pour trouver par où l'eau entre, je bâche si elle coule encore, et vous recevez un devis écrit, poste par poste, avant toute réparation."
+    note="Devis gratuit, déplacement offert"
+    mascotte="face"
+    inverse={true}
+  />
+
+  <!-- ═══ 3. FUITE OU CONDENSATION ═══════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Fuite, condensation ou canalisation&nbsp;?</h2>
+        <p>
+          Une tache au plafond ne vient pas toujours du toit, et c'est la première chose que
+          je vérifie. Une vraie fuite apparaît ou grandit après la pluie, et souvent d'un seul
+          côté de la maison, celui d'où vient le vent.
+        </p>
+        <p>
+          La condensation, elle, goutte après les nuits froides, pluie ou pas : des combles
+          mal ventilés, un isolant qui touche les tuiles, pas d'écran de sous-toiture. Et une
+          canalisation qui traverse les combles fuit sans se soucier de la météo.
+        </p>
+        <p>
+          Après un passage dans les combles, je vous dis de laquelle des trois il s'agit. Si
+          le toit n'y est pour rien, vous le saurez aussi, sans travaux inutiles.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/charpente-en-bois-vue-de-dessous-avant-traitement-simonard-couvreur-77.webp"
+          width="828" height="550" loading="lazy" decoding="async"
+          alt={`Charpente en bois vue depuis les combles, sous une couverture en tuiles — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4. FUITE ACTIVE ════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>L'eau coule encore&nbsp;? Je bâche d'abord</h2>
+        <p>
+          Quand il pleut dedans, la priorité n'est pas de chercher, c'est d'arrêter l'eau. Je
+          bâche la zone touchée et la maison est hors d'eau ; la recherche et la réparation se
+          font ensuite, au sec.
+        </p>
+        <p>
+          Une fuite qu'on laisse courir mouille l'isolant, qui ne protège plus rien, puis la
+          charpente, qui pourrit sans bruit. Ce qui se réglait avec une tuile finit en
+          <a href="/renovation-refection-de-toiture/">réfection de toiture</a>. Plus tôt je
+          passe, moins la facture est lourde.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/pavillon-a-la-toiture-decouverte-et-bachee-simonard-couvreur-77.webp"
+          width="1199" height="1600" loading="lazy" decoding="async"
+          alt={`Pavillon dont un pan de toiture découvert est protégé par une bâche — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur les fuites de toiture" items={faq} gris={false} />
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <AppelBandeau
+    titre="Un toit qui fuit&nbsp;? Le déplacement est gratuit."
+    texte="Appelez-moi : je viens chercher par où l'eau entre et vous recevez un devis écrit et détaillé, sans engagement."
+    points={[
+      'Devis et déplacement gratuits',
+      'Recherche sur le toit et dans les combles',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="gauche"
+  />
+</Layout>

@@ -1,0 +1,266 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page « Isolation de toiture » — pilier du silo isolation, gabarit dupliqué
+ * depuis renovation-refection-de-toiture.astro (mêmes sections, mêmes
+ * alternances).
+ *
+ * Faits utilisés, tous documentés sur l'accueil : combles perdus par
+ * soufflage, rampants par l'intérieur ou par l'extérieur (sarking), pignons,
+ * bardage PVC ; « on intervient sur le toit, autant en profiter » ; visite
+ * des combles, devis écrit poste par poste, chantier protégé et nettoyé
+ * chaque soir, garantie décennale. Aucune promesse chiffrée (épaisseur,
+ * économie, aides) : rien ne la documente.
+ *
+ * Maillage : les pages de détail (soufflage, rampants, isolation mince,
+ * pignons, bardage) restent 'todo' dans data/urls.js — aucun lien vers elles
+ * tant qu'elles n'y passent pas à 'ok'.
+ */
+const path = '/isolation-de-toiture/';
+const brouillon = !estPubliee(path);
+
+const filAriane = 'Isolation de toiture';
+
+const h1 = 'Isolation de toiture en Seine-et-Marne';
+const title = `Isolation de toiture en ${site.address.region} (77) | ${site.brand}`;
+const description = `Combles glacés l'hiver, étouffants l'été ? Isolation des combles par soufflage, des rampants ou par l'extérieur (sarking) en ${site.address.region}. Devis gratuit ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/isolation-en-laine-de-verre-entre-les-liteaux-simonard-couvreur-77.webp';
+
+const prestations = [
+  { t: 'Combles perdus par soufflage', d: "Un isolant en vrac soufflé sur le plancher des combles, jusqu'à l'épaisseur voulue, y compris dans les recoins qu'un rouleau ne couvre jamais." },
+  { t: "Rampants par l'intérieur", d: "Une couche entre les chevrons, une seconde croisée en dessous, un pare-vapeur côté pièce. Les finitions suivent." },
+  { t: "Rampants par l'extérieur (sarking)", d: "Des panneaux rigides posés sur les chevrons, sous l'écran et la couverture. Rien ne change à l'intérieur : à faire quand on refait le toit." },
+  { t: 'Isolation mince', d: "Un complément réfléchissant multicouche sous les liteaux, quand la place manque pour un isolant épais. En appoint, jamais seul." },
+  { t: 'Pignons', d: "Le mur de pignon des combles, isolé par l'intérieur, pour que la chaleur ne s'échappe pas par le côté une fois le toit traité." },
+  { t: 'Bardage PVC', d: "L'isolation du pignon par l'extérieur, protégée par un bardage en PVC : le mur est isolé et habillé en une seule intervention." },
+];
+
+const faq = [
+  { q: 'Mon isolation est ancienne : faut-il la remplacer ?', a: "Pas toujours. Un isolant tassé, mouillé ou visité par les rongeurs ne protège plus et se remplace. Un isolant sec et encore épais peut recevoir une couche en plus. Je vous le dis après être passé dans les combles." },
+  { q: 'Puis-je isoler mes combles sans refaire la toiture ?', a: "Oui. Les combles perdus s'isolent par le plancher, et les rampants par l'intérieur, sans toucher à la couverture. Le sarking, lui, demande de découvrir le toit : il se fait quand la couverture est à refaire." },
+  { q: "L'isolation sert-elle aussi contre la chaleur en été ?", a: "Oui. Un toit sans isolant chauffe les pièces du dessous comme un radiateur. Un isolant épais ralentit la chaleur qui descend le jour, et la maison garde la fraîcheur de la nuit plus longtemps." },
+  { q: 'Faut-il quitter la maison pendant les travaux ?', a: "Non. Pour un soufflage, je passe par la trappe des combles. Pour des rampants par l'intérieur, seule la pièce concernée est en chantier, protégée et nettoyée chaque soir. Par l'extérieur, tout se passe sur le toit." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    service: { name: 'Isolation de toiture', description },
+    faq,
+  })}
+>
+  <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Isolation de toiture en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Une chambre sous les toits invivable en août, un chauffage qui tourne pour rien en
+          janvier : c'est par le toit que la chaleur s'échappe en premier. J'isole vos combles
+          ou vos rampants, par l'intérieur ou par l'extérieur, selon ce que vous en faites.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Combles perdus par soufflage</li>
+          <li><Icone nom="coche" taille={18} />Rampants par l'intérieur ou par l'extérieur (sarking)</li>
+          <li><Icone nom="coche" taille={18} />Pignons et bardage PVC</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1600" height="1200"
+          fetchpriority="high" decoding="async"
+          alt={`Isolation en laine de verre posée entre les liteaux d'une toiture découverte — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Isolation et couverture ensemble</strong>
+            <span>Un seul chantier quand le toit est ouvert, un seul devis.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1. INTÉRIEUR OU EXTÉRIEUR ══════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Isoler par l'intérieur ou par l'extérieur&nbsp;?</h2>
+        <p>
+          Tout dépend de ce que vous faites de vos combles, et de l'état de la couverture
+          au-dessus.
+        </p>
+        <h3>Des combles perdus</h3>
+        <p>
+          Si vous ne les habitez pas, c'est le plancher des combles qu'on isole, pas la pente
+          du toit. L'isolant est soufflé en vrac sur toute la surface, sans découpe ni
+          raccord : c'est la technique la plus rapide à mettre en œuvre, et l'une des plus
+          efficaces.
+        </p>
+        <h3>Des combles aménagés</h3>
+        <p>
+          Là, c'est la pente qu'il faut isoler, entre et sous les chevrons. Par l'intérieur,
+          on perd quelques centimètres sous plafond et il faut refaire les finitions. Par
+          l'extérieur, le sarking, l'isolant se pose sur les chevrons, sous la couverture :
+          rien ne bouge dedans, mais il faut découvrir le toit.
+        </p>
+        <h3>Ce que je regarde avant de vous répondre</h3>
+        <p>
+          Je passe dans les combles : isolant existant, épaisseur, tassement, traces
+          d'humidité, ventilation. Et je monte sur le toit, parce qu'isoler sous une
+          couverture qui fuit ne sert à rien.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/remplacement-de-lisolation-de-toiture-simonard-couvreur-77.webp"
+          width="525" height="700" loading="lazy" decoding="async"
+          alt={`Ancienne laine minérale tassée entre les chevrons, en cours de dépose — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. LES PRESTATIONS ═════════════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Mes prestations d'isolation de toiture</h2>
+        <p>Du plancher des combles au mur de pignon, selon votre maison :</p>
+        <ul class="liste-detail">
+          {prestations.map((p) => <li><strong>{p.t}</strong> — {p.d}</li>)}
+        </ul>
+        <!-- Maillage interne : les liens vers les pages de détail (soufflage,
+             rampants, isolation mince, pignons, bardage) s'ajoutent ici quand
+             elles passent à 'ok' dans data/urls.js — jamais avant. -->
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/depose-de-lisolation-sur-toiture-en-renovation-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Couvreur sur une toiture découverte, laine minérale posée entre les chevrons — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Trop chaud sous les toits en été&nbsp;?"
+    texte="Appelez-moi : je passe dans vos combles, je regarde ce qui est déjà posé et dans quel état, puis je vous dis quelle isolation convient à votre toit et à l'usage que vous en faites. Le devis est écrit, poste par poste, sans engagement."
+    note="Devis gratuit, déplacement offert"
+    mascotte="gauche"
+  />
+
+  <!-- ═══ 3. AVEC LA RÉFECTION ═══════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Refaire le toit et isoler en même temps</h2>
+        <p>
+          Quand je dépose une couverture, la charpente est à nu. Poser un isolant à ce
+          moment-là, sur les chevrons ou entre eux, évite d'ouvrir le toit une seconde fois.
+          L'échafaudage sert aux deux.
+        </p>
+        <p>
+          C'est pourquoi, sur une
+          <a href="/renovation-refection-de-toiture/">réfection de toiture</a>, je vous parle
+          toujours de l'isolation pendant la visite : si la vôtre a fait son temps, elle entre
+          dans le même devis, poste par poste. On intervient sur le toit, autant en profiter.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/isolation-et-liteaux-sur-toiture-decouverte-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Isolant posé entre les chevrons d'une toiture découverte, couvreur au travail en haut du pan — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4. VENTILATION ═════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Isoler sans étouffer la charpente</h2>
+        <p>
+          Un isolant qui touche directement les tuiles emprisonne l'humidité contre le bois.
+          Il faut une lame d'air entre l'isolant et la couverture, ou un écran de
+          sous-toiture qui laisse passer la vapeur.
+        </p>
+        <p>
+          Je pose l'isolant en sachant ce qu'il y a au-dessus : pare-vapeur côté pièce,
+          ventilation côté toit, closoirs au faîtage. La charpente reste sèche et l'isolant
+          garde son épaisseur, donc son efficacité.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/isolant-alu-et-liteaux-le-long-dun-chien-assis-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Isolant réfléchissant et liteaux neufs le long d'un chien-assis — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur l'isolation de toiture" items={faq} gris={false} />
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <AppelBandeau
+    titre="Des combles à isoler&nbsp;? Le déplacement est gratuit."
+    texte="Appelez-moi : je passe dans les combles et vous recevez un devis écrit et détaillé, sans engagement."
+    points={[
+      'Devis et déplacement gratuits',
+      'Combles, rampants, pignons',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="face"
+  />
+</Layout>

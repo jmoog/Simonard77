@@ -1,0 +1,63 @@
+---
+import Icone from './Icones.astro';
+import Fleche from './Fleche.astro';
+import { site } from '../data/site.js';
+
+/**
+ * Bandeau d'appel de fin de page (pages de prestation) — avec la mascotte.
+ *
+ * C'est le dernier bloc avant le pied de page : bleu nuit, titre qui nomme
+ * la situation du visiteur, une phrase sur ce qui se passe s'il appelle,
+ * quelques faits en chips, puis les deux actions (devis + téléphone). La
+ * mascotte se tient à côté du texte et le DÉSIGNE de son pouce levé.
+ *
+ * Même règle d'orientation que dans AppelMascotte :
+ *   - `gauche` : pouce à droite du cadre → mascotte à GAUCHE (montage normal) ;
+ *   - `face`   : pouce à gauche du cadre → mascotte à DROITE (montage `inverse`).
+ * `droite` n'est pas utilisable (gros plan tronqué, halo blanc) — voir
+ * AppelMascotte.astro.
+ *
+ * Sur une page qui porte déjà un encart mascotte à mi-hauteur, prendre ICI
+ * l'autre dessin : la page montre alors deux poses différentes au lieu de
+ * la même carte recopiée.
+ */
+const {
+  titre,
+  texte,
+  points = [],
+  mascotte = 'gauche',
+  inverse = mascotte === 'face',
+} = Astro.props;
+
+const TAILLES = {
+  face:   { l: 197, h: 183 },
+  gauche: { l: 241, h: 242 },
+};
+const t = TAILLES[mascotte] ?? TAILLES.gauche;
+---
+<section class={`appel${inverse ? ' appel--inverse' : ''}`}>
+  <div class="conteneur appel__grille">
+    <img
+      class="appel__perso"
+      src={`/mascotte-simonard-${mascotte}.webp`}
+      width={t.l} height={t.h}
+      loading="lazy" decoding="async"
+      alt="" aria-hidden="true"
+    />
+    <div class="appel__texte">
+      <h2>{titre}</h2>
+      {texte && <p>{texte}</p>}
+      {points.length > 0 && (
+        <ul class="appel__points">
+          {points.map((p) => <li>{p}</li>)}
+        </ul>
+      )}
+      <div class="appel__actions">
+        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
+        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
+          <Icone nom="tel" taille={20} />{site.phone}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

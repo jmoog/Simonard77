@@ -24,7 +24,8 @@ import { pageSchema } from '../data/schema.js';
  *
  * Structure (modèle LocalPlace, rédaction du 3 septembre 2026) : fil
  * d'Ariane · hero (H1, accroche, six prestations, boutons, photo) · trois
- * arguments · quatre cartes de prestations dont l'ordre tourne · section
+ * arguments · six cartes de prestations (deux rangées de trois) dont
+ * l'ordre tourne · section
  * photo · section longue · encadré mairie · encart mascotte · communes
  * voisines.
  *
@@ -84,9 +85,13 @@ const depart = (rang * 3) % restantes.length;
 const galerie = [...restantes.slice(depart), ...restantes.slice(0, depart)].slice(0, 3);
 const heroPhoto = photoHero.src;
 
-// Les quatre cartes de prestations. Leur ordre d'affichage tourne avec le
-// rang. La carte ne devient un lien que le jour où sa page pilier est
-// marquée `ok` dans data/urls.js (voir CartePrestation.astro).
+// Les six cartes de prestations, en deux rangées de trois (depuis le
+// 4 septembre 2026 : isolation et étanchéité ont rejoint les quatre
+// premières, et la carte « réparation » alterne avec « recherche de fuite »
+// d'une commune à l'autre — les deux pages existent, une carte ne porte qu'un
+// lien, et l'alternance donne à chacune cinq liens entrants). Leur ordre
+// d'affichage tourne avec le rang. La carte ne devient un lien que le jour où
+// sa page est marquée `ok` dans data/urls.js (voir CartePrestation.astro).
 const CARTES = [
   {
     titre: `${rang % 2 ? 'Nettoyage' : 'Démoussage'} de toiture à ${nom}`,
@@ -109,12 +114,36 @@ const CARTES = [
     href: '/installation-remplacement-de-gouttieres/',
     items: ['Gouttières', 'Descentes', 'Zinc, alu, PVC'],
   },
+  rang % 2
+    ? {
+        titre: `Recherche de fuite à ${nom}`,
+        texte: `Une auréole au plafond, des gouttes dans les combles : l'eau entre rarement là où elle apparaît. ${site.brand} passe dans les combles et sur le toit pour remonter jusqu'au point d'entrée, puis referme ce point-là, pas la tache.`,
+        icone: '/icones/reparation.webp',
+        href: '/reparation-de-vos-fuites-de-toiture/',
+        items: ['Combles', 'Toit', 'Arrosage ciblé'],
+      }
+    : {
+        titre: `Réparation de toiture à ${nom}`,
+        texte: `${site.brand} intervient rapidement pour réparer la toiture. En urgence, une bâche met le toit hors d'eau ; il cherche ensuite l'origine réelle de la fuite ou de l'infiltration, et répare là où l'eau entre, pas là où elle apparaît.`,
+        icone: '/icones/reparation.webp',
+        href: '/reparation-de-toiture/',
+        items: ['Bâchage', 'Fuite', 'Infiltration'],
+      },
   {
-    titre: `Réparation de toiture à ${nom}`,
-    texte: `${site.brand} intervient rapidement pour réparer la toiture. En urgence, une bâche met le toit hors d'eau ; il cherche ensuite l'origine réelle de la fuite ou de l'infiltration, et répare là où l'eau entre, pas là où elle apparaît.`,
-    icone: '/icones/reparation.webp',
-    href: '/reparation-de-toiture/',
-    items: ['Bâchage', 'Fuite', 'Infiltration'],
+    titre: `Isolation de toiture à ${nom}`,
+    texte: `Combles glacés l'hiver, étouffants l'été : c'est par le toit que la chaleur s'échappe en premier. Combles perdus par soufflage, rampants par l'intérieur ou par l'extérieur (sarking), pignons : l'isolation se fait dans le même chantier quand la toiture est refaite.`,
+    icone: '/icones/isolation.webp',
+    href: '/isolation-de-toiture/',
+    items: ['Soufflage', 'Rampants', 'Sarking'],
+  },
+  {
+    // « toit plat » et non « toit-terrasse » : `text-wrap:balance` coupait le
+    // titre au trait d'union (« Étanchéité de toit- / terrasse à Messy »).
+    titre: `Étanchéité de toit plat à ${nom}`,
+    texte: `Sur un toit plat, l'eau s'attarde et le moindre défaut de la membrane finit au plafond du dessous. ${site.brand} reprend l'étanchéité là où elle lâche, relevés et évacuations compris, ou la refait entièrement quand elle a fait son temps.`,
+    icone: '/icones/etancheite.webp',
+    href: '/etancheite-toit-terrasse/',
+    items: ['Membrane bitume', 'Relevés', 'Évacuations'],
   },
 ];
 const debut = rang % CARTES.length;
@@ -122,7 +151,10 @@ const cartes = [...CARTES.slice(debut), ...CARTES.slice(0, debut)];
 
 // Le corps de la section longue suit l'OBJET du H2 (même index), pour que le
 // texte parle bien de ce que le titre annonce.
-const h2Long = `Faites appel à ${SUJETS_LONG[rang % 4]} pour ${OBJETS_LONG[(rang + 1) % 4]}`;
+// Sans le « Faites appel à » d'origine (4 septembre 2026) : avec lui, le
+// titre le plus long (71 caractères) tenait sur trois lignes de 320 à 430 px.
+const sujetLong = SUJETS_LONG[rang % 4];
+const h2Long = `${sujetLong.charAt(0).toUpperCase()}${sujetLong.slice(1)} pour ${OBJETS_LONG[(rang + 1) % 4]}`;
 const paragraphesLongs = [...TEXTES_LONGS[(rang + 1) % 4](nom), TEXTE_URBANISME(deNom)];
 
 // Communes voisines : les autres communes de la zone d'intervention. Elles ne
@@ -202,13 +234,13 @@ const lienVoisine = (nomCommune) => {
     </div>
   </section>
 
-  <!-- ═══ QUATRE CARTES ══════════════════════════════════════════════ -->
+  <!-- ═══ SIX CARTES ═════════════════════════════════════════════════ -->
   <section class="section">
     <div class="conteneur">
       <div class="chapeau">
         <h2>Mes prestations de {rang % 2 ? 'couvreur zingueur' : 'couvreur'} à <span class="nowrap">{nom}</span></h2>
       </div>
-      <div class="prestations prestations--4">
+      <div class="prestations">
         {cartes.map((c) => <CartePrestation {...c} />)}
       </div>
     </div>

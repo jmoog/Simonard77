@@ -42,7 +42,7 @@ export const urls = [
   // ── Couverture ───────────────────────────────────────────────────────
   { path: '/renovation-refection-de-toiture/',                          silo: 'couverture', label: 'Rénovation & réfection de toiture',   status: 'ok'   },
   { path: '/reparation-de-toiture/',                                    silo: 'couverture', label: 'Réparation de toiture',               status: 'ok'   },
-  { path: '/reparation-de-vos-fuites-de-toiture/',                      silo: 'couverture', label: 'Réparation de fuites de toiture',     status: 'todo' },
+  { path: '/reparation-de-vos-fuites-de-toiture/',                      silo: 'couverture', label: 'Recherche de fuite de toiture',       status: 'ok'   },
   { path: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/',silo: 'couverture', label: 'Urgences de toiture',                 status: 'todo' },
   { path: '/remplacement-de-couverture-en-tuile/',                      silo: 'couverture', label: 'Couverture en tuile',                 status: 'todo' },
   { path: '/remplacement-de-couverture-en-ardoise/',                    silo: 'couverture', label: 'Couverture en ardoise',               status: 'todo' },
@@ -68,7 +68,7 @@ export const urls = [
   { path: '/etancheite-cheminee/',                                      silo: 'zinguerie', label: 'Étanchéité de cheminée',               status: 'todo' },
 
   // ── Isolation ────────────────────────────────────────────────────────
-  { path: '/isolation-de-toiture/',                                     silo: 'isolation', label: 'Isolation de toiture',                 status: 'todo', pilier: true },
+  { path: '/isolation-de-toiture/',                                     silo: 'isolation', label: 'Isolation de toiture',                 status: 'ok',   pilier: true },
   { path: '/isolation-des-combles-par-soufflage/',                      silo: 'isolation', label: 'Isolation des combles par soufflage',  status: 'todo' },
   { path: '/isolation-des-rampants-de-toiture-par-linterieur/',         silo: 'isolation', label: 'Rampants par l’intérieur',             status: 'todo' },
   { path: '/isolation-des-rampants-de-toiture-par-lexterieur/',         silo: 'isolation', label: 'Rampants par l’extérieur',             status: 'todo' },
@@ -77,7 +77,7 @@ export const urls = [
   { path: '/isolation-par-lexterieur-bardage-pvc/',                     silo: 'isolation', label: 'Bardage PVC (ITE)',                    status: 'todo' },
 
   // ── Étanchéité ───────────────────────────────────────────────────────
-  { path: '/etancheite-toit-terrasse/',                                 silo: 'etancheite', label: 'Étanchéité de toit-terrasse',         status: 'todo', pilier: true },
+  { path: '/etancheite-toit-terrasse/',                                 silo: 'etancheite', label: 'Étanchéité de toit-terrasse',         status: 'ok',   pilier: true },
   { path: '/etancheite-bitume-isolation-bitumineuse/',                  silo: 'etancheite', label: 'Étanchéité bitume',                   status: 'todo' },
 
   // ── Zones d'intervention ─────────────────────────────────────────────

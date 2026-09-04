@@ -5,6 +5,7 @@ import Fleche from '../components/Fleche.astro';
 import Ariane from '../components/Ariane.astro';
 import Faq from '../components/Faq.astro';
 import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
 import { site, reassurance } from '../data/site.js';
 import { estPubliee } from '../data/urls.js';
 import { pageSchema } from '../data/schema.js';
@@ -141,7 +142,9 @@ const faq = [
         <p>
           Je monte sur le toit et je passe dans les combles quand il y a une trace. Reboucher
           là où l'eau apparaît ne sert à rien si elle entre trois mètres plus haut : je répare
-          là où elle entre.
+          là où elle entre. Quand l'origine ne saute pas aux yeux, la
+          <a href="/reparation-de-vos-fuites-de-toiture/">recherche de fuite</a> a sa propre
+          méthode.
         </p>
       </div>
       <div class="duo__media">
@@ -226,22 +229,16 @@ const faq = [
 
   <Faq titre="Vos questions sur la réparation de toiture" items={faq} gris={false} />
 
-  <section class="appel">
-    <div class="conteneur">
-      <h2>Une fuite à réparer ? Le déplacement est gratuit.</h2>
-      <p>Appelez-moi : je viens voir la toiture, je bâche si c'est nécessaire, et vous recevez un devis écrit et détaillé, sans engagement.</p>
-      <ul class="appel__points">
-        <li>Devis et déplacement gratuits</li>
-        <li>Interlocuteur unique</li>
-        <li>Garantie décennale</li>
-        <li>Urgences traitées en priorité</li>
-      </ul>
-      <div class="appel__actions">
-        <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander mon devis<Fleche /></a>
-        <a class="btn btn--lg btn--clair" href={`tel:${site.phoneHref}`}>
-          <Icone nom="tel" taille={20} />{site.phone}
-        </a>
-      </div>
-    </div>
-  </section>
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <AppelBandeau
+    titre="Une fuite à réparer&nbsp;? Le déplacement est gratuit."
+    texte="Appelez-moi : je viens voir la toiture, je bâche si c'est nécessaire, et vous recevez un devis écrit et détaillé, sans engagement."
+    points={[
+      'Devis et déplacement gratuits',
+      'Bâchage si le toit est ouvert',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="face"
+  />
 </Layout>

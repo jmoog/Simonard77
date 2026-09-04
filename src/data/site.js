@@ -112,15 +112,17 @@ export const site = {
 };
 
 // ── Menu principal ────────────────────────────────────────────────────────
-// Les cinq rubriques du site WordPress actuel. Une entrée SANS `href` reste
-// visible mais s'affiche en texte simple : sa page chapeau n'est pas encore
-// écrite, et on refuse d'envoyer visiteurs et Google sur une 404. Le jour où
-// la page est publiée, ajouter son `href` ici — et dans PAGES_PUBLIEES
+// Les cinq rubriques du site WordPress actuel. Chaque `href` vise la page
+// PUBLIÉE la plus représentative de la rubrique (pas forcément la page
+// pilier, tant qu'elle n'est pas écrite). Une entrée SANS `href` reste
+// visible mais s'affiche en texte simple : aucune page de sa rubrique n'est
+// encore écrite, et on refuse d'envoyer visiteurs et Google sur une 404.
+// Toute page liée ici doit être marquée `ok` dans PAGES_PUBLIEES
 // (data/urls.js), qui pilote le sitemap, le plan du site et le balisage.
 export const mainNav = [
-  { label: 'Couverture' },
-  { label: 'Entretien' },
-  { label: 'Zinguerie' },
+  { label: 'Couverture', href: '/renovation-refection-de-toiture/' },
+  { label: 'Nettoyage', href: '/nettoyage-demoussage-de-toiture/' },
+  { label: 'Zinguerie', href: '/installation-remplacement-de-gouttieres/' },
   { label: 'Isolation' },
   { label: 'Étanchéité' },
 ];

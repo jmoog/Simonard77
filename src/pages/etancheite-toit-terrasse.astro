@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page « Étanchéité de toit-terrasse » — pilier du silo étanchéité, gabarit
+ * dupliqué depuis renovation-refection-de-toiture.astro (mêmes sections,
+ * mêmes alternances).
+ *
+ * Faits utilisés, tous documentés sur l'accueil : toits-terrasses et
+ * étanchéité bitumineuse (membrane, relevés, évacuations), « une reprise
+ * ciblée coûte toujours moins cher qu'un plafond à refaire », zinc à joint
+ * debout pour les faibles pentes, visite avant devis, devis écrit poste par
+ * poste, garantie décennale. La banque d'images n'a pas de photo de membrane
+ * bitume : les visuels montrent des toits plats et des relevés en zinc,
+ * et les alt décrivent ce qui est visible.
+ *
+ * Maillage : /etancheite-bitume-isolation-bitumineuse/ reste 'todo' dans
+ * data/urls.js — aucun lien vers elle tant qu'elle n'y passe pas à 'ok'.
+ */
+const path = '/etancheite-toit-terrasse/';
+const brouillon = !estPubliee(path);
+
+const filAriane = 'Étanchéité de toit-terrasse';
+
+const h1 = 'Étanchéité de toit-terrasse en Seine-et-Marne';
+const title = `Étanchéité de toit-terrasse et bitume en ${site.address.region} (77)`;
+const description = `Flaque sur le toit plat, tache au plafond ? Reprise ou réfection de l'étanchéité bitume en ${site.address.region} : membrane, relevés, évacuations. Devis gratuit ✓ ${site.phone}.`;
+
+const heroPhoto = '/photos/pied-de-cheminee-sur-toiture-terrasse-en-zinc-simonard-couvreur-77.webp';
+
+const etapes = [
+  { t: 'Préparation du support', d: "Je retire l'ancienne membrane si elle cloque, ou je la nettoie et la laisse sécher si elle peut rester en support. Rien ne se pose sur un support humide." },
+  { t: 'Pente et évacuations', d: "Je vérifie que l'eau va bien vers les évacuations et je refais celles qui sont fendues ou trop hautes : une flaque permanente use la membrane à cet endroit." },
+  { t: 'Pose de la membrane bitume', d: "Je soude les lés au chalumeau, en recouvrement, sur toute la surface. C'est cette continuité qui fait l'étanchéité." },
+  { t: 'Relevés', d: "La membrane remonte contre les murs, les acrotères et les souches, protégée par une bande ou un solin en zinc, pour que l'eau ne passe pas derrière." },
+  { t: 'Points singuliers', d: "Évacuations, ventilations, passages de câbles : chaque percement reçoit sa pièce, soudée à la membrane." },
+  { t: 'Protection et contrôle', d: "Je pose la finition qui convient à l'usage de la terrasse, puis je contrôle joints et relevés avant de vous rendre le toit." },
+];
+
+const faq = [
+  { q: 'Une flaque sur mon toit plat après la pluie, est-ce grave ?', a: "Une flaque qui sèche dans la journée n'est pas un défaut : un toit plat n'est jamais parfaitement plan. Une flaque qui reste plusieurs jours, si : elle use la membrane à cet endroit, et le jour où elle passe, c'est le plafond du dessous qui en fait les frais. Je regarde d'où vient le creux : évacuation trop haute, support affaissé." },
+  { q: "Peut-on réparer une étanchéité sans tout refaire ?", a: "Oui, quand le défaut est localisé : un relevé, un joint, une évacuation. Non, quand la membrane est cloquée ou cassante sur toute la surface : une réparation sur un support en fin de vie ne tient pas, et vous paieriez deux fois." },
+  { q: 'Mon toit-terrasse est carrelé : faut-il enlever le carrelage ?', a: "Pour reprendre la membrane, oui, au moins sur la zone en cause : sur une terrasse accessible, l'étanchéité est sous le carrelage, pas dessus. Je vous dis après la visite jusqu'où il faut ouvrir." },
+  { q: "Combien de temps dure une étanchéité bitume ?", a: "Cela dépend de l'exposition, de l'entretien des évacuations et de la protection posée dessus. Une membrane dont on nettoie les évacuations et qu'on ne laisse pas sous une flaque vieillit bien ; une membrane nue, en plein soleil, jamais visitée, vieillit vite." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, {
+    pageName: h1,
+    description,
+    image: heroPhoto,
+    service: { name: 'Étanchéité de toit-terrasse', description },
+    faq,
+  })}
+>
+  <!-- ═══ FIL D'ARIANE ═══════════════════════════════════════════════ -->
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Étanchéité de toit-terrasse en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Sur un toit plat, l'eau ne file pas vers la gouttière : elle s'attarde, et le moindre
+          défaut de la membrane finit au plafond du dessous. Je reprends l'étanchéité là où elle lâche, ou
+          je la refais entièrement quand elle a fait son temps.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Toit plat, toit-terrasse, terrasse accessible</li>
+          <li><Icone nom="coche" taille={18} />Membrane bitume, relevés, évacuations</li>
+          <li><Icone nom="coche" taille={18} />Reprise ciblée ou réfection complète</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="733" height="550"
+          fetchpriority="high" decoding="async"
+          alt={`Toit plat en zinc et souche de cheminée en brique, vus d'en haut — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Une reprise ciblée d'abord</strong>
+            <span>Quand elle suffit, elle coûte moins cher qu'un plafond à refaire.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1. POURQUOI ÇA FUIT ════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Pourquoi un toit plat finit par fuir</h2>
+        <p>
+          Un toit-terrasse ne compte pas sur la pente pour évacuer l'eau, mais sur une
+          membrane continue. Le soleil la fissure, le gel la fait éclater, et une flaque qui
+          reste des jours finit par passer au travers.
+        </p>
+        <h3>Les points faibles</h3>
+        <p>
+          Ce sont presque toujours les mêmes : les relevés, là où la membrane remonte contre
+          un mur ou un acrotère ; les évacuations, bouchées par les feuilles ; les joints
+          entre lés ; les passages de cheminée, de ventilation ou de garde-corps.
+        </p>
+        <h3>Ce que je regarde avant de vous répondre</h3>
+        <p>
+          Je monte sur la terrasse et je passe dessous : cloques, fissures, flaques qui
+          stagnent, relevés décollés, plafond taché. Je vous dis ensuite si une reprise
+          localisée tient, ou si la membrane entière est en fin de vie. Et si l'eau vient
+          d'ailleurs, la <a href="/reparation-de-vos-fuites-de-toiture/">recherche de fuite</a>
+          le montrera.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/cheneau-carrele-et-solin-en-zinc-simonard-couvreur-77.webp"
+          width="450" height="589" loading="lazy" decoding="async"
+          alt={`Terrasse carrelée le long d'un mur, avec son relevé en zinc — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. LES ÉTAPES ══════════════════════════════════════════════ -->
+  <section class="section section--sombre">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Les étapes d'une réfection d'étanchéité</h2>
+        <p>Quand la membrane est à refaire, le chantier suit toujours le même ordre :</p>
+        <ul class="liste-detail">
+          {etapes.map((e) => <li><strong>{e.t}</strong> — {e.d}</li>)}
+        </ul>
+        <a class="btn btn--rouge duo__cta" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/verriere-et-toiture-en-zinc-avec-echafaudage-simonard-couvreur-77.webp"
+          width="733" height="550" loading="lazy" decoding="async"
+          alt={`Toiture à faible pente en zinc à joint debout, sous échafaudage — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Une flaque qui ne sèche jamais sur le toit&nbsp;?"
+    texte="Appelez-moi : je monte sur la terrasse et je regarde le plafond du dessous, je vous dis si une reprise des relevés ou des évacuations suffit ou si la membrane est à refaire, et vous recevez un devis écrit, poste par poste."
+    note="Devis gratuit, déplacement offert"
+    mascotte="face"
+    inverse={true}
+  />
+
+  <!-- ═══ 3. BITUME OU ZINC ══════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Bitume ou zinc pour votre toit plat&nbsp;?</h2>
+        <p>
+          La membrane bitumineuse est la plus courante sur les toits-terrasses : elle se soude
+          en continu, épouse les formes et se répare par plaques. C'est elle que je pose sur
+          un toit plat ou une terrasse accessible.
+        </p>
+        <p>
+          Sur un toit à faible pente, un appentis, une verrière ou une extension, le zinc à
+          joint debout est une autre réponse : des feuilles pliées et agrafées, sans soudure
+          sur la surface, qui évacuent l'eau dès qu'il y a un peu de pente. Je vous dis lequel
+          convient à votre toit après l'avoir vu.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/etancheite-de-pied-de-cheminee-en-zinc-simonard-couvreur-77.webp"
+          width="830" height="408" loading="lazy" decoding="async"
+          alt={`Pied de cheminée habillé en zinc sur une couverture en tuiles canal — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4. RELEVÉS ET SOLINS ═══════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Relevés et solins : là où l'eau passe</h2>
+        <p>
+          La plupart des fuites de toit-terrasse ne viennent pas du milieu de la membrane,
+          mais de ses bords : un relevé qui s'est décollé du mur, un solin fendu au pied d'une
+          cheminée, une évacuation dont la platine n'est plus soudée.
+        </p>
+        <p>
+          C'est pour cela qu'une reprise ciblée règle souvent le problème sans tout refaire :
+          je ressoude ou je remplace la pièce en cause, en bitume ou en zinc, et je contrôle
+          le reste dans la foulée. Si la membrane entière est cloquée ou cassante, je vous le
+          dis : une reprise sur un support mort ne tient pas.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/solin-en-zinc-contre-un-mur-simonard-couvreur-77.webp"
+          width="818" height="409" loading="lazy" decoding="async"
+          alt={`Solin en zinc posé contre un mur, au-dessus d'une couverture en tuiles canal — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur l'étanchéité de toit-terrasse" items={faq} gris={false} />
+
+  <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
+  <AppelBandeau
+    titre="Un toit plat qui fuit&nbsp;? Le déplacement est gratuit."
+    texte="Appelez-moi : je monte voir la terrasse et vous recevez un devis écrit et détaillé, sans engagement."
+    points={[
+      'Devis et déplacement gratuits',
+      'Membrane, relevés, évacuations',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="gauche"
+  />
+</Layout>

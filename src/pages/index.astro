@@ -20,9 +20,11 @@ const description = `Couvreur zingueur à ${site.address.city} et dans toute la 
 
 const heroPhoto = '/photos/vue-aerienne-maison-avec-toiture-ardoise-terminee-simonard-couvreur-77.webp';
 
-// Les cinq rubriques du site. `href` pointe vers la page pilier de chaque
-// silo : la carte ne devient cliquable que le jour où cette page est marquée
-// `ok` dans data/urls.js (voir CartePrestation.astro).
+// Les rubriques du site. `href` pointe vers la page PUBLIÉE la plus proche
+// de la rubrique (celle que les gens recherchent : nettoyage, gouttières,
+// réparation), pas forcément vers la page pilier du silo. La carte ne devient
+// cliquable que si cette page est marquée `ok` dans data/urls.js (voir
+// CartePrestation.astro).
 const rubriques = [
   {
     titre: 'Couverture & rénovation',
@@ -32,17 +34,17 @@ const rubriques = [
     items: ['Tuile', 'Ardoise', 'Zinc', 'Bac acier', 'Fuites'],
   },
   {
-    titre: 'Entretien de toiture',
+    titre: 'Nettoyage de toiture',
     texte: "Nettoyage et démoussage, traitement anti-mousse, hydrofuge incolore ou coloré : l'entretien régulier est ce qui repousse le plus longtemps une réfection complète.",
     icone: '/icones/entretien.webp',
-    href: '/entretien-de-toiture/',
+    href: '/nettoyage-demoussage-de-toiture/',
     items: ['Démoussage', 'Anti-mousse', 'Hydrofuge'],
   },
   {
     titre: 'Zinguerie',
     texte: "Gouttières, descentes, noues, solins et pieds de cheminée. Tout ce qui conduit l'eau hors de votre toit, façonné et posé sur mesure.",
     icone: '/icones/zinguerie.webp',
-    href: '/refection-zinguerie/',
+    href: '/installation-remplacement-de-gouttieres/',
     items: ['Gouttières', 'Noues', 'Cheminée', 'Rives'],
   },
   {
@@ -63,7 +65,7 @@ const rubriques = [
     titre: 'Urgences & recherche de fuite',
     texte: "Une infiltration, des tuiles déplacées ou cassées : j'interviens pour bâcher et mettre hors d'eau, puis je cherche l'origine réelle du problème avant de réparer.",
     icone: '/icones/reparation.webp',
-    href: '/intervention-rapide-couvreur-pour-vos-urgences-de-toiture/',
+    href: '/reparation-de-toiture/',
     items: ['Bâchage', 'Infiltration', "Mise hors d'eau"],
   },
 ];
