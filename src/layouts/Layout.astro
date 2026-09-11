@@ -267,6 +267,17 @@ const villesPubliees = parSilo('ville');
           {site.brand} — Artisan couvreur zingueur en {site.address.region} ({site.address.department}).
           Devis gratuit et déplacement offert.
         </p>
+        {/* Liens vers les deux autres sites de l'entreprise (voir
+            `autresBureaux` dans data/site.js). Chaque site reste d'un
+            seul tenant : pas de liste de villes ni d'ancre « couvreur ». */}
+        {site.autresBureaux?.length > 0 && (
+          <p class="pied__bureaux">
+            Autres bureaux&nbsp;:
+            {site.autresBureaux.map((b, i) => (
+              <Fragment>{i > 0 && '\u00a0· '}<span class="nowrap">{b.departement} (<a href={b.url}>{b.site}</a>)</span></Fragment>
+            ))}
+          </p>
+        )}
         <p class="pied__legal">{site.legalName} · SIRET {site.siret}</p>
         <a class="pied__signature" href="https://local-place.fr/" target="_blank" rel="noopener noreferrer">
           <span class="pied__signature-badge"><img src="/logo-the-local-place.png" width="65" height="22" alt="The Local Place" loading="lazy" /></span>

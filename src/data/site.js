@@ -34,6 +34,18 @@ export const site = {
   whatsapp: 'https://wa.me/33665505307',
   email: 'contact@simonard.fr',
 
+  // Les deux autres sites de l'entreprise, cités sur UNE ligne dans la
+  // barre du bas du pied de page (« Autres bureaux : … »). Lien vers
+  // l'ACCUEIL seulement, ancre = nom du site. Jamais d'ancre du type
+  // « couvreur 93 », jamais de lien vers les pages villes ou prestations
+  // de l'autre site : un bloc de liens croisés entre sites d'un même
+  // propriétaire ressemble à un réseau de liens pour Google et n'apporte
+  // rien au référencement. Chaque site garde sa seule adresse.
+  autresBureaux: [
+    { departement: 'Seine-Saint-Denis', site: 'simonard.fr', url: 'https://simonard.fr/' },
+    { departement: 'Val-de-Marne', site: 'simonard94.fr', url: 'https://simonard94.fr/' },
+  ],
+
   // Bureau secondaire, en Seine-et-Marne. « Seine-et-Marne » est
   // FÉMININ : on écrit « en Seine-et-Marne » et « dans toute la
   // Seine-et-Marne ». Jamais « dans le Seine-et-Marne ».
