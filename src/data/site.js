@@ -137,6 +137,7 @@ export const mainNav = [
   { label: 'Zinguerie', href: '/installation-remplacement-de-gouttieres/' },
   { label: 'Isolation' },
   { label: 'Étanchéité' },
+  { label: 'Prix', href: '/prix-couvreur/' },
 ];
 
 // Arguments de réassurance affichés sous le hero de l'accueil.

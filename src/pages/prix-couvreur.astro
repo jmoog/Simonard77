@@ -1,0 +1,330 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icone from '../components/Icones.astro';
+import Fleche from '../components/Fleche.astro';
+import Ariane from '../components/Ariane.astro';
+import Faq from '../components/Faq.astro';
+import AppelMascotte from '../components/AppelMascotte.astro';
+import AppelBandeau from '../components/AppelBandeau.astro';
+import { site, reassurance } from '../data/site.js';
+import { estPubliee, lienSiPubliee } from '../data/urls.js';
+import { pageSchema } from '../data/schema.js';
+
+/**
+ * Page « Prix couvreur 77 » (oct. 2026) — nouvelle URL, hors des 46 URLs
+ * historiques du WordPress. Inspirée des pages prix d'artisans qui se
+ * positionnent sur « prix couvreur + département » : des chantiers concrets,
+ * en photos, avec le prix de chaque type de travaux.
+ *
+ * Tarifs de base 2026 (fourchettes TTC, fourniture et pose). Quand M. Simonard
+ * communique le prix réellement facturé d'un chantier, il remplace la
+ * fourchette du chantier correspondant.
+ */
+const path = '/prix-couvreur/';
+const brouillon = !estPubliee(path);
+const filAriane = 'Prix couvreur 77';
+
+const title = 'Prix couvreur 77 : tarifs de toiture 2026 – M. Simonard';
+const description = `Combien coûte un couvreur en ${site.address.region} ? Tarifs 2026 de réfection, réparation, démoussage, zinguerie et isolation, chantiers à l'appui ✓ ${site.phone}.`;
+const heroPhoto = '/photos/toiture-en-tuiles-renovee-vue-de-la-rue-simonard-couvreur-77.webp';
+
+const tarifs = [
+  { poste: 'Réfection en tuiles mécaniques', prix: '90 à 160 € le m²', lien: '/renovation-refection-de-toiture/' },
+  { poste: 'Réfection en tuiles plates', prix: '120 à 180 € le m²', lien: '/renovation-refection-de-toiture/' },
+  { poste: 'Couverture en ardoise naturelle', prix: '140 à 270 € le m²', lien: '/renovation-refection-de-toiture/' },
+  { poste: 'Couverture en zinc à joint debout', prix: '145 à 305 € le m²' },
+  { poste: 'Toiture en bac acier', prix: '40 à 80 € le m²' },
+  { poste: 'Réparation de toiture (tuiles, faîtage, rives)', prix: '200 à 800 €', lien: '/reparation-de-toiture/' },
+  { poste: 'Recherche et réparation de fuite', prix: '200 à 800 €', lien: '/reparation-de-vos-fuites-de-toiture/' },
+  { poste: 'Remplacement de tuiles cassées', prix: '8 à 15 € la tuile' },
+  { poste: 'Nettoyage, démoussage et traitement hydrofuge', prix: '15 à 35 € le m²', lien: '/nettoyage-demoussage-de-toiture/' },
+  { poste: 'Gouttières neuves en zinc', prix: '40 à 80 € le mètre', lien: '/installation-remplacement-de-gouttieres/' },
+  { poste: 'Gouttières en aluminium ou PVC', prix: '20 à 50 € le mètre', lien: '/installation-remplacement-de-gouttieres/' },
+  { poste: 'Étanchéité de pied de cheminée en zinc', prix: '300 à 1 000 €' },
+  { poste: 'Isolation des combles', prix: '30 à 70 € le m²', lien: '/isolation-de-toiture/' },
+  { poste: 'Étanchéité de toit-terrasse', prix: '60 à 120 € le m²', lien: '/etancheite-toit-terrasse/' },
+  { poste: "Taux horaire de main-d'œuvre", prix: "40 à 70 € de l'heure" },
+];
+
+const chantiers = [
+  {
+    titre: "La réfection complète d'un pavillon en tuiles",
+    texte: `Dépose de l'ancienne couverture, écran de sous-toiture, liteaux neufs et tuiles neuves, rang par rang. Le faîtage, les rives et la zinguerie sont refaits dans la foulée. C'est la ${lienSiPubliee('/renovation-refection-de-toiture/', 'réfection de toiture')} type d'un pavillon dont les tuiles d'origine sont devenues poreuses.`,
+    prix: '90 à 180 € TTC le m²',
+    base: 'selon la tuile, mécanique ou plate, dépose et écran de sous-toiture compris',
+    photo: { src: '/photos/pavillon-avec-toiture-en-tuiles-terminee-simonard-couvreur-77-02.webp', w: 1600, h: 1199, alt: 'Pavillon avec sa toiture en tuiles terminée' },
+  },
+  {
+    titre: 'Une couverture en ardoise naturelle',
+    texte: `L'ardoise se pose au crochet, une à une, sur des liteaux neufs. Elle demande plus de main-d'œuvre que la tuile, mais elle dure plus longtemps et convient aux fortes pentes et aux maisons de caractère.`,
+    prix: '140 à 270 € TTC le m²',
+    base: "ardoise naturelle, pose au crochet sur liteaux neufs",
+    photo: { src: '/photos/vue-aerienne-maison-avec-toiture-ardoise-terminee-simonard-couvreur-77.webp', w: 1444, h: 993, alt: 'Vue aérienne d\'une maison avec sa toiture en ardoise terminée' },
+  },
+  {
+    titre: "Le démoussage et le traitement hydrofuge d'un toit",
+    texte: `Je brosse la mousse et les lichens, j'applique un traitement anti-mousse, puis un hydrofuge qui protège la tuile pendant plusieurs années. Un ${lienSiPubliee('/nettoyage-demoussage-de-toiture/', 'démoussage de toiture')} régulier est l'entretien qui retarde le plus une réfection.`,
+    prix: '15 à 35 € TTC le m²',
+    base: 'démoussage, traitement anti-mousse et hydrofuge',
+    photo: { src: '/photos/application-dun-traitement-hydrofuge-sur-toiture-simonard-couvreur-77.webp', w: 733, h: 550, alt: "Application d'un traitement hydrofuge sur une toiture en tuiles" },
+  },
+  {
+    titre: 'Des gouttières et des descentes neuves en zinc',
+    texte: `Je façonne et je pose les ${lienSiPubliee('/installation-remplacement-de-gouttieres/', 'gouttières en zinc')} sur mesure, avec leurs crochets, leurs naissances et leurs descentes. Le zinc coûte plus cher que l'aluminium ou le PVC, mais il dure des décennies.`,
+    prix: '40 à 80 € TTC le mètre',
+    base: 'gouttière en zinc posée, descentes comprises',
+    photo: { src: '/photos/gouttiere-et-descente-en-zinc-sur-chantier-simonard-couvreur-77.webp', w: 1200, h: 900, alt: 'Gouttière et descente en zinc posées sur un chantier' },
+  },
+  {
+    titre: "L'étanchéité d'un pied de cheminée",
+    texte: `Le raccord entre la souche et la couverture est l'un des premiers endroits où l'on cherche une ${lienSiPubliee('/reparation-de-vos-fuites-de-toiture/', 'fuite de toiture')}. Je dépose l'ancien solin, je façonne un abergement en zinc à la forme de la cheminée et je le raccorde aux tuiles.`,
+    prix: '300 à 1 000 € TTC',
+    base: 'abergement ou solin en zinc neuf, selon la taille de la souche',
+    photo: { src: '/photos/mise-en-etancheite-dun-pied-de-cheminee-simonard-couvreur-77.webp', w: 733, h: 550, alt: "Mise en étanchéité d'un pied de cheminée en zinc" },
+  },
+  {
+    titre: "L'isolation posée pendant la réfection",
+    texte: `Quand la charpente est à nu, l'${lienSiPubliee('/isolation-de-toiture/', 'isolation de la toiture')} coûte moins cher que si l'on doit rouvrir le toit plus tard. L'isolant se pose entre les chevrons, puis la couverture neuve vient par-dessus.`,
+    prix: '30 à 70 € TTC le m²',
+    base: 'isolation des combles, le toit étant déjà ouvert',
+    photo: { src: '/photos/isolation-en-laine-de-verre-entre-les-liteaux-simonard-couvreur-77.webp', w: 1600, h: 1200, alt: 'Isolation en laine de verre posée entre les liteaux' },
+  },
+];
+
+const faq = [
+  { q: "Quel est le prix d'un couvreur au m² en Seine-et-Marne ?", a: "Pour une réfection complète, comptez 90 à 160 € TTC le m² en tuiles mécaniques, 120 à 180 € en tuiles plates et 140 à 270 € en ardoise, fourniture et pose comprises. Un démoussage avec traitement hydrofuge revient à 15 à 35 € le m²." },
+  { q: "Combien coûte la réparation d'une fuite de toiture ?", a: "Entre 200 et 800 € TTC pour une recherche de fuite suivie d'une réparation ponctuelle : tuiles déplacées, solin, faîtage. Un pied de cheminée à reprendre en zinc revient à 300 à 1 000 € selon la taille de la souche." },
+  { q: "L'échafaudage est-il compris dans le prix ?", a: "Il figure sur une ligne à part de mon devis, pour que vous sachiez exactement ce que vous payez. Sur une réfection, on en profite pour reprendre la zinguerie : l'échafaudage ne se paie qu'une fois." },
+  { q: 'Quel taux de TVA pour des travaux de toiture ?', a: "10 % pour la rénovation d'une maison de plus de deux ans, 5,5 % sur la partie isolation thermique, 20 % en construction neuve. Je vous fais signer l'attestation simplifiée avec le devis." },
+];
+---
+<Layout
+  title={title}
+  description={description}
+  path={path}
+  noindex={brouillon}
+  ogImage={heroPhoto}
+  jsonLd={pageSchema(path, filAriane, { pageName: `Prix d'un couvreur en ${site.address.region}`, description, image: heroPhoto, faq })}
+>
+  <Ariane label={filAriane} />
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero-page">
+    <div class="conteneur hero-page__grille">
+      <div class="hero-page__texte">
+        <h1>Prix d'un couvreur en <em>{site.address.region}</em></h1>
+        <p class="hero-page__chapo">
+          Avant de demander un devis, vous voulez savoir à quoi vous attendre. Voici mes
+          tarifs de base pour 2026, poste par poste, puis des chantiers que j'ai réalisés
+          avec le <strong>prix d'un couvreur dans le 77</strong> pour chaque type de travaux.
+        </p>
+        <ul class="hero-page__points">
+          <li><Icone nom="coche" taille={18} />Tarifs 2026 TTC, fourniture et pose</li>
+          <li><Icone nom="coche" taille={18} />Des chantiers réels, en photos</li>
+          <li><Icone nom="coche" taille={18} />Devis gratuit, détaillé poste par poste</li>
+        </ul>
+        <div class="hero-page__actions">
+          <a class="btn btn--rouge btn--lg" href="/devis-gratuit/">Demander un devis<Fleche /></a>
+          <a class="btn btn--lg btn--contour" href={`tel:${site.phoneHref}`}>
+            <Icone nom="tel" taille={20} />{site.phone}
+          </a>
+        </div>
+      </div>
+      <div class="hero-page__media">
+        <img
+          class="hero-page__photo"
+          src={heroPhoto}
+          width="1600" height="1199"
+          fetchpriority="high" decoding="async"
+          alt={`Toiture en tuiles rénovée, vue de la rue — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+        <div class="hero-page__carte">
+          <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
+          <div>
+            <strong>Garantie décennale</strong>
+            <span>Sur tous mes travaux de couverture.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉASSURANCE ════════════════════════════════════════════════ -->
+  <section class="reassurance reassurance--plate">
+    <div class="conteneur">
+      <div class="reassurance__grille">
+        {reassurance.map((r) => (
+          <div class="reassurance__item">
+            <strong>{r.titre}</strong>
+            <span>{r.texte}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1. COMBIEN ÇA COÛTE ════════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur duo">
+      <div class="duo__texte">
+        <h2>Combien coûte un couvreur dans le 77 ?</h2>
+        <p>
+          C'est souvent la première question que l'on me pose au téléphone. Elle est
+          légitime : une toiture est un gros budget, et deux devis peuvent varier du simple
+          au double.
+        </p>
+        <p>
+          Le prix dépend de la surface, de la pente, du matériau, de l'accès à la maison et
+          de l'état de la charpente, que l'on découvre à la dépose. Pour vous donner des
+          repères honnêtes, je publie ici mes tarifs de base. Tous les prix sont TTC,
+          fourniture et pose comprises.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/maison-sous-echafaudage-chantier-de-couverture-simonard-couvreur-77-01.webp"
+          width="1200" height="900" loading="lazy" decoding="async"
+          alt={`Maison sous échafaudage pendant un chantier de couverture — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2. TARIFS ══════════════════════════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Mes tarifs de couverture en 2026</h2>
+        <p>Des fourchettes TTC, fourniture et pose comprises, pour une maison de {site.address.region}.</p>
+      </div>
+      <div class="px-tableau-wrap">
+        <table class="px-tableau">
+          <thead><tr><th scope="col">Travaux</th><th scope="col">Prix TTC</th></tr></thead>
+          <tbody>
+            {tarifs.map((t) => (
+              <tr>
+                <th scope="row">{t.lien && estPubliee(t.lien) ? <a href={t.lien}>{t.poste}</a> : t.poste}</th>
+                <td><strong>{t.prix}</strong></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="px-note">
+        L'échafaudage, quand il est nécessaire, figure sur une ligne à part de mon devis.
+        Ces prix sont des repères : celui de votre toiture est établi sur votre devis,
+        gratuit et sans engagement.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ 3. CHANTIERS ET PRIX ═══════════════════════════════════════ -->
+  <section class="section">
+    <div class="conteneur">
+      <div class="chapeau">
+        <h2>Mes chantiers et leur prix</h2>
+        <p>Des toitures que j'ai refaites, entretenues ou réparées, et ce que coûte ce type de travaux.</p>
+      </div>
+      {chantiers.map((c, i) => (
+        <article class:list={['duo', 'px-chantier', { 'duo--inverse': i % 2 === 1 }]}>
+          <div class="duo__texte">
+            <h3>{c.titre}</h3>
+            <p set:html={c.texte} />
+            <div class="px-prix">
+              <span class="px-prix__lib">Prix de ce type de chantier</span>
+              <strong class="px-prix__val">{c.prix}</strong>
+              <span class="px-prix__base">Tarif de base : {c.base}.</span>
+            </div>
+          </div>
+          <div class="duo__media">
+            <img src={c.photo.src} width={c.photo.w} height={c.photo.h} loading="lazy" decoding="async"
+              alt={`${c.photo.alt} — ${site.brand}, couvreur en ${site.address.region}`} />
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <AppelMascotte
+    titre="Vous voulez connaître le prix de votre toiture ?"
+    texte="Appelez-moi : je regarde votre toiture et vos combles, puis je vous remets un devis écrit, poste par poste."
+    note="Le devis est gratuit et sans engagement"
+    mascotte="gauche"
+  />
+
+  <!-- ═══ 4. CE QUI FAIT VARIER LE PRIX ══════════════════════════════ -->
+  <section class="section section--gris">
+    <div class="conteneur duo duo--inverse">
+      <div class="duo__texte">
+        <h2>Ce qui fait varier le prix de votre toiture</h2>
+        <p>Deux toitures de même surface n'ont presque jamais le même prix.</p>
+        <ul class="liste-detail">
+          <li><strong>La pente</strong> — un toit très pentu demande plus de sécurité pendant la pose.</li>
+          <li><strong>L'accès</strong> — une maison en cœur d'îlot ou sur une rue étroite allonge le montage de l'échafaudage.</li>
+          <li><strong>La charpente</strong> — des bois abîmés, découverts à la dépose, sont à reprendre avant de refermer le toit.</li>
+          <li><strong>Les points singuliers</strong> — lucarnes, cheminées, noues et fenêtres de toit demandent des raccords en zinc.</li>
+          <li><strong>Le matériau</strong> — certaines communes imposent la tuile plate ou l'ardoise dans les secteurs protégés.</li>
+        </ul>
+        <p>
+          À l'inverse, entretenir son toit coûte bien moins cher que de le refaire : une
+          <Fragment set:html={lienSiPubliee('/reparation-de-toiture/', 'réparation de toiture')} />
+          faite à la première fuite évite d'abîmer la charpente.
+        </p>
+      </div>
+      <div class="duo__media">
+        <img
+          src="/photos/remplacement-de-toiture-en-cours-sur-pavillon-simonard-couvreur-77.webp"
+          width="1600" height="1199" loading="lazy" decoding="async"
+          alt={`Remplacement d'une toiture en cours sur un pavillon — ${site.brand}, couvreur en ${site.address.region}`}
+        />
+      </div>
+    </div>
+  </section>
+
+  <Faq titre="Vos questions sur le prix d'un couvreur" items={faq} gris={false} />
+
+  <AppelBandeau
+    titre="Un devis clair pour votre toiture"
+    texte="Appelez-moi : vous recevez un devis écrit et détaillé, avec chaque poste chiffré. Le devis est gratuit et sans engagement."
+    points={[
+      'Devis gratuit et sans engagement',
+      'TVA à 10 % en rénovation',
+      'Garantie décennale',
+      'Mon équipe, sans sous-traitance',
+    ]}
+    mascotte="face"
+  />
+</Layout>
+
+<style>
+  .px-tableau-wrap { max-width: 900px; margin: 0 auto; overflow-x: auto; background: #fff; border-radius: var(--r-lg); box-shadow: 0 10px 30px rgb(4 32 47 / .08); }
+  .px-tableau { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .px-tableau th, .px-tableau td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--bordure); }
+  .px-tableau thead th { background: var(--bleu-nuit); color: #fff; font-family: var(--titre); font-size: .92rem; }
+  .px-tableau tbody th { font-weight: 600; color: var(--ink); }
+  .px-tableau tbody th a { color: var(--bleu); text-decoration: none; }
+  .px-tableau tbody th a:hover { text-decoration: underline; }
+  .px-tableau td strong { color: var(--bleu-fonce); white-space: nowrap; }
+  .px-tableau tbody tr:last-child th, .px-tableau tbody tr:last-child td { border-bottom: 0; }
+  .px-note { max-width: 900px; margin: 18px auto 0; color: var(--gris); font-size: .95rem; }
+
+  .px-chantier + .px-chantier { margin-top: 64px; }
+  .px-chantier h3 { margin: 0 0 12px; font-size: 1.3rem; }
+  .px-chantier .duo__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-lg); }
+  .px-prix { display: flex; flex-direction: column; gap: 4px; background: var(--gris-clair); border-radius: var(--r); padding: 16px 18px; margin-top: 8px; }
+  .px-prix__lib { font-size: .88rem; color: var(--gris); }
+  .px-prix__val { font-family: var(--titre); font-size: 1.35rem; color: var(--bleu-fonce); }
+  .px-prix__base { font-size: .88rem; color: var(--gris); }
+
+  @media (max-width: 760px) {
+    .px-tableau { font-size: .95rem; }
+    .px-tableau thead { display: none; }
+    .px-tableau, .px-tableau tbody, .px-tableau tr, .px-tableau th, .px-tableau td { display: block; width: 100%; }
+    .px-tableau tr { padding: 14px 16px; border-bottom: 1px solid var(--bordure); }
+    .px-tableau th, .px-tableau td { padding: 2px 0; border: 0; }
+    .px-chantier + .px-chantier { margin-top: 44px; }
+    .px-prix__val { font-size: 1.2rem; }
+    /* Mobile : textes alignés à gauche */
+    .px-chantier h3, .chapeau, .px-note { text-align: left; }
+  }
+</style>

@@ -36,6 +36,7 @@ export const urls = [
   { path: '/devis-gratuit/',    silo: 'transverse', label: 'Devis gratuit',          status: 'ok', nouveau: true },
   { path: '/mentions-legales/', silo: 'transverse', label: 'Mentions légales',       status: 'ok'   },
   { path: '/plan-du-site/',     silo: 'transverse', label: 'Plan du site',           status: 'ok'   },
+  { path: '/prix-couvreur/',    silo: 'transverse', label: 'Prix couvreur 77',       status: 'ok', nouveau: true },
   { path: '/a-propos/',         silo: 'transverse', label: 'À propos',               status: 'todo' },
   { path: '/contact/',          silo: 'transverse', label: 'Contact',                status: 'todo' },
 
