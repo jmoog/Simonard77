@@ -18,7 +18,7 @@ const path = '/devis-gratuit/';
 // 58 caractères — requête « devis toiture / devis couvreur + Seine-et-Marne ».
 const title = 'Devis gratuit toiture en Seine-et-Marne (77) — M. Simonard';
 // 152 caractères.
-const description = `Devis gratuit et sans engagement pour votre toiture en ${site.address.region} : je me déplace, je monte voir le toit et je chiffre par écrit ✓ ${site.phone}.`;
+const description = `Devis gratuit et sans engagement pour votre toiture en ${site.address.region} : un chiffrage écrit, détaillé poste par poste ✓ ${site.phone}.`;
 
 // Carte OpenStreetMap (sans cookie), centrée sur site.geo (Claye-Souilly).
 // Affiner les coordonnées dans src/data/site.js si le marqueur doit tomber
@@ -70,16 +70,14 @@ const prestations = [
             Un devis de toiture ne se rédige pas au téléphone. Vu du sol, un pan « juste à
             nettoyer » cache parfois des liteaux morts sous les tuiles ; à l'inverse, une
             infiltration inquiétante se règle souvent par une réparation ciblée d'une
-            demi-journée. Je me déplace donc systématiquement : je monte voir la couverture,
-            je passe dans les combles quand il y a une trace d'eau, et je chiffre sur ce que
-            j'ai constaté — pas sur une estimation à distance.
+            demi-journée. Je chiffre donc sur l'état réel de la couverture et des combles, pas sur une
+            estimation à distance.
           </p>
           <p>
             Vous recevez ensuite un devis détaillé poste par poste : les surfaces concernées,
             les matériaux et leur provenance, la dépose et l'évacuation des gravats,
             l'échafaudage lorsqu'il en faut. Rien de forfaitaire ni de flou, pour que vous
-            puissiez le comparer sereinement à un autre. Le déplacement et le conseil sont
-            gratuits, et le devis ne vous engage à rien.
+            puissiez le comparer sereinement à un autre. Le devis est gratuit et sans engagement.
           </p>
           <p>
             Le formulaire accueille toutes les demandes, du remplacement de quelques tuiles à
@@ -90,7 +88,7 @@ const prestations = [
           </p>
           <div class="page-texte__encart">
             <p>
-              <strong>L'eau entre déjà chez vous ?</strong> Ne passez pas par le formulaire :
+              <strong>Vous êtes victime d'une fuite ?</strong> Ne passez pas par le formulaire :
               appelez-moi au <a href={`tel:${site.phoneHref}`}>{site.phone}</a>. Les urgences
               passent devant — on met le toit hors d'eau d'abord, on chiffre ensuite.
             </p>
@@ -223,9 +221,9 @@ const prestations = [
       <div class="chapeau">
         <h2>Ma zone d'intervention</h2>
         <p>
-          Je me déplace dans le nord de la {site.address.region} et les communes limitrophes.
+          J'interviens dans le nord de la {site.address.region} et les communes limitrophes.
           Que votre toit soit en ville ou dans un bourg de campagne, la démarche est la même :
-          visite sur place, chiffrage écrit, réponse rapide.
+          un chiffrage écrit et détaillé, et une réponse rapide.
         </p>
       </div>
       <ul class="communes">

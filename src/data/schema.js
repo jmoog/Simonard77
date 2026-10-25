@@ -91,7 +91,7 @@ export function localBusinessGraph({ areaServed } = {}) {
       name: site.brand,
       alternateName: site.brandFull,
       legalName: site.legalName,
-      description: `Artisan couvreur zingueur en ${site.address.region}, j'interviens (${site.address.department}) : couverture et rénovation de toiture, réparation de fuites, entretien et démoussage, zinguerie et gouttières, isolation et étanchéité. Devis et déplacement gratuits.`,
+      description: `Artisan couvreur zingueur en ${site.address.region}, j'interviens (${site.address.department}) : couverture et rénovation de toiture, réparation de fuites, entretien et démoussage, zinguerie et gouttières, isolation et étanchéité. Devis gratuit et sans engagement.`,
       url: abs('/'),
       ...(site.sameAs?.length ? { sameAs: site.sameAs } : {}),
       image: PHOTOS_ENTREPRISE.map((p) => abs(p)),

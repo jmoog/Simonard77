@@ -54,7 +54,7 @@ const materiaux = [
 ];
 
 const faq = [
-  { q: 'Faut-il refaire toute la toiture, ou une réparation suffit-elle ?', a: "Tout dépend de l'étendue de l'usure. Quelques tuiles cassées se remplacent ; une couverture usée sur tout le pan se refait. Je tranche après être monté sur le toit, pas avant." },
+  { q: 'Faut-il refaire toute la toiture, ou une réparation suffit-elle ?', a: "Tout dépend de l'étendue de l'usure. Quelques tuiles cassées se remplacent ; une couverture usée sur tout le pan se refait. Je vous le dis franchement, une fois l'état réel de la couverture connu." },
   { q: 'Combien de temps dure une réfection de toiture ?', a: 'Cela dépend de la surface, de la pente et du matériau. La durée est indiquée sur le devis, et la date du chantier est fixée avec vous.' },
   { q: 'Faut-il une autorisation de la mairie pour refaire sa toiture ?', a: "Une déclaration préalable de travaux est nécessaire dès que l'aspect extérieur change : matériau, couleur ou forme du toit. Refaire à l'identique en demande rarement, mais chaque commune a ses règles : renseignez-vous auprès du service urbanisme de votre mairie avant le chantier." },
   { q: 'La maison est-elle protégée pendant les travaux ?', a: "Oui. Tant que la couverture neuve n'est pas posée, le toit est bâché, et le chantier est protégé et nettoyé chaque soir." },
@@ -111,8 +111,8 @@ const faq = [
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Interlocuteur unique</strong>
-            <span>Mon équipe et moi, sans sous-traitance.</span>
+            <strong>Sans sous-traitance</strong>
+            <span>Mon équipe et moi, du début à la fin du chantier.</span>
           </div>
         </div>
       </div>
@@ -154,9 +154,9 @@ const faq = [
         </p>
         <h3>Ce que je regarde avant de vous répondre</h3>
         <p>
-          Je monte sur le toit et je passe dans les combles : état des liteaux, de la
-          charpente, ventilation, traces d'humidité. Je constate au lieu de supposer, et je
-          vous dis ensuite si une réparation suffit ou s'il faut refaire.
+          L'état des liteaux et de la charpente, la ventilation, les traces d'humidité dans
+          les combles : c'est ce qui décide. Je vous dis ensuite franchement si une
+          réparation suffit ou s'il faut refaire.
         </p>
       </div>
       <div class="duo__media">
@@ -192,8 +192,8 @@ const faq = [
 
   <AppelMascotte
     titre="Votre toiture a fait son temps ?"
-    texte="Appelez-moi : je monte sur le toit, je passe dans les combles, et je vous dis si une réfection partielle suffit ou s'il faut tout remplacer. Le devis est écrit, poste par poste, sans engagement."
-    note="Devis gratuit, déplacement offert"
+    texte="Appelez-moi : je vous dis si une réfection partielle suffit ou s'il faut tout remplacer, et vous recevez un devis écrit, poste par poste."
+    note="Le devis est gratuit et sans engagement"
     mascotte="face"
     inverse={true}
   />
@@ -251,10 +251,10 @@ const faq = [
 
   <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
   <AppelBandeau
-    titre="Une toiture à refaire&nbsp;? Le déplacement est gratuit."
-    texte="Appelez-moi : je monte voir le toit et vous recevez un devis écrit et détaillé, sans engagement."
+    titre="Une toiture à refaire&nbsp;?"
+    texte="Appelez-moi : vous recevez un devis écrit et détaillé, poste par poste."
     points={[
-      'Devis et déplacement gratuits',
+      'Devis gratuit et sans engagement',
       'Chantier protégé et nettoyé chaque soir',
       'Garantie décennale',
       'Mon équipe, sans sous-traitance',

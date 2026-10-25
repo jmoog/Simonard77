@@ -72,7 +72,7 @@ const rubriques = [
 
 const etapes = [
   { titre: 'Votre appel', texte: "Vous m'expliquez ce que vous avez constaté. Je vous dis tout de suite si cela demande une visite ou si la réponse tient en trois minutes." },
-  { titre: 'La visite', texte: 'Je monte voir la toiture, je passe dans les combles quand il y a une trace, et je constate au lieu de supposer. Le déplacement est gratuit.' },
+  { titre: 'La visite', texte: "Je regarde la couverture, et les combles quand il y a une trace d'eau, pour chiffrer sur l'état réel de votre toit." },
   { titre: 'Le devis écrit', texte: 'Un devis détaillé poste par poste : surfaces, matériaux, dépose et évacuation, échafaudage. Comparable, et sans engagement.' },
   { titre: 'Le chantier', texte: 'Une date fixée, un chantier protégé et nettoyé chaque soir. Les travaux sont couverts par la garantie décennale.' },
 ];
@@ -153,7 +153,7 @@ const etapes = [
     mascotte="gauche"
     titre="Demandez l'intervention de votre couvreur près de chez vous"
     texte={`J'interviens rapidement, en urgence comme sur rendez-vous, à ${site.address.city} et dans toutes les communes proches, pour entretenir, réparer ou rénover votre toiture.`}
-    note="Devis gratuit, déplacement offert"
+    note="Le devis est gratuit et sans engagement"
   />
 
   <!-- ═══ ARTISAN ════════════════════════════════════════════════════ -->
@@ -294,8 +294,8 @@ const etapes = [
   <AppelMascotte
     mascotte="face"
     inverse
-    titre="Une toiture à voir ? Le déplacement est gratuit."
-    texte="Un toit qui fuit, des tuiles cassées, une gouttière qui déborde ? Appelez-moi : je viens voir la toiture et vous recevez un devis écrit et détaillé."
+    titre={`Faites appel à votre couvreur en ${site.address.region}`}
+    texte="Un toit qui fuit, des tuiles cassées, une gouttière qui déborde ? Appelez-moi : vous recevez un devis écrit et détaillé, gratuit et sans engagement."
     note="Garantie décennale sur tous les travaux"
   />
 </Layout>

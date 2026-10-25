@@ -117,7 +117,7 @@ export const ARGUMENTS = [
   [
     { titre: 'Garantie décennale', texte: 'Tous les travaux sont couverts.' },
     { titre: 'Tous matériaux de couverture', texte: 'Tuile, ardoise, zinc, bac acier, shingle.' },
-    { titre: 'Devis et déplacement gratuits', texte: 'Un devis écrit, détaillé, sans engagement.' },
+    { titre: 'Devis gratuit', texte: 'Un devis écrit, détaillé, sans engagement.' },
   ],
   [
     { titre: 'Savoir-faire artisanal', texte: 'Le travail bien fait, du support aux finitions.' },
@@ -153,11 +153,11 @@ export const TEXTES_LONGS = [
   (nom) => [
     `Une toiture s'entretient comme le reste de la maison. À ${nom} comme ailleurs, la mousse s'installe sur les pans à l'ombre, retient l'eau et finit par rendre les tuiles poreuses ; les gouttières se bouchent de feuilles ; le mortier du faîtage se fissure. Rien de tout cela n'est grave la première année. Laissé sans suite, ça devient une réfection.`,
     `Mon équipe et moi nettoyons la toiture à la brosse ou à basse pression, selon l'état des tuiles, puis nous appliquons un traitement anti-mousse et un hydrofuge, incolore ou coloré, qui fait ruisseler l'eau et retarde la repousse. J'en profite toujours pour contrôler le faîtage, les solins et les pieds de cheminée : ce sont eux qui fuient en premier. Le détail est sur la page ${L('/nettoyage-demoussage-de-toiture/', 'nettoyage et démoussage de toiture')}.`,
-    `Un entretien régulier coûte bien moins qu'un remplacement de couverture, et c'est lui qui repousse ce remplacement le plus longtemps. Si vous ne savez pas dans quel état est votre toit, je viens le voir à ${nom} : le déplacement est gratuit, et vous saurez si votre toit a besoin d'un nettoyage, d'une réparation, ou de rien du tout.`,
+    `Un entretien régulier coûte bien moins qu'un remplacement de couverture, et c'est lui qui repousse ce remplacement le plus longtemps. Si vous ne savez pas dans quel état est votre toit à ${nom}, appelez-moi : vous saurez s'il a besoin d'un nettoyage, d'une réparation, ou de rien du tout.`,
   ],
   // 1 — refaire votre toiture
   (nom) => [
-    `Refaire une toiture, ce n'est pas forcément tout remplacer. Une réfection partielle reprend le pan abîmé et laisse le reste en place ; un remplacement complet dépose toute la couverture et repart sur un écran de sous-toiture et des liteaux neufs. Entre les deux, il y a la visite : je monte sur le toit, je passe dans les combles, et je vous dis laquelle des deux s'impose pour votre maison à ${nom}.`,
+    `Refaire une toiture, ce n'est pas forcément tout remplacer. Une réfection partielle reprend le pan abîmé et laisse le reste en place ; un remplacement complet dépose toute la couverture et repart sur un écran de sous-toiture et des liteaux neufs. Entre les deux, je vous dis franchement laquelle s'impose pour votre maison à ${nom}, une fois l'état de la couverture et des combles connu.`,
     `Tuile plate, tuile mécanique, ardoise, zinc, bac acier ou shingle : chaque matériau a ses règles de pose, son écartement de liteaux, ses recouvrements, et je les respecte. Les fournitures sont choisies dans la continuité de la couverture existante, pour que le pan refait s'accorde avec le reste. Les étapes d'un chantier sont détaillées sur la page ${L('/renovation-refection-de-toiture/', 'rénovation et réfection de toiture')}.`,
     `Pendant les travaux, la maison reste protégée : le toit est bâché tant que la couverture neuve n'est pas posée, et le chantier est nettoyé chaque soir. Vous recevez avant de commencer un devis écrit, poste par poste — surfaces, matériaux, dépose et évacuation, échafaudage — et la date du chantier est fixée avec vous.`,
   ],
@@ -165,7 +165,7 @@ export const TEXTES_LONGS = [
   (nom) => [
     `Quand la tuile est devenue poreuse sur tout le pan, que les fixations lâchent et qu'il n'y a plus d'écran sous la couverture, réparer tuile par tuile ne mène nulle part : la couverture est en fin de vie. Si c'est le cas de votre maison à ${nom}, je remplace la toiture entière, de la dépose de l'ancienne couverture jusqu'à la zinguerie.`,
     `Le chantier suit toujours le même ordre : dépose et évacuation des gravats, écran de sous-toiture, liteaux neufs, pose de la couverture rang par rang, zinguerie raccordée, nettoyage. Le toit ouvert, c'est aussi le bon moment pour isoler les rampants ou les combles : on intervient sur le toit, autant en profiter. Tout est détaillé sur la page ${L('/renovation-refection-de-toiture/', 'remplacement de toiture')}.`,
-    `Avant de vous engager, vous avez un devis écrit et détaillé, poste par poste, et le déplacement pour venir voir le toit est gratuit. Tous les travaux sont couverts par la garantie décennale, et c'est mon équipe qui les réalise, sans sous-traitance.`,
+    `Avant de vous engager, vous avez un devis écrit et détaillé, poste par poste : il est gratuit et sans engagement. Tous les travaux sont couverts par la garantie décennale, et c'est mon équipe qui les réalise, sans sous-traitance.`,
   ],
   // 3 — vos travaux de zinguerie
   (nom) => [

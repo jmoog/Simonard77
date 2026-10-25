@@ -148,7 +148,7 @@ p a:hover,.page-texte>ul a:hover{color:var(--rouge)}
 .barre-haute a{color:#fff;font-weight:600;display:inline-flex;align-items:center;gap:7px}
 .barre-haute a:hover{color:var(--rouge);text-decoration:none}
 @media(max-width:820px){.barre-haute__droite{display:none}.barre-haute .conteneur{justify-content:center}}
-/* Sur les petits écrans, seul « Devis et déplacement gratuits » reste :
+/* Sur les petits écrans, seul « Devis gratuit et sans engagement » reste :
    la mention de la zone tenait sur une deuxième ligne et épaississait la
    barre au détriment du hero. */
 @media(max-width:600px){.barre-haute__zone{display:none}.barre-haute{font-size:.8rem}}

@@ -6,7 +6,7 @@ import { site } from '../data/site.js';
 
 const path = '/merci/';
 const title = `Demande envoyée — ${site.brand}`;
-const description = "Votre demande de devis a bien été envoyée. Voici la suite : rappel, visite sur place puis devis détaillé sans engagement.";
+const description = "Votre demande de devis a bien été envoyée. Voici la suite : rappel, rendez-vous puis devis détaillé sans engagement.";
 
 // Délais annoncés volontairement qualitatifs (« rapidement »), cohérents avec
 // l'accusé de réception envoyé par /api/devis. Si l'artisan veut s'engager sur
@@ -15,7 +15,7 @@ const description = "Votre demande de devis a bien été envoyée. Voici la suit
 // contrediraient dans la même minute.
 const etapes = [
   { titre: 'Un premier échange', texte: `${site.founder} vous rappelle pour préciser votre besoin, répondre à vos premières questions et convenir d'un créneau de visite.` },
-  { titre: 'La visite sur place', texte: `Rendez-vous chez vous pour monter voir la toiture, relever les mesures et identifier ce qui doit réellement être repris. Déplacement gratuit en ${site.address.region}.` },
+  { titre: 'Le rendez-vous', texte: `Rendez-vous chez vous pour relever les mesures et identifier ce qui doit réellement être repris.` },
   { titre: 'Le devis détaillé', texte: "Vous recevez un devis écrit, poste par poste, avec les matériaux et la durée du chantier. Sans engagement : rien ne démarre tant que vous ne l'avez pas signé." },
 ];
 ---

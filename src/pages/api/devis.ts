@@ -270,7 +270,7 @@ function accuseTemplate(d: DevisData) {
             J'ai bien reçu votre demande de devis pour <strong>${echapper(presta.toLowerCase())}</strong> à <strong>${echapper(d.ville)}</strong>. Merci de votre confiance.
           </p>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${TEXTE};">
-            Je vous recontacte rapidement pour convenir d'une visite, monter voir la toiture et évaluer précisément ce qui doit être repris. Vous recevrez ensuite un devis détaillé, poste par poste et sans engagement.
+            Je vous recontacte rapidement pour convenir d'un rendez-vous et évaluer précisément ce qui doit être repris. Vous recevrez ensuite un devis détaillé, poste par poste et sans engagement.
           </p>
           <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:${TEXTE};">
             Si votre situation est urgente — une fuite en cours, des tuiles arrachées —, n'attendez pas mon rappel : appelez-moi directement.

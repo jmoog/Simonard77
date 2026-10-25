@@ -117,14 +117,14 @@ const CARTES = [
   rang % 2
     ? {
         titre: `Recherche de fuite à ${nom}`,
-        texte: `Une auréole au plafond, des gouttes dans les combles : l'eau entre rarement là où elle apparaît. ${site.brand} passe dans les combles et sur le toit pour remonter jusqu'au point d'entrée, puis referme ce point-là, pas la tache.`,
+        texte: `Une auréole au plafond, des gouttes dans les combles : une fuite se déclare rarement là où elle apparaît. ${site.brand} remonte jusqu'à son origine, dans les combles et sur la couverture, puis referme ce point-là, pas la tache.`,
         icone: '/icones/reparation.webp',
         href: '/reparation-de-vos-fuites-de-toiture/',
         items: ['Combles', 'Toit', 'Arrosage ciblé'],
       }
     : {
         titre: `Réparation de toiture à ${nom}`,
-        texte: `${site.brand} intervient rapidement pour réparer la toiture. En urgence, une bâche met le toit hors d'eau ; il cherche ensuite l'origine réelle de la fuite ou de l'infiltration, et répare là où l'eau entre, pas là où elle apparaît.`,
+        texte: `${site.brand} intervient rapidement pour réparer la toiture. En urgence, une bâche met le toit hors d'eau ; il cherche ensuite l'origine réelle de la fuite ou de l'infiltration, et répare là où l'eau s'infiltre, pas là où elle apparaît.`,
         icone: '/icones/reparation.webp',
         href: '/reparation-de-toiture/',
         items: ['Bâchage', 'Fuite', 'Infiltration'],
@@ -212,7 +212,7 @@ const lienVoisine = (nomCommune) => {
         <div class="hero-page__carte">
           <span class="hero-page__pastille"><Icone nom="coche" taille={22} /></span>
           <div>
-            <strong>Déplacement et devis gratuits</strong>
+            <strong>Devis gratuit</strong>
             <span>Un devis écrit et détaillé, sans engagement.</span>
           </div>
         </div>
@@ -394,9 +394,9 @@ const lienVoisine = (nomCommune) => {
        Les deux dessins alternent d'une ville à l'autre ; chacun est monté
        du côté vers lequel son pouce pointe (voir AppelMascotte.astro). -->
   <AppelMascotte
-    titre={`Une toiture à voir à ${nom} ?`}
-    texte="Appelez-moi : je me déplace, j'examine la toiture et vous recevez un devis écrit, détaillé et gratuit."
-    note="Devis gratuit, déplacement offert"
+    titre={`Contactez votre couvreur à ${nom}`}
+    texte="Appelez-moi : vous recevez un devis écrit et détaillé, poste par poste."
+    note="Le devis est gratuit et sans engagement"
     mascotte={rang % 2 ? 'face' : 'gauche'}
     inverse={rang % 2 === 1}
   />

@@ -42,14 +42,14 @@ const etapes = [
 const pannes = [
   { t: 'Tuiles ou ardoises cassées', d: "Un choc, le gel ou le vent suffisent à en casser ou à en déplacer quelques-unes, et l'eau passe." },
   { t: 'Faîtage fissuré', d: "Le mortier du faîtage se fissure avec les années et laisse l'eau s'infiltrer sous les tuiles faîtières." },
-  { t: 'Solin de cheminée décollé', d: "La jonction entre la cheminée et la couverture est le point faible du toit : c'est souvent par là que l'eau entre." },
+  { t: 'Solin de cheminée décollé', d: "La jonction entre la cheminée et la couverture est le point faible du toit : c'est souvent par là que l'eau s'infiltre." },
   { t: 'Gouttière bouchée ou percée', d: "L'eau qui ne s'évacue plus déborde et remonte sous les premiers rangs de tuiles au lieu de partir dans la descente." },
   { t: 'Écran de sous-toiture déchiré', d: "Percé ou mal raccordé, il laisse l'humidité arriver directement sur la charpente." },
 ];
 
 const faq = [
   { q: 'Une petite fuite peut-elle attendre ?', a: "Non. Une infiltration, même légère, humidifie la charpente et l'isolant, et les dégâts grossissent en silence. Plus on attend, plus la réparation coûte cher." },
-  { q: 'Intervenez-vous en urgence après une tempête ?', a: "Oui. Je me déplace pour constater les dégâts et bâcher si le toit est ouvert, puis j'organise la réparation." },
+  { q: 'Intervenez-vous en urgence après une tempête ?', a: "Oui. Si le toit est ouvert, je le bâche pour le mettre hors d'eau, puis j'organise la réparation." },
   { q: "J'ai une tache au plafond : d'où vient l'eau ?", a: "Rarement de juste au-dessus. L'eau suit un chevron ou un liteau avant de retomber, parfois à plusieurs mètres du point d'entrée. Je passe dans les combles et sur le toit pour remonter jusqu'à la source." },
   { q: 'La réparation est-elle garantie ?', a: 'Oui. Tous mes travaux sont couverts par la garantie décennale, la réparation comme le remplacement.' },
 ];
@@ -140,9 +140,9 @@ const faq = [
         </p>
         <h3>Chercher l'origine, pas la trace</h3>
         <p>
-          Je monte sur le toit et je passe dans les combles quand il y a une trace. Reboucher
-          là où l'eau apparaît ne sert à rien si elle entre trois mètres plus haut : je répare
-          là où elle entre. Quand l'origine ne saute pas aux yeux, la
+          Reboucher là où l'eau apparaît ne sert à rien si elle s'infiltre trois mètres plus
+          haut : je cherche l'origine dans les combles et sur la couverture, et je répare
+          là où elle s'infiltre. Quand l'origine ne saute pas aux yeux, la
           <a href="/reparation-de-vos-fuites-de-toiture/">recherche de fuite</a> a sa propre
           méthode.
         </p>
@@ -178,8 +178,8 @@ const faq = [
 
   <AppelMascotte
     titre="Une tache au plafond, une tuile qui manque ?"
-    texte="Appelez-moi : je viens chercher d'où vient l'eau, je bâche si le toit est ouvert, et vous recevez un devis écrit pour la réparation, détaillé poste par poste."
-    note="Devis gratuit, déplacement offert"
+    texte="Appelez-moi : je cherche d'où vient l'eau, je bâche si le toit est ouvert, et vous recevez un devis écrit pour la réparation, détaillé poste par poste."
+    note="Le devis est gratuit et sans engagement"
     mascotte="gauche"
   />
 
@@ -212,8 +212,8 @@ const faq = [
         <h2>Après une tempête ou un orage de grêle</h2>
         <p>
           Tuiles arrachées, ardoises fendues, gouttière décrochée : après un coup de vent,
-          appelez-moi. Je viens constater les dégâts, je bâche si le toit est ouvert, et vous
-          recevez un devis écrit pour la réparation.
+          appelez-moi. Je bâche si le toit est ouvert, et vous recevez un devis écrit pour
+          la réparation.
         </p>
         <p>Ce devis, détaillé poste par poste, peut être transmis à votre assurance.</p>
       </div>
@@ -231,10 +231,10 @@ const faq = [
 
   <!-- ═══ APPEL ══════════════════════════════════════════════════════ -->
   <AppelBandeau
-    titre="Une fuite à réparer&nbsp;? Le déplacement est gratuit."
-    texte="Appelez-moi : je viens voir la toiture, je bâche si c'est nécessaire, et vous recevez un devis écrit et détaillé, sans engagement."
+    titre="Une fuite à réparer&nbsp;?"
+    texte="Appelez-moi : je bâche si c'est nécessaire, et vous recevez un devis écrit et détaillé."
     points={[
-      'Devis et déplacement gratuits',
+      'Devis gratuit et sans engagement',
       'Bâchage si le toit est ouvert',
       'Garantie décennale',
       'Mon équipe, sans sous-traitance',

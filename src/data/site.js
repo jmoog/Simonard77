@@ -142,7 +142,7 @@ export const mainNav = [
 
 // Arguments de réassurance affichés sous le hero de l'accueil.
 export const reassurance = [
-  { titre: 'Devis gratuit', texte: 'Déplacement et chiffrage offerts, sans engagement.' },
+  { titre: 'Devis gratuit', texte: 'Un devis écrit et détaillé, sans engagement.' },
   { titre: 'Urgences toiture', texte: 'Fuite, tuiles arrachées : intervention rapide.' },
   { titre: 'Garantie décennale', texte: 'Tous les travaux sont couverts.' },
   { titre: 'Artisan du 77', texte: 'Interventions dans tout le nord de la Seine-et-Marne.' },
