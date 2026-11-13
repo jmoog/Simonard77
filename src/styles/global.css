@@ -213,10 +213,12 @@ p a:hover,.page-texte>ul a:hover{color:var(--rouge)}
 html:has(.nav-bascule:checked){overflow:hidden}
 
 /* ── Barre d'action mobile ─────────────────────────────────────────────
-   Apparaît après 900 px de défilement, quand l'en-tête n'est plus visible. */
+   Toujours visible sur mobile et tablette : le visiteur doit pouvoir
+   appeler dès l'arrivée, y compris tant que le bandeau cookies est ouvert
+   (celui-ci se pose juste au-dessus, voir plus bas). */
 .barre-mobile{display:none}
 @media(max-width:1199px){
-  .barre-mobile{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:45;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;box-shadow:0 -6px 22px rgba(7,47,76,.16);transform:translateY(130%);transition:transform .3s ease}
+  .barre-mobile{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:45;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;box-shadow:0 -6px 22px rgba(7,47,76,.16)}
   .barre-mobile .btn{flex:1;font-size:.9rem;padding:13px 12px}
   /* La flèche est resserrée dans la barre : à trois actions sur 390 px,
      ses 24 px pleins faisaient déborder le numéro de téléphone. */
@@ -226,8 +228,6 @@ html:has(.nav-bascule:checked){overflow:hidden}
   /* Déclaré APRÈS la règle ci-dessus, sinon son padding-inline, de même
      spécificité, l'emportait et écrasait l'icône du bouton carré. */
   .barre-mobile .btn--carre{flex:none;width:48px;padding:0}
-  body.defile .barre-mobile{transform:translateY(0)}
-  body:has(.bandeau-cookies.est-visible) .barre-mobile{transform:translateY(130%)}
   body.defile .entete{transform:translateY(-100%)}
 }
 /* Sous 400 px — les iPhone 12 à 15 font 390 px —, les trois actions plus la
@@ -604,22 +604,25 @@ html:has(.nav-bascule:checked){overflow:hidden}
 .bandeau-cookies{position:fixed;left:0;right:0;bottom:0;z-index:999;display:flex;justify-content:flex-start;padding:0 20px calc(20px + env(safe-area-inset-bottom,0px));pointer-events:none;visibility:hidden;opacity:0;transform:translateY(24px);transition:transform .45s cubic-bezier(.22,.8,.3,1),opacity .4s ease,visibility 0s linear .45s}
 .bandeau-cookies[hidden]{display:none}
 .bandeau-cookies.est-visible{visibility:visible;opacity:1;transform:none;pointer-events:auto;transition-delay:0s}
-.bandeau-cookies__carte{width:100%;max-width:440px;background:#fff;border:1px solid var(--bordure);border-radius:var(--r-lg);box-shadow:var(--ombre-carte);padding:22px 24px 20px}
-.bandeau-cookies__entete{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.bandeau-cookies__icone{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:var(--radius);background:var(--ciel);color:var(--bleu);flex:none}
-.bandeau-cookies__titre{margin:0;font-family:var(--titre);font-weight:700;font-size:1.08rem;line-height:1.25;color:var(--bleu-nuit)}
-.bandeau-cookies__texte{margin:0;font-size:.92rem;line-height:1.55;color:var(--ink)}
+.bandeau-cookies__carte{width:100%;max-width:440px;background:#fff;border:1px solid var(--bordure);border-radius:var(--r-lg);box-shadow:var(--ombre-carte);padding:16px 18px}
+.bandeau-cookies__texte{margin:0;font-size:.88rem;line-height:1.45;color:var(--ink)}
 .bandeau-cookies__texte a{color:var(--bleu);font-weight:600;white-space:nowrap}
-.bandeau-cookies__etat{margin:10px 0 0;font-size:.86rem;font-weight:600;color:var(--bleu)}
+.bandeau-cookies__etat{margin:6px 0 0;font-size:.86rem;font-weight:600;color:var(--bleu)}
 /* Refuser et Accepter : même style, même taille, même rang — refuser doit
    être aussi simple qu'accepter. Largeur naturelle, jamais étirés. */
-.bandeau-cookies__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-.bandeau-cookies__actions .btn{padding:12px 22px;font-size:.92rem}
-.bandeau-cookies__note{margin:12px 0 0;font-size:.8rem;line-height:1.45;color:var(--gris)}
+.bandeau-cookies__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.bandeau-cookies__actions .btn{padding:10px 20px;font-size:.9rem}
+/* Sous 1200 px la barre d'action mobile occupe le bas de l'écran : le
+   bandeau se pose au-dessus d'elle, sans jamais la recouvrir. */
+@media(max-width:1199px){
+  .bandeau-cookies{bottom:calc(68px + env(safe-area-inset-bottom,0px));padding-bottom:10px}
+}
 @media(max-width:640px){
-  .bandeau-cookies{padding:0 10px calc(10px + env(safe-area-inset-bottom,0px))}
-  .bandeau-cookies__carte{max-width:none;padding:18px 18px 16px}
-  .bandeau-cookies__actions .btn{padding:12px 18px}
+  .bandeau-cookies{padding:0 10px 10px}
+  .bandeau-cookies__carte{max-width:none;padding:12px 14px}
+  .bandeau-cookies__texte{font-size:.84rem;line-height:1.4}
+  .bandeau-cookies__actions{margin-top:10px}
+  .bandeau-cookies__actions .btn{padding:9px 18px}
 }
 @media(prefers-reduced-motion:reduce){
   .bandeau-cookies{transform:none;transition:opacity .2s ease,visibility 0s linear .2s}

@@ -95,15 +95,10 @@ const villesPubliees = parSilo('ville');
       Masqué (hidden) tant que le script ne l'ouvre pas : sans JavaScript il
       n'apparaît jamais — et rien n'est chargé non plus. */}
   <div id="bandeau-cookies" class="bandeau-cookies" hidden>
-    <div class="bandeau-cookies__carte" role="dialog" aria-labelledby="cookies-titre" aria-describedby="cookies-texte">
-      <div class="bandeau-cookies__entete">
-        <span class="bandeau-cookies__icone"><Icone nom="cookie" taille={22} /></span>
-        <p class="bandeau-cookies__titre" id="cookies-titre">Cookies : à vous de choisir</p>
-      </div>
+    <div class="bandeau-cookies__carte" role="dialog" aria-label="Cookies" aria-describedby="cookies-texte">
       <p class="bandeau-cookies__texte" id="cookies-texte">
-        Ce site utilise Google Analytics pour savoir combien de personnes le visitent et quelles
-        pages les intéressent. Rien n'est déposé tant que vous n'avez pas choisi, et le site
-        fonctionne exactement pareil si vous refusez.
+        Acceptez-vous les cookies de Google Analytics, qui servent à mesurer les visites du
+        site&nbsp;?
         <a href="/mentions-legales/#cookies">En savoir plus</a>
       </p>
       <p class="bandeau-cookies__etat" id="cookies-etat" hidden></p>
@@ -111,8 +106,8 @@ const villesPubliees = parSilo('ville');
         <button type="button" class="btn btn--bleu" id="cookies-refus">Refuser</button>
         <button type="button" class="btn btn--bleu" id="cookies-accord">Accepter</button>
       </div>
-      <p class="bandeau-cookies__note">Vous pourrez changer d'avis à tout moment via « Gérer les cookies », en bas de page.</p>
     </div>
+  </div>
   </div>
 
   <div class="barre-haute">
